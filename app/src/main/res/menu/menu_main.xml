@@ -6,5 +6,24 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
+        android:icon="@drawable/ic_settings_grey600_24dp"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="100"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_magnify_grey600_24dp"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_synchronization"
+        android:orderInCategory="100"
+        android:title="@string/action_synchronization"
+        android:icon="@drawable/ic_sync_grey600_24dp"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_items_view"
+        android:orderInCategory="100"
+        android:title="@string/action_items_view"
+        android:icon="@drawable/ic_view_stream_white_24dp"
+        app:showAsAction="always" />
 </menu>

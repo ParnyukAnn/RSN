@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">RSN</string>
+
+    <!--Menu-->
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_synchronization">Synchronization</string>
+    <string name="action_items_view">View</string>
+    <!--End-->
+
 </resources>
