@@ -2,10 +2,25 @@
     <string name="app_name">RSN</string>
 
     <!--Menu-->
+    <string name="action_test">Test: go to sms tab</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="action_synchronization">Synchronization</string>
     <string name="action_items_view">View</string>
+    <!--End-->
+
+    <!--Tabs-->
+    <string name="tab_sms">SMS</string>
+    <string name="tab_call">Call</string>
+    <string name="tab_remind">Remind</string>
+    <string name="tab_note">Note</string>
+    <string name="tab_header">Свой заголовок</string>
+    <!--End-->
+
+    <!--NavigationDrawer-->
+    <string name="view_navigation_open">Open</string>
+    <string name="view_navigation_close">Close</string>
+
     <!--End-->
 
 </resources>
