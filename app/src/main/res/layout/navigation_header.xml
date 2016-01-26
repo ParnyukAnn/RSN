@@ -2,7 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="192dp"
-    android:background="@color/colorPrimaryDark"
+    android:src="@drawable/test"
+    android:background="@drawable/material_4"
     android:orientation="vertical">
 
 </LinearLayout>
+
+<!--
+android:layout_height="wrap_content"
+android:adjustViewBounds="true"
+android:scaleType="fitCenter"
+-->

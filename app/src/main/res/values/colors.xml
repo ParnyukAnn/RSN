@@ -13,13 +13,27 @@
     <color name="colorPrimary">#607D8B</color>
     <color name="colorPrimaryDark">#455A64</color>
     <color name="colorPrimaryLight">#CFD8DC</color>
-    <color name="colorAccent">#FF5252</color>
-    <!--color name="colorAccent">#FFC107</color-->
-    <!--color name="colorAccent">#CDDC39</color-->
-    <!--color name="colorAccent">#FF5732</color!-->
+    <color name="colorTab">#78909c</color>
+
+    <color name="colorFab1">#FFC107</color>
+    <color name="colorFab2">#00BCD4</color>
+    <color name="colorFab3">#ff5722</color>
+    <color name="colorFab4">#CDDC39</color>
+
+    <color name="colorTabFrag1">#fff8e1</color>
+    <color name="colorTabFrag2">#eceff1</color>
+    <color name="colorTabFrag3">#fbe9e7</color>
+    <color name="colorTabFrag4">#f9fbe7</color>
+
+    <color name="colorTabLine1">#ffd54f</color>
+    <color name="colorTabLine2">#80deea</color>
+    <color name="colorTabLine3">#ff8a65</color>
+    <color name="colorTabLine4">#d4e157</color>
+
+    <color name="colorAccent">#FFC107</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
     <color name="colorIcons">#FFFFFF</color>
-    <color name="colorDivider">#B6B6B6</color>
-    <color name="colorBackground">#f5f5f5</color>
+    <color name="colorDivider">#bdbdbd</color>
+    <color name="colorBackground">#ECEFF1</color>
 </resources>

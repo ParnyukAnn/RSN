@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/grp0"
+        android:checkableBehavior="single">
     <item
+        android:id="@+id/nav_auth"
+        android:icon="@drawable/ic_account_grey600_24dp"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        android:icon="@drawable/ic_settings_grey600_24dp"/>
+        android:title="@string/action_authorization" />
     <item
+        android:id="@+id/nav_sync"
+        android:icon="@drawable/ic_sync_grey600_24dp"
         android:orderInCategory="100"
-        android:title="@string/action_search"
-        android:icon="@drawable/ic_magnify_grey600_24dp" />
-    <item
-        android:orderInCategory="100"
-        android:title="@string/action_synchronization"
-        android:icon="@drawable/ic_sync_grey600_24dp" />
+        android:title="@string/action_synchronization" />
+    </group>
+    <group
+        android:id="@+id/grp1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/ic_calendar_blank_grey600_24dp"
+            android:orderInCategory="100"
+            android:title="@string/action_calendar" />
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_magnify_grey600_24dp"
+            android:orderInCategory="100"
+            android:title="@string/action_search" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_archive_grey600_24dp"
+            android:orderInCategory="100"
+            android:title="@string/action_history" />
+    </group>
+    <group
+        android:id="@+id/grp2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_grey600_24dp"
+            android:orderInCategory="100"
+            android:title="@string/action_settings" />
+    </group>
 </menu>

@@ -2,10 +2,6 @@
     <string name="app_name">RSN</string>
 
     <!--Menu-->
-    <string name="action_test">Test: go to sms tab</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_search">Search</string>
-    <string name="action_synchronization">Synchronization</string>
     <string name="action_items_view">View</string>
     <!--End-->
 
@@ -21,6 +17,19 @@
     <string name="view_navigation_open">Open</string>
     <string name="view_navigation_close">Close</string>
 
+    <string name="action_history">History</string>
+    <string name="action_authorization">Authorization</string>
+    <string name="action_calendar">Calendar</string>
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_synchronization">Synchronization</string>
+    <!--End-->
+
+    <!--Fragment-->
+    <string name="sms_welcome">Create you first sms here.</string>
+    <string name="call_welcome">Create you first call-notification here.</string>
+    <string name="remind_welcome">Create you first remind here.</string>
+    <string name="note_welcome">Create you first note here.</string>
     <!--End-->
 
 </resources>

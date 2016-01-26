@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -30,10 +31,10 @@
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabIndicatorColor="@android:color/white"
-                app:tabIndicatorHeight="6dp"
-                app:tabSelectedTextColor="@android:color/white"
-                app:tabTextColor="@android:color/white" >
+                app:tabIndicatorColor="@color/colorFab1"
+                app:tabIndicatorHeight="3dp"
+                app:tabSelectedTextColor="@color/colorTabLine1"
+                app:tabTextColor="@color/colorPrimaryLight">
             </android.support.design.widget.TabLayout>
 
         </android.support.design.widget.AppBarLayout>
@@ -62,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/navigtion_header"
+        app:headerLayout="@layout/navigation_header"
         app:menu="@menu/menu_navigation">
 
     </android.support.design.widget.NavigationView>
