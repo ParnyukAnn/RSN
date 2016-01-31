@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.aparnyuk.rsn.Constants;
-import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.fragment.AbstractTabFragment;
 import com.aparnyuk.rsn.fragment.CallFragment;
 import com.aparnyuk.rsn.fragment.NoteFragment;
@@ -17,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TabsFragmentAdapter extends FragmentPagerAdapter {
+    // код(номер)/фрагмент
     private Map<Integer, AbstractTabFragment> tabs;
     private Context context;
 

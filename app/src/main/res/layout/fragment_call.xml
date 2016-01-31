@@ -4,9 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <!--android:background="@color/colorTabFrag2"-->
+    <!--
     <TextView
-        android:id="@+id/textView"
-        style="@style/WelcomeText"
-        android:text="@string/call_welcome" />
+           android:id="@+id/textView"
+           style="@style/WelcomeText"
+           android:text="@string/call_welcome" />
+    -->
+       <ListView
+           android:id="@+id/callListView"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:layout_weight="1">
+
 
 </LinearLayout>

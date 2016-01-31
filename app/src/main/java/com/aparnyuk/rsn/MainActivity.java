@@ -4,7 +4,6 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -51,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.setupWithViewPager(viewPager);
 
 
-//!!
+    // !! add animation to floating button and change tabs color
+    // state 0 = nothing happen, state 1 = begining scrolling, state 2 = stop at selected tab.
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private int state = 0;
             private boolean isFloatButtonHidden = false;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (!isFloatButtonHidden && state == 1 && positionOffset != 0.0) {
                     isFloatButtonHidden = true;
-                    //hide floating action button
+                    //hide floating button
                     swappingAway();
                 }
             }
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.pop_down);
         fab.startAnimation(animation);
     }
-
+    // add button animation, change button and tabs color and put icons on button
     private void selectedTabs(int tab) {
         fab.show();
         //a bit animation of popping up.
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    // Работа с меню в Toolbar
+    // Work with Toolbar menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -198,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    // Работа с меню NavigationDrover
+    // work with NavigationDrawer menu
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -223,13 +224,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
         }
-        // закрыть шторку после выбора пункта меню
+        // close NavigationDrawer after choosing menu item
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    // Закрыть NavigationDrover при нажатии кнопки назад
+    // close NavigationDrawer when put back button
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
