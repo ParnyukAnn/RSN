@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorTabFrag2"
     android:orientation="vertical">
-    <!--android:background="@color/colorTabFrag2"-->
     <!--
     <TextView
            android:id="@+id/textView"
            style="@style/WelcomeText"
            android:text="@string/call_welcome" />
     -->
-       <ListView
-           android:id="@+id/callListView"
-           android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:layout_weight="1">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/callRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
+    <EditText
+        android:id="@+id/callText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/call_fab"
+        style="@style/FAB"
+        android:src="@drawable/ic_phone_white_24dp"
+        app:backgroundTint="@color/colorFab2" />
 </LinearLayout>

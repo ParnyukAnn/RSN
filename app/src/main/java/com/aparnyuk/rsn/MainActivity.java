@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initToolbar();
         initTabs();
         initNavigationDrover();
-        initFloatingButton();
+        // initFloatingButton();
     }
 
     private void initToolbar() {
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // !! add animation to floating button and change tabs color
     // state 0 = nothing happen, state 1 = begining scrolling, state 2 = stop at selected tab.
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    /*    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private int state = 0;
             private boolean isFloatButtonHidden = false;
             private int position = 0;
@@ -90,13 +90,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     selectedTabs(position);
                 }
             }
-        });
-//!!
+        });*/
+    //!!
 
     }
 
 //!!
-    private void swappingAway() {
+   /* private void swappingAway() {
         fab.clearAnimation();
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.pop_down);
         fab.startAnimation(animation);
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
         }
-    }
+    }*/
 //!!
 
     private void initNavigationDrover() {
@@ -164,17 +164,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initFloatingButton() {
+/*    private void initFloatingButton() {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             /*   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
                 Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

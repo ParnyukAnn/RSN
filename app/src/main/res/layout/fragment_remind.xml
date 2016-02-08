@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorTabFrag3"
     android:orientation="vertical">
-    <!--android:background="@color/colorTabFrag3"-->
     <!--
     <TextView
         android:id="@+id/textView"
         style="@style/WelcomeText"
         android:text="@string/remind_welcome" />
     -->
-    <ListView
-        android:id="@+id/remindListView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/remindRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-    </ListView>
+        android:layout_weight="1" />
 
+    <EditText
+        android:id="@+id/remindText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/remind_fab"
+        style="@style/FAB"
+        android:src="@drawable/ic_alarm_check_white_24dp"
+        app:backgroundTint="@color/colorFab3" />
 </LinearLayout>

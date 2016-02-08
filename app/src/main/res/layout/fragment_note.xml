@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorTabFrag4"
     android:orientation="vertical">
-    <!--android:background="@color/colorTabFrag4"-->
     <!--
     <TextView
          android:id="@+id/textView"
          style="@style/WelcomeText"
          android:text="@string/note_welcome" />
      -->
-     <ListView
-         android:id="@+id/noteListView"
-         android:layout_width="match_parent"
-         android:layout_height="0dp"
-         android:layout_weight="1">
-     </ListView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/noteRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
- </LinearLayout>
+    <EditText
+        android:id="@+id/noteText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/note_fab"
+        style="@style/FAB"
+        android:src="@drawable/ic_pen_white_24dp"
+        app:backgroundTint="@color/colorFab4" />
+</LinearLayout>
