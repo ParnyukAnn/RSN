@@ -32,4 +32,16 @@
     <string name="note_welcome">Create you first note here.</string>
     <!--End-->
 
+    <!--DialogFragment-->
+    <string name="dialog_create_note">Adding note</string>
+    <string name="dialog_create_remind">Adding remind</string>
+    <string name="hint_title_note">Write your note here:</string>
+    <!--End-->
+
+    <!--Buttons-->
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_done">Done</string>
+    <!--End-->
+
 </resources>
