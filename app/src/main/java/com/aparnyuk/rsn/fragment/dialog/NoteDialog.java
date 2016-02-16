@@ -12,7 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.aparnyuk.rsn.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.model.Note;
+import com.firebase.client.Firebase;
+
+import java.util.Date;
 
 public class NoteDialog extends DialogFragment {
 
@@ -47,7 +52,11 @@ public class NoteDialog extends DialogFragment {
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        sendCreateItemEvent();
+                        Note note = new Note(nameView.getText().toString(), new Date());
+                        new Firebase(Constants.FIREBASE_URL)
+                                .child("note")
+                                .push()
+                                .setValue(note);
                         dialog.dismiss();
                     }
                 });

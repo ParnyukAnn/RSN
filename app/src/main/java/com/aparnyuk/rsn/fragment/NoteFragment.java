@@ -51,7 +51,7 @@ public class NoteFragment extends AbstractTabFragment {
         Firebase.setAndroidContext(getContext());
         Firebase base = new Firebase(Constants.FIREBASE_URL).child("note");
 
-        mAdapter = new FirebaseRecyclerViewAdapter <Note, NoteListViewHolder>(Note.class, R.layout.list_item_for_note, NoteListViewHolder.class, base) {
+        mAdapter = new FirebaseRecyclerViewAdapter<Note, NoteListViewHolder>(Note.class, R.layout.list_item_for_note, NoteListViewHolder.class, base) {
             @Override
             public void populateViewHolder(NoteListViewHolder noteListViewHolder, Note note) {
                 noteListViewHolder.noteText.setText(note.getText());
@@ -71,19 +71,9 @@ public class NoteFragment extends AbstractTabFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-////!!
-//                                /*ТЕСТОВЫЙ ВВОД ДАННЫХ */
-//                // создать диалоговые окна ввода данных о заметках
-//                // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
-//                Note note = new Note(text.getText().toString(), new Date());
-//                new Firebase(Constants.FIREBASE_URL)
-//                        .child("note")
-//                        .push()
-//                        .setValue(note);
                 noteDialog = new NoteDialog();
                 noteDialog.show(getFragmentManager(), "CreateDialog1");
             }
-//!!
         });
     }
 
