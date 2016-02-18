@@ -1,12 +1,13 @@
 package com.aparnyuk.rsn.fragment.dialog;
 
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,32 +29,48 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class RemindDialog extends DialogFragment {
-    private EditText nameView, dateView, timeView;
-    ;
-    private Spinner repeatRemindSpinner, quantityRemindSpinner;
+public class CallDialog extends DialogFragment {
+    private EditText nameView, dateView, timeView;;
+    private Spinner repeatSpinner, quantitySpinner;
     private int day, month, year, hour, minute;
     private static TimePickerDialog timePicker;
     private static DatePickerDialog datePicker;
     private static Button okButton, cancelButton;
+    private Button buttonContacts;
+    static final int SELECT_CONTACT_SUCCESS_RESULT = 101;
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog (Bundle savedInstanceState){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view = inflater.inflate(R.layout.remind_dialog, null);
+        View view = inflater.inflate(R.layout.call_dialog, null);
 
-        nameView = (EditText) view.findViewById(R.id.remind_dialog_text);
+        nameView = (EditText) view.findViewById(R.id.call_dialog_text);
         nameView.addTextChangedListener(titleWatcher);
 
-        dateView = (EditText) view.findViewById(R.id.remind_date);
-        timeView = (EditText) view.findViewById(R.id.remind_time);
+        dateView = (EditText) view.findViewById(R.id.event_date);
+        timeView = (EditText) view.findViewById(R.id.event_time);
+        buttonContacts = (Button) view.findViewById(R.id.buttonContacts);
+
+        buttonContacts.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+
+                // Create a new intent for choosing a contact
+                // http://stackoverflow.com/questions/9496350/pick-a-number-and-name-from-contacts-list-in-android-app
+                Intent contactPickerIntent = new Intent (Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                contactPickerIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); //(Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
+                // Start the contact picker expecting a result with the resultCode '101'
+                //StartActivityForResult (contactPickerIntent, SELECT_CONTACT_SUCCESS_RESULT);
+                startActivityForResult(contactPickerIntent, SELECT_CONTACT_SUCCESS_RESULT);
+            }
+        });
 
         Date date = new Date();
         TimeZone timeZone = TimeZone.getDefault();
-        int offset = timeZone.getOffset(date.getTime()) / (60 * 60 * 1000);
+        int offset = timeZone.getOffset(date.getTime())/(60 * 60 * 1000);
 
         DateTime dateTime = new DateTime(date);
         LocalDateTime localDateTime = dateTime.toLocalDateTime();
@@ -61,7 +78,7 @@ public class RemindDialog extends DialogFragment {
         day = localDateTime.getDayOfMonth();
         month = localDateTime.getMonthOfYear();
         year = localDateTime.getYear();
-        hour = localDateTime.getHourOfDay() + offset;
+        hour = localDateTime.getHourOfDay()+offset;
         minute = localDateTime.getMinuteOfHour();
 
         datePicker = new DatePickerDialog(getActivity(), myDateListener, year, month, day);
@@ -69,9 +86,8 @@ public class RemindDialog extends DialogFragment {
         showDate(year, month, day);
         showTime(hour, minute);
 
-
-        //Set OnClickListener on Date and Time
         dateView.setOnClickListener(new View.OnClickListener() {
+
             public void setDatePicker(DatePickerDialog mDatePicker) {
                 final Calendar calendar = Calendar.getInstance();
                 mDatePicker = datePicker;
@@ -87,6 +103,7 @@ public class RemindDialog extends DialogFragment {
         });
 
         timeView.setOnClickListener(new View.OnClickListener() {
+
             public void setTimePicker(TimePickerDialog mTimePicker) {
                 mTimePicker = timePicker;
                 mTimePicker.show();
@@ -98,18 +115,11 @@ public class RemindDialog extends DialogFragment {
             }
         });
 
-        //Show Spinners
-        repeatRemindSpinner = (Spinner) view.findViewById(R.id.repeatRemindSpinner);
+        repeatSpinner = (Spinner) view.findViewById(R.id.repeatCallSpinner);
         ArrayAdapter<CharSequence> arrayRepeatAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.repeat, android.R.layout.simple_spinner_dropdown_item);
         arrayRepeatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        repeatRemindSpinner.setAdapter(arrayRepeatAdapter);
-
-        quantityRemindSpinner = (Spinner) view.findViewById(R.id.quantityRemindSpinner);
-        ArrayAdapter<CharSequence> arrayQuantityAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.quantity, android.R.layout.simple_spinner_dropdown_item);
-        arrayRepeatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        quantityRemindSpinner.setAdapter(arrayQuantityAdapter);
+        repeatSpinner.setAdapter(arrayRepeatAdapter);
 
 
         builder.setTitle(R.string.dialog_create_remind)
@@ -145,7 +155,6 @@ public class RemindDialog extends DialogFragment {
     }
 
     private final TextWatcher titleWatcher = new TextWatcher() {
-
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
@@ -221,4 +230,5 @@ public class RemindDialog extends DialogFragment {
 //            return true;
 //        } else return false;
 //    }
+
 }

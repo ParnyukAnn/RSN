@@ -35,8 +35,11 @@
     <!--DialogFragment-->
     <string name="dialog_create_note">Adding note</string>
     <string name="dialog_create_remind">Adding remind</string>
+    <string name="dialog_create_call">Adding call</string>
     <string name="hint_title_note">Write your note here:</string>
     <string name="hint_title_remind">Write your remind here:</string>
+    <string name="hint_title_sms">Write your sms here:</string>
+    <string name="hint_title_call">Write your call here:</string>
     <string name="hint_date">Date</string>
     <string name="hint_time">Time</string>
     <!--End-->

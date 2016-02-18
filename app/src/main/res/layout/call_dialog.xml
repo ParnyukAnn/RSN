@@ -16,10 +16,10 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/remind_dialog_text"
+                android:id="@+id/call_dialog_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_title_remind"
+                android:hint="@string/hint_title_call"
                 android:maxLength="24"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
@@ -41,7 +41,7 @@
             android:layout_weight="0.5">
 
             <EditText
-                android:id="@+id/remind_date"
+                android:id="@+id/event_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -57,7 +57,7 @@
             android:layout_weight="0.5">
 
             <EditText
-                android:id="@+id/remind_time"
+                android:id="@+id/event_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
@@ -83,36 +83,30 @@
             android:text="Repeat" />
 
         <Spinner
-            android:id="@+id/repeatRemindSpinner"
+            android:id="@+id/repeatCallSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/call_number_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout3"
-        android:layout_margin="20dp"
-        android:baselineAligned="false">
+        android:hint="Write yor number here"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/buttonContacts"
+        android:layout_toLeftOf="@+id/buttonContacts" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="Quantity"
-            android:layout_gravity="center_vertical" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Push"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/linearLayout1"
+        android:layout_alignEnd="@+id/linearLayout1"
 
-
-        <Spinner
-            android:id="@+id/quantityRemindSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
-
-    </LinearLayout>
-
+        android:id="@+id/buttonContacts" />
 
 </RelativeLayout>

@@ -138,9 +138,9 @@ public class SmsFragment extends AbstractTabFragment {
         this.context = context;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mAdapter.cleanup();
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        mAdapter.cleanup();
+//    }
 }

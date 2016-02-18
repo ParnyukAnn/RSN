@@ -95,8 +95,8 @@ public class NoteFragment extends AbstractTabFragment {
         }
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        mAdapter.cleanup();
-    }
+//    public void onDestroy() {
+//        super.onDestroy();
+//        mAdapter.cleanup();
+//    }
 }

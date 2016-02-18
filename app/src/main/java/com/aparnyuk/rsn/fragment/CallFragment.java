@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.aparnyuk.rsn.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.fragment.dialog.CallDialog;
 import com.aparnyuk.rsn.model.Calls;
 import com.aparnyuk.rsn.model.Sim;
 import com.firebase.client.Firebase;
@@ -25,6 +26,7 @@ import java.util.Date;
 
 public class CallFragment extends AbstractTabFragment {
     FirebaseRecyclerViewAdapter mAdapter;
+    CallDialog callDialog;
 
     public static CallFragment getInstance(Context context) {
         Bundle args = new Bundle();
@@ -72,20 +74,22 @@ public class CallFragment extends AbstractTabFragment {
 
             @Override
             public void onClick(View view) {
-//!!
-                                /*ТЕСТОВЫЙ ВВОД ДАННЫХ */
-                // создать диалоговые окна ввода данных звонках
-                // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
-                ArrayList<String> phoneNumbers = new ArrayList<>();
-                phoneNumbers.add("8947839534");
-                phoneNumbers.add("5487983721");
-                Sim sim = new Sim("sim 1", "phone 2");
-                Calls call = new Calls(phoneNumbers, sim, new Date());
-                call.setText(text.getText().toString());
-                new Firebase(Constants.FIREBASE_URL)
-                        .child("call")
-                        .push()
-                        .setValue(call);
+////!!
+//                                /*ТЕСТОВЫЙ ВВОД ДАННЫХ */
+//                // создать диалоговые окна ввода данных звонках
+//                // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
+//                ArrayList<String> phoneNumbers = new ArrayList<>();
+//                phoneNumbers.add("8947839534");
+//                phoneNumbers.add("5487983721");
+//                Sim sim = new Sim("sim 1", "phone 2");
+//                Calls call = new Calls(phoneNumbers, sim, new Date());
+//                call.setText(text.getText().toString());
+//                new Firebase(Constants.FIREBASE_URL)
+//                        .child("call")
+//                        .push()
+//                        .setValue(call);
+                callDialog = new CallDialog();
+                callDialog.show(getFragmentManager(), "CreateDialog3");
             }
 //!!
         });
@@ -110,9 +114,9 @@ public class CallFragment extends AbstractTabFragment {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mAdapter.cleanup();
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        mAdapter.cleanup();
+//    }
 }

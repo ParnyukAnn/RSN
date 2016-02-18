@@ -20,8 +20,6 @@ import com.aparnyuk.rsn.model.Remind;
 import com.firebase.client.Firebase;
 import com.firebase.ui.FirebaseRecyclerViewAdapter;
 
-import java.util.Date;
-
 public class RemindFragment extends AbstractTabFragment {
     FirebaseRecyclerViewAdapter mAdapter;
     RemindDialog remindDialog;
@@ -101,12 +99,12 @@ public class RemindFragment extends AbstractTabFragment {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.remind_cv);
             remindText = (TextView) itemView.findViewById(R.id.remind_text);
-            dateText = (TextView) itemView.findViewById(R.id.remind_date);
+            dateText = (TextView) itemView.findViewById(R.id.event_date);
         }
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        mAdapter.cleanup();
-    }
+//    public void onDestroy() {
+//        super.onDestroy();
+//        mAdapter.cleanup();
+//    }
 }
