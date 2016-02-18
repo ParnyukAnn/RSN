@@ -15,14 +15,14 @@ import android.widget.TextView;
 
 import com.aparnyuk.rsn.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
 import com.aparnyuk.rsn.model.Remind;
 import com.firebase.client.Firebase;
 import com.firebase.ui.FirebaseRecyclerViewAdapter;
 
-import java.util.Date;
-
 public class RemindFragment extends AbstractTabFragment {
     FirebaseRecyclerViewAdapter mAdapter;
+    RemindDialog remindDialog;
 
     public static RemindFragment getInstance(Context context) {
         Bundle args = new Bundle();
@@ -70,15 +70,17 @@ public class RemindFragment extends AbstractTabFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//!!
-                                /*ТЕСТОВЫЙ ВВОД ДАННЫХ */
-                // создать диалоговые окна ввода данных о напоминании
-                // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
-                Remind remind = new Remind(text.getText().toString(), new Date());
-                new Firebase(Constants.FIREBASE_URL)
-                        .child("remind")
-                        .push()
-                        .setValue(remind);
+////!!
+//                                /*ТЕСТОВЫЙ ВВОД ДАННЫХ */
+//                // создать диалоговые окна ввода данных о напоминании
+//                // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
+//                Remind remind = new Remind(text.getText().toString(), new Date());
+//                new Firebase(Constants.FIREBASE_URL)
+//                        .child("remind")
+//                        .push()
+//                        .setValue(remind);
+                remindDialog = new RemindDialog();
+                remindDialog.show(getFragmentManager(), "CreateDialog2");
             }
 //!!
         });
@@ -97,12 +99,12 @@ public class RemindFragment extends AbstractTabFragment {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.remind_cv);
             remindText = (TextView) itemView.findViewById(R.id.remind_text);
-            dateText = (TextView) itemView.findViewById(R.id.remind_date);
+            dateText = (TextView) itemView.findViewById(R.id.event_date);
         }
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        mAdapter.cleanup();
-    }
+//    public void onDestroy() {
+//        super.onDestroy();
+//        mAdapter.cleanup();
+//    }
 }
