@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,10 @@ import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
 import com.aparnyuk.rsn.model.Remind;
 import com.firebase.client.Firebase;
-import com.firebase.ui.FirebaseRecyclerViewAdapter;
+import com.firebase.ui.FirebaseRecyclerAdapter;
 
 public class RemindFragment extends AbstractTabFragment {
-    FirebaseRecyclerViewAdapter mAdapter;
+    FirebaseRecyclerAdapter mAdapter;
     RemindDialog remindDialog;
 
     public static RemindFragment getInstance(Context context) {
@@ -49,12 +50,12 @@ public class RemindFragment extends AbstractTabFragment {
         Firebase.setAndroidContext(getContext());
         Firebase base = new Firebase(Constants.FIREBASE_URL).child("remind");
 
-        mAdapter = new FirebaseRecyclerViewAdapter<Remind, RemindListViewHolder>(Remind.class, R.layout.list_item_for_remind, RemindListViewHolder.class, base) {
+        mAdapter = new FirebaseRecyclerAdapter<Remind, RemindListViewHolder>(Remind.class, R.layout.list_item_for_remind, RemindListViewHolder.class, base) {
 
             @Override
-            public void populateViewHolder(RemindListViewHolder smsListViewHolder, Remind remind) {
-                smsListViewHolder.remindText.setText(remind.getText());
-                smsListViewHolder.dateText.setText(remind.getDate().toString());
+            protected void populateViewHolder(RemindListViewHolder remindListViewHolder, Remind remind, int i) {
+                remindListViewHolder.remindText.setText(remind.getText());
+                remindListViewHolder.dateText.setText(remind.getDate().toString());
             }
         };
 

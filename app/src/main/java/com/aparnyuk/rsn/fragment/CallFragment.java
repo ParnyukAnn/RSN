@@ -19,13 +19,13 @@ import com.aparnyuk.rsn.fragment.dialog.CallDialog;
 import com.aparnyuk.rsn.model.Calls;
 import com.aparnyuk.rsn.model.Sim;
 import com.firebase.client.Firebase;
-import com.firebase.ui.FirebaseRecyclerViewAdapter;
+import com.firebase.ui.FirebaseRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class CallFragment extends AbstractTabFragment {
-    FirebaseRecyclerViewAdapter mAdapter;
+    FirebaseRecyclerAdapter mAdapter;
     CallDialog callDialog;
 
     public static CallFragment getInstance(Context context) {
@@ -52,10 +52,10 @@ public class CallFragment extends AbstractTabFragment {
         Firebase.setAndroidContext(getContext());
         Firebase base = new Firebase(Constants.FIREBASE_URL).child("call");
 
-        mAdapter = new FirebaseRecyclerViewAdapter<Calls, CallsListViewHolder>(Calls.class, R.layout.list_item_for_calls, CallsListViewHolder.class, base) {
+        mAdapter = new FirebaseRecyclerAdapter<Calls, CallsListViewHolder>(Calls.class, R.layout.list_item_for_calls, CallsListViewHolder.class, base) {
 
             @Override
-            public void populateViewHolder(CallsListViewHolder callsListViewHolder, Calls calls) {
+            protected void populateViewHolder(CallsListViewHolder callsListViewHolder, Calls calls, int i) {
                 callsListViewHolder.callPhoneNum.setText(calls.getNumbers().get(0));
                 callsListViewHolder.callText.setText(calls.getText());
                 callsListViewHolder.dateText.setText(calls.getDate().toString());

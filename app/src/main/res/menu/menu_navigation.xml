@@ -8,11 +8,12 @@
         android:icon="@drawable/ic_account_grey600_24dp"
         android:orderInCategory="100"
         android:title="@string/action_authorization" />
-    <item
+ <!--   <item
         android:id="@+id/nav_sync"
         android:icon="@drawable/ic_sync_grey600_24dp"
         android:orderInCategory="100"
-        android:title="@string/action_synchronization" />
+        android:title="@string/action_login" />
+        -->
     </group>
     <group
         android:id="@+id/grp1"

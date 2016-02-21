@@ -18,13 +18,13 @@ import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.model.Sim;
 import com.aparnyuk.rsn.model.Sms;
 import com.firebase.client.Firebase;
-import com.firebase.ui.FirebaseRecyclerViewAdapter;
+import com.firebase.ui.FirebaseRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class SmsFragment extends AbstractTabFragment {
-    FirebaseRecyclerViewAdapter mAdapter;
+    FirebaseRecyclerAdapter mAdapter;
 
     public static SmsFragment getInstance(Context context) {
         Bundle args = new Bundle();
@@ -49,10 +49,10 @@ public class SmsFragment extends AbstractTabFragment {
         Firebase.setAndroidContext(getContext());
         Firebase base = new Firebase(Constants.FIREBASE_URL).child("sms");
 
-        mAdapter = new FirebaseRecyclerViewAdapter<Sms, SmsListViewHolder>(Sms.class, R.layout.list_item_for_sms, SmsListViewHolder.class, base) {
+        mAdapter = new FirebaseRecyclerAdapter<Sms, SmsListViewHolder>(Sms.class, R.layout.list_item_for_sms, SmsListViewHolder.class, base) {
 
             @Override
-            public void populateViewHolder(SmsListViewHolder smsListViewHolder, Sms sms) {
+            protected void populateViewHolder(SmsListViewHolder smsListViewHolder, Sms sms, int i) {
                 smsListViewHolder.smsPhoneNum.setText(sms.getNumbers().get(0));
                 smsListViewHolder.smsText.setText(sms.getText());
                 smsListViewHolder.dateText.setText(sms.getDate().toString());

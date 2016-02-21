@@ -18,14 +18,14 @@ import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
 import com.aparnyuk.rsn.model.Note;
 import com.firebase.client.Firebase;
-import com.firebase.ui.FirebaseRecyclerViewAdapter;
+import com.firebase.ui.FirebaseRecyclerAdapter;
 
 import java.util.Date;
 
 public class NoteFragment extends AbstractTabFragment {
 
     NoteDialog noteDialog;
-    FirebaseRecyclerViewAdapter mAdapter;
+    FirebaseRecyclerAdapter mAdapter;
 
     public static NoteFragment getInstance(Context context) {
         Bundle args = new Bundle();
@@ -51,9 +51,9 @@ public class NoteFragment extends AbstractTabFragment {
         Firebase.setAndroidContext(getContext());
         Firebase base = new Firebase(Constants.FIREBASE_URL).child("note");
 
-        mAdapter = new FirebaseRecyclerViewAdapter<Note, NoteListViewHolder>(Note.class, R.layout.list_item_for_note, NoteListViewHolder.class, base) {
+        mAdapter = new FirebaseRecyclerAdapter<Note, NoteListViewHolder>(Note.class, R.layout.list_item_for_note, NoteListViewHolder.class, base) {
             @Override
-            public void populateViewHolder(NoteListViewHolder noteListViewHolder, Note note) {
+            protected void populateViewHolder(NoteListViewHolder noteListViewHolder, Note note, int i) {
                 noteListViewHolder.noteText.setText(note.getText());
                 noteListViewHolder.dateText.setText(note.getDate().toString());
             }

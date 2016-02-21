@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,16 +20,26 @@ import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.aparnyuk.rsn.adapter.TabsFragmentAdapter;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.ui.auth.core.AuthProviderType;
+import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
+import com.firebase.ui.auth.core.FirebaseLoginError;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends FirebaseLoginBaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+    public static final String TAG = "MainActivity";
     Toolbar toolbar;
     ViewPager viewPager;
     FloatingActionButton fab;
     TabLayout tabLayout;
+    private Firebase mRef;
+    private String mName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Firebase.setAndroidContext(this);
+        mRef = new Firebase(Constants.FIREBASE_URL);
 
         initToolbar();
         initTabs();
@@ -181,21 +192,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_login).setVisible(getAuth() == null);
+        menu.findItem(R.id.action_logout).setVisible(getAuth() != null);
+        return true;
+    }
+
     // Work with Toolbar menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        switch (id) {
-            case (R.id.action_items_view): {
-                Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT).show();
-                break;
-            }
+        switch (item.getItemId()) {
+            case R.id.action_login:
+                this.showFirebaseLoginPrompt();
+                return true;
+            case R.id.action_logout:
+                this.logout();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     // work with NavigationDrawer menu
     @Override
@@ -203,11 +224,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         switch (id) {
             case (R.id.nav_auth): {
-                Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT).show();
-                break;
-            }
-            case (R.id.nav_sync): {
-                break;
+                    break;
             }
             case (R.id.nav_calendar): {
                 break;
@@ -238,4 +255,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setEnabledAuthProvider(AuthProviderType.FACEBOOK);
+        setEnabledAuthProvider(AuthProviderType.GOOGLE);
+        setEnabledAuthProvider(AuthProviderType.PASSWORD);
+    }
+
+    @Override
+    public void onFirebaseLoggedIn(AuthData authData) {
+        Log.i(TAG, "Logged in to " + authData.getProvider());
+        switch (authData.getProvider()) {
+            case "password":
+                mName = (String) authData.getProviderData().get("email");
+                break;
+            default:
+                mName = (String) authData.getProviderData().get("displayName");
+                break;
+        }
+
+        invalidateOptionsMenu();
+        //mRecycleViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFirebaseLoggedOut() {
+        Log.i(TAG, "Logged out");
+        mName = "";
+        invalidateOptionsMenu();
+//        mRecycleViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFirebaseLoginProviderError(FirebaseLoginError firebaseError) {
+        Log.e(TAG, "Login provider error: " + firebaseError.toString());
+        resetFirebaseLoginPrompt();
+    }
+
+    @Override
+    public void onFirebaseLoginUserError(FirebaseLoginError firebaseError) {
+        Log.e(TAG, "Login user error: "+firebaseError.toString());
+        resetFirebaseLoginPrompt();
+    }
+
+    @Override
+    public Firebase getFirebaseRef() {
+        return mRef;
+    }
+
 }
