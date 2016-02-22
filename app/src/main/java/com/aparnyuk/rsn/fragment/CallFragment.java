@@ -42,7 +42,7 @@ public class CallFragment extends AbstractTabFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_call, container, false);
         // view.setBackgroundColor(getResources().getColor(R.color.colorTabFrag2));
-        initFab();
+       // initFab();
 
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.callRecyclerView);
         recycler.setHasFixedSize(true);
@@ -66,7 +66,7 @@ public class CallFragment extends AbstractTabFragment {
 
         return view;
     }
-
+/*
     private void initFab() {
         final EditText text = (EditText) view.findViewById(R.id.callText);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.call_fab);
@@ -75,7 +75,7 @@ public class CallFragment extends AbstractTabFragment {
             @Override
             public void onClick(View view) {
 ////!!
-//                                /*ТЕСТОВЫЙ ВВОД ДАННЫХ */
+//
 //                // создать диалоговые окна ввода данных звонках
 //                // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
 //                ArrayList<String> phoneNumbers = new ArrayList<>();
@@ -94,7 +94,7 @@ public class CallFragment extends AbstractTabFragment {
 //!!
         });
     }
-
+*/
     public void setContext(Context context) {
         this.context = context;
     }

@@ -98,10 +98,10 @@ public class SmsFragment extends AbstractTabFragment {
 */
         //!!
 
-        initFab();
+      //  initFab();
         return view;
     }
-
+/*
     private void initFab() {
         final EditText text = (EditText) view.findViewById(R.id.smsText);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.sms_fab);
@@ -110,7 +110,7 @@ public class SmsFragment extends AbstractTabFragment {
             public void onClick(View view) {
 
 //!!
-                                /*ТЕСТОВЫЙ ВВОД ДАННЫХ */
+
                 // создать диалоговые окна ввода данных смс
                 // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
                 ArrayList<String> phoneNumbers = new ArrayList<>();
@@ -130,7 +130,7 @@ public class SmsFragment extends AbstractTabFragment {
             }
         });
     }
-
+*/
     public static class SmsListViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView smsPhoneNum;

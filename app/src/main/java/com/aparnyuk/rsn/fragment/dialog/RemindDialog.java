@@ -4,6 +4,7 @@ package com.aparnyuk.rsn.fragment.dialog;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -30,7 +31,6 @@ import java.util.TimeZone;
 
 public class RemindDialog extends DialogFragment {
     private EditText nameView, dateView, timeView;
-    ;
     private Spinner repeatRemindSpinner, quantityRemindSpinner;
     private int day, month, year, hour, minute;
     private static TimePickerDialog timePicker;
@@ -205,6 +205,8 @@ public class RemindDialog extends DialogFragment {
         timeView.setText(new StringBuilder().append(mHour)
                 .append(":").append(mMinute));
     }
+
+
 //
 //    private boolean dateHasPassed(EditText dateView) {
 //        String[] strings = dateView.getText().toString().split("/");

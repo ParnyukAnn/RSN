@@ -1,5 +1,6 @@
 package com.aparnyuk.rsn;
 
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -22,6 +23,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.aparnyuk.rsn.adapter.TabsFragmentAdapter;
+import com.aparnyuk.rsn.fragment.dialog.CallDialog;
+import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
+import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
 import com.aparnyuk.rsn.login.LoginActivity;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -39,6 +43,13 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     private String mName;
     private SharedPreferences prefs = null;
     public static final String APP_PREFERENCES = "com.aparnyuk.rsn";
+    private int position;
+
+    CallDialog callDialog;
+    RemindDialog remindDialog;
+    NoteDialog noteDialog;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +61,9 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         initToolbar();
         initTabs();
         initNavigationDrover();
-        // initFloatingButton();
+        initFloatingButton();
+
+        position = 0;
     }
 
     private void initToolbar() {
@@ -67,13 +80,13 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         tabLayout.setupWithViewPager(viewPager);
 
 
-    // !! add animation to floating button and change tabs color
-    // state 0 = nothing happen, state 1 = begining scrolling, state 2 = stop at selected tab.
+        // !! add animation to floating button and change tabs color
+        // state 0 = nothing happen, state 1 = begining scrolling, state 2 = stop at selected tab.
 
-    /*    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private int state = 0;
             private boolean isFloatButtonHidden = false;
-            private int position = 0;
+           // private int position = 0;
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -85,10 +98,10 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected(int pos) {
                 //reset floating
-                this.position = position;
-
+                //this.position = position;
+                position = pos;
                 if (state == 2) {
                     //have end in selected tab
                     isFloatButtonHidden = false;
@@ -107,18 +120,19 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                     selectedTabs(position);
                 }
             }
-        });*/
-    //!!
+        });
+        //!!
 
     }
 
-//!!
-   /* private void swappingAway() {
+    //!!
+    private void swappingAway() {
         fab.clearAnimation();
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.pop_down);
         fab.startAnimation(animation);
     }
-    // add button animation, change button and tabs color and put icons on button
+
+    /* Add button animation, change button and tabs color and put icons on button */
     private void selectedTabs(int tab) {
         fab.show();
         //a bit animation of popping up.
@@ -136,7 +150,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 //fab.setImageResource(R.drawable.ic_email_white_36dp);
                 fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
                 tabLayout.setSelectedTabIndicatorColor(tabColor);
-                tabLayout.setTabTextColors(defaultColor,tabColor);
+                tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
             case (Constants.TAB_TWO_CALL): {
@@ -145,7 +159,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 fab.setImageResource(R.drawable.ic_phone_white_36dp);
                 fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
                 tabLayout.setSelectedTabIndicatorColor(tabColor);
-                tabLayout.setTabTextColors(defaultColor,tabColor);
+                tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
             case (Constants.TAB_THREE_REMIND): {
@@ -154,7 +168,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 fab.setImageResource(R.drawable.ic_alarm_check_white_36dp);
                 fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
                 tabLayout.setSelectedTabIndicatorColor(tabColor);
-                tabLayout.setTabTextColors(defaultColor,tabColor);
+                tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
             case (Constants.TAB_FOUR_NOTE): {
@@ -163,11 +177,11 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 fab.setImageResource(R.drawable.ic_pen_white_36dp);
                 fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
                 tabLayout.setSelectedTabIndicatorColor(tabColor);
-                tabLayout.setTabTextColors(defaultColor,tabColor);
+                tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
         }
-    }*/
+    }
 //!!
 
     private void initNavigationDrover() {
@@ -181,15 +195,38 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-/*    private void initFloatingButton() {
+    private void initFloatingButton() {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                switch (position) {
+                    case (Constants.TAB_ONE_SMS): {
+                        //smsDialog = new SmsDialog();
+                        //smsDialog.show(getFragmentManager(), "CreateDialog4");
+                        break;
+                    }
+                    case (Constants.TAB_TWO_CALL): {
+                        callDialog = new CallDialog();
+                        callDialog.show(fragmentManager, "CreateDialog3");
+
+                        break;
+                    }
+                    case (Constants.TAB_THREE_REMIND): {
+                        remindDialog = new RemindDialog();
+                        remindDialog.show(fragmentManager, "CreateDialog2");
+                        break;
+                    }
+                    case (Constants.TAB_FOUR_NOTE): {
+                        noteDialog = new NoteDialog();
+                        noteDialog.show(fragmentManager, "CreateDialog1");
+                        break;
+                    }
+                }
             }
         });
-    }*/
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -205,7 +242,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         return true;
     }
 
-    // Work with Toolbar menu
+    /* Work with Toolbar menu */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -223,8 +260,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     }
 
 
-
-    // work with NavigationDrawer menu
+    /*  Work with NavigationDrawer menu */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -253,7 +289,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         return true;
     }
 
-    // close NavigationDrawer when put back button
+    /* Close NavigationDrawer when put back button */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -285,7 +321,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         }
 
         invalidateOptionsMenu();
-        //mRecycleViewAdapter.notifyDataSetChanged();
+        // mRecycleViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -295,7 +331,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         invalidateOptionsMenu();
 
         // case tab ->
-//        mRecycleViewAdapter.notifyDataSetChanged();
+        // mRecycleViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -306,7 +342,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
     @Override
     public void onFirebaseLoginUserError(FirebaseLoginError firebaseError) {
-        Log.e(TAG, "Login user error: "+firebaseError.toString());
+        Log.e(TAG, "Login user error: " + firebaseError.toString());
         resetFirebaseLoginPrompt();
     }
 
@@ -315,13 +351,13 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         return mRef;
     }
 
-    // The first launch of the application
+    /* The first launch of the application. Ask user login. */
     @Override
     protected void onResume() {
         super.onResume();
         if (prefs.getBoolean("firstrun", true)) {
             Toast.makeText(this, "First run", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent (this,LoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             prefs.edit().putBoolean("firstrun", false).apply();
         }

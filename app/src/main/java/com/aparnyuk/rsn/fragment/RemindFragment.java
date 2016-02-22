@@ -40,7 +40,7 @@ public class RemindFragment extends AbstractTabFragment {
         view = inflater.inflate(R.layout.fragment_remind, container, false);
         // view.setBackgroundColor(getResources().getColor(R.color.colorTabFrag3));
 
-        initFab();
+     //   initFab();
 
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.remindRecyclerView);
         recycler.setHasFixedSize(true);
@@ -63,7 +63,7 @@ public class RemindFragment extends AbstractTabFragment {
 
         return view;
     }
-
+/*
     private void initFab() {
         //Firebase.setAndroidContext(getContext());
         final EditText text = (EditText) view.findViewById(R.id.remindText);
@@ -72,7 +72,7 @@ public class RemindFragment extends AbstractTabFragment {
             @Override
             public void onClick(View view) {
 ////!!
-//                                /*ТЕСТОВЫЙ ВВОД ДАННЫХ */
+//
 //                // создать диалоговые окна ввода данных о напоминании
 //                // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
 //                Remind remind = new Remind(text.getText().toString(), new Date());
@@ -86,7 +86,7 @@ public class RemindFragment extends AbstractTabFragment {
 //!!
         });
     }
-
+*/
     public void setContext(Context context) {
         this.context = context;
     }

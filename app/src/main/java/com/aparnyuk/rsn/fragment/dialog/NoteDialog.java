@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.aparnyuk.rsn.Constants;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.model.Note;
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 
 import java.util.Date;
@@ -53,10 +54,14 @@ public class NoteDialog extends DialogFragment {
                     @Override
                     public void onClick(View view) {
                         Note note = new Note(nameView.getText().toString(), new Date());
-                        new Firebase(Constants.FIREBASE_URL)
-                                .child("note")
-                                .push()
-                                .setValue(note);
+
+                        Firebase base = new Firebase(Constants.FIREBASE_URL);
+                        AuthData authData = base.getAuth();
+                        if (authData != null) {
+                            base =base.child(authData.getUid());
+                        }
+                        base.child("note").push().setValue(note);
+
                         dialog.dismiss();
                     }
                 });

@@ -17,6 +17,7 @@ import com.aparnyuk.rsn.Constants;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
 import com.aparnyuk.rsn.model.Note;
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.ui.FirebaseRecyclerAdapter;
 
@@ -24,7 +25,7 @@ import java.util.Date;
 
 public class NoteFragment extends AbstractTabFragment {
 
-    NoteDialog noteDialog;
+   // NoteDialog noteDialog;
     FirebaseRecyclerAdapter mAdapter;
 
     public static NoteFragment getInstance(Context context) {
@@ -42,14 +43,19 @@ public class NoteFragment extends AbstractTabFragment {
         view = inflater.inflate(R.layout.fragment_note, container, false);
         //   view.setBackgroundColor(getResources().getColor(R.color.colorTabFrag4));
 
-        initFab();
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.noteRecyclerView);
         recycler.setHasFixedSize(true);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Use Firebase to populate the list.
         Firebase.setAndroidContext(getContext());
-        Firebase base = new Firebase(Constants.FIREBASE_URL).child("note");
+        Firebase base = new Firebase(Constants.FIREBASE_URL);
+        AuthData authData = base.getAuth();
+        if (authData != null) {
+            base = base.child(authData.getUid()).child("note");
+        } else {
+            base = base.child("note");
+        }
 
         mAdapter = new FirebaseRecyclerAdapter<Note, NoteListViewHolder>(Note.class, R.layout.list_item_for_note, NoteListViewHolder.class, base) {
             @Override
@@ -63,18 +69,6 @@ public class NoteFragment extends AbstractTabFragment {
 
 
         return view;
-    }
-
-    private void initFab() {
-        final EditText text = (EditText) view.findViewById(R.id.noteText);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.note_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                noteDialog = new NoteDialog();
-                noteDialog.show(getFragmentManager(), "CreateDialog1");
-            }
-        });
     }
 
     public void setContext(Context context) {
