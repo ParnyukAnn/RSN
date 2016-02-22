@@ -1,5 +1,5 @@
 package com.aparnyuk.rsn.fragment;
-
+import com.firebase.client.AuthData;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -47,7 +47,15 @@ public class SmsFragment extends AbstractTabFragment {
 
         // Use Firebase to populate the list.
         Firebase.setAndroidContext(getContext());
-        Firebase base = new Firebase(Constants.FIREBASE_URL).child("sms");
+        Firebase base = new Firebase(Constants.FIREBASE_URL);
+        AuthData authData = base.getAuth();
+        if (authData != null) {
+            base = base.child(authData.getUid()).child("sms");
+        } else {
+            base = base.child("sms");
+        }
+
+
 
         mAdapter = new FirebaseRecyclerAdapter<Sms, SmsListViewHolder>(Sms.class, R.layout.list_item_for_sms, SmsListViewHolder.class, base) {
 
@@ -110,10 +118,14 @@ public class SmsFragment extends AbstractTabFragment {
                 phoneNumbers.add("5487983721");
                 Sim sim = new Sim("sim 1", "phone 2");
                 Sms sms = new Sms(phoneNumbers, sim, text.getText().toString(), new Date());
-                new Firebase(Constants.FIREBASE_URL)
-                        .child("sms")
-                        .push()
-                        .setValue(sms);
+
+                Firebase base = new Firebase(Constants.FIREBASE_URL);
+                AuthData authData = base.getAuth();
+                if (authData != null) {
+                    base =base.child(authData.getUid());
+                }
+
+                base.child("sms").push().setValue(sms);
 //!!
             }
         });

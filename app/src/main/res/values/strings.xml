@@ -57,6 +57,15 @@
     <string name="twitter_app_secret">OYg5yRvwETur3nUnwyPssehOjfjC54fymGaAB6QnIeJTwtxaaS</string>
     <!--End-->
 
+    <!-- Login -->
+    <string name="enter_email">Enter email</string>
+    <string name="enter_password">Enter password</string>
+    <string name="create_account">Create account</string>
+    <string name="or">or</string>
+    <string name="login">Login</string>
+    <string name="welcome_atuh_text">Log in, please, before working with program</string>
+    <!--End-->
+
     <string-array name="repeat">
         <item>Never</item>
         <item>3 min</item>

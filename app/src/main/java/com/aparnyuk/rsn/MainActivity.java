@@ -1,5 +1,7 @@
 package com.aparnyuk.rsn;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.aparnyuk.rsn.adapter.TabsFragmentAdapter;
+import com.aparnyuk.rsn.login.LoginActivity;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.ui.auth.core.AuthProviderType;
@@ -34,13 +37,16 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     TabLayout tabLayout;
     private Firebase mRef;
     private String mName;
+    private SharedPreferences prefs = null;
+    public static final String APP_PREFERENCES = "com.aparnyuk.rsn";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
         mRef = new Firebase(Constants.FIREBASE_URL);
-
+        prefs = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         initToolbar();
         initTabs();
         initNavigationDrover();
@@ -224,7 +230,9 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         int id = item.getItemId();
         switch (id) {
             case (R.id.nav_auth): {
-                    break;
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                break;
             }
             case (R.id.nav_calendar): {
                 break;
@@ -259,8 +267,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     @Override
     protected void onStart() {
         super.onStart();
-        setEnabledAuthProvider(AuthProviderType.FACEBOOK);
-        setEnabledAuthProvider(AuthProviderType.GOOGLE);
+        //   setEnabledAuthProvider(AuthProviderType.FACEBOOK);
+        //   setEnabledAuthProvider(AuthProviderType.GOOGLE);
         setEnabledAuthProvider(AuthProviderType.PASSWORD);
     }
 
@@ -285,6 +293,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         Log.i(TAG, "Logged out");
         mName = "";
         invalidateOptionsMenu();
+
+        // case tab ->
 //        mRecycleViewAdapter.notifyDataSetChanged();
     }
 
@@ -303,6 +313,18 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     @Override
     public Firebase getFirebaseRef() {
         return mRef;
+    }
+
+    // The first launch of the application
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (prefs.getBoolean("firstrun", true)) {
+            Toast.makeText(this, "First run", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent (this,LoginActivity.class);
+            startActivity(intent);
+            prefs.edit().putBoolean("firstrun", false).apply();
+        }
     }
 
 }
