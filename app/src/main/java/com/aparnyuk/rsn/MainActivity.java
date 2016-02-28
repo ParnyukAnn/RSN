@@ -26,6 +26,7 @@ import com.aparnyuk.rsn.adapter.TabsFragmentAdapter;
 import com.aparnyuk.rsn.fragment.dialog.CallDialog;
 import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
 import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
+import com.aparnyuk.rsn.login.CreateAccountActivity;
 import com.aparnyuk.rsn.login.LoginActivity;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -34,30 +35,44 @@ import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
 
 public class MainActivity extends FirebaseLoginBaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     public static final String TAG = "MainActivity";
+
     Toolbar toolbar;
     ViewPager viewPager;
     FloatingActionButton fab;
     TabLayout tabLayout;
+    NavigationView navigationView;
+    TabsFragmentAdapter adapter;
+
+    /* A reference to the Firebase */
     private Firebase mRef;
     private String mName;
+
+    /* Preferences variables. Use for the checking of the first run*/
     private SharedPreferences prefs = null;
     public static final String APP_PREFERENCES = "com.aparnyuk.rsn";
+
+    /* Current tab position*/
     private int position;
 
+    /* Input data dialogs */
     CallDialog callDialog;
     RemindDialog remindDialog;
     NoteDialog noteDialog;
-
+    //SmsDialog smsDialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Firebase.setAndroidContext(this);
+
         mRef = new Firebase(Constants.FIREBASE_URL);
         prefs = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+
         initToolbar();
         initTabs();
         initNavigationDrover();
@@ -73,7 +88,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
     private void initTabs() {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        TabsFragmentAdapter adapter = new TabsFragmentAdapter(this, getSupportFragmentManager());
+        adapter = new TabsFragmentAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -86,7 +101,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private int state = 0;
             private boolean isFloatButtonHidden = false;
-           // private int position = 0;
+            // private int position = 0;
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -140,44 +155,44 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.pop_up);
         fab.startAnimation(animation);
         int selectedColor;
-        int defaultColor = getResources().getColor(R.color.colorPrimaryLight);
+        // int defaultColor = getResources().getColor(R.color.colorPrimaryLight);
         int tabColor;
         switch (tab) {
             case (Constants.TAB_ONE_SMS): {
-                selectedColor = (getResources().getColor(R.color.colorFab1));
-                tabColor = (getResources().getColor(R.color.colorTabLine1));
+                //  selectedColor = (getResources().getColor(R.color.colorFab1));
+                //  tabColor = (getResources().getColor(R.color.colorTabLine1));
                 fab.setImageResource(android.R.drawable.ic_dialog_email);
-                //fab.setImageResource(R.drawable.ic_email_white_36dp);
-                fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
-                tabLayout.setSelectedTabIndicatorColor(tabColor);
-                tabLayout.setTabTextColors(defaultColor, tabColor);
+                // fab.setImageResource(R.drawable.ic_email_white_36dp);
+                // fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
+                // tabLayout.setSelectedTabIndicatorColor(tabColor);
+                // tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
             case (Constants.TAB_TWO_CALL): {
-                selectedColor = getResources().getColor(R.color.colorFab2);
-                tabColor = (getResources().getColor(R.color.colorTabLine2));
+                //  selectedColor = getResources().getColor(R.color.colorFab2);
+                //  tabColor = (getResources().getColor(R.color.colorTabLine2));
                 fab.setImageResource(R.drawable.ic_phone_white_36dp);
-                fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
-                tabLayout.setSelectedTabIndicatorColor(tabColor);
-                tabLayout.setTabTextColors(defaultColor, tabColor);
+                // fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
+                // tabLayout.setSelectedTabIndicatorColor(tabColor);
+                // tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
             case (Constants.TAB_THREE_REMIND): {
-                selectedColor = getResources().getColor(R.color.colorFab3);
-                tabColor = (getResources().getColor(R.color.colorTabLine3));
+                //  selectedColor = getResources().getColor(R.color.colorFab3);
+                //  tabColor = (getResources().getColor(R.color.colorTabLine3));
                 fab.setImageResource(R.drawable.ic_alarm_check_white_36dp);
-                fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
-                tabLayout.setSelectedTabIndicatorColor(tabColor);
-                tabLayout.setTabTextColors(defaultColor, tabColor);
+                //  fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
+                //  tabLayout.setSelectedTabIndicatorColor(tabColor);
+                //   tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
             case (Constants.TAB_FOUR_NOTE): {
-                selectedColor = getResources().getColor(R.color.colorFab4);
-                tabColor = (getResources().getColor(R.color.colorTabLine4));
+                //  selectedColor = getResources().getColor(R.color.colorFab4);
+                //  tabColor = (getResources().getColor(R.color.colorTabLine4));
                 fab.setImageResource(R.drawable.ic_pen_white_36dp);
-                fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
-                tabLayout.setSelectedTabIndicatorColor(tabColor);
-                tabLayout.setTabTextColors(defaultColor, tabColor);
+                //   fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
+                //  tabLayout.setSelectedTabIndicatorColor(tabColor);
+                //   tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
         }
@@ -191,8 +206,11 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
+        navigationView = (NavigationView) findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
+
+        changeAuthItem();
+        // navigationView.inflateMenu();
     }
 
     private void initFloatingButton() {
@@ -200,28 +218,32 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                switch (position) {
-                    case (Constants.TAB_ONE_SMS): {
-                        //smsDialog = new SmsDialog();
-                        //smsDialog.show(getFragmentManager(), "CreateDialog4");
-                        break;
-                    }
-                    case (Constants.TAB_TWO_CALL): {
-                        callDialog = new CallDialog();
-                        callDialog.show(fragmentManager, "CreateDialog3");
+                if (getAuth()== null) {
+                    showFirebaseLoginPrompt();
+                } else {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    switch (position) {
+                        case (Constants.TAB_ONE_SMS): {
+                            //smsDialog = new SmsDialog();
+                            //smsDialog.show(getFragmentManager(), "CreateDialog4");
+                            break;
+                        }
+                        case (Constants.TAB_TWO_CALL): {
+                            callDialog = new CallDialog();
+                            callDialog.show(fragmentManager, "CreateDialog3");
 
-                        break;
-                    }
-                    case (Constants.TAB_THREE_REMIND): {
-                        remindDialog = new RemindDialog();
-                        remindDialog.show(fragmentManager, "CreateDialog2");
-                        break;
-                    }
-                    case (Constants.TAB_FOUR_NOTE): {
-                        noteDialog = new NoteDialog();
-                        noteDialog.show(fragmentManager, "CreateDialog1");
-                        break;
+                            break;
+                        }
+                        case (Constants.TAB_THREE_REMIND): {
+                            remindDialog = new RemindDialog();
+                            remindDialog.show(fragmentManager, "CreateDialog2");
+                            break;
+                        }
+                        case (Constants.TAB_FOUR_NOTE): {
+                            noteDialog = new NoteDialog();
+                            noteDialog.show(fragmentManager, "CreateDialog1");
+                            break;
+                        }
                     }
                 }
             }
@@ -237,8 +259,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.action_login).setVisible(getAuth() == null);
-        menu.findItem(R.id.action_logout).setVisible(getAuth() != null);
+//        menu.findItem(R.id.action_login).setVisible(getAuth() == null);
+//        menu.findItem(R.id.action_logout).setVisible(getAuth() != null);
         return true;
     }
 
@@ -248,26 +270,29 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_login:
-                this.showFirebaseLoginPrompt();
-                return true;
-            case R.id.action_logout:
-                this.logout();
-                return true;
-        }
+//        switch (item.getItemId()) {
+//            case R.id.action_login:
+//                this.showFirebaseLoginPrompt();
+//                return true;
+//            case R.id.action_logout:
+//                this.logout();
+//                return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
-
 
     /*  Work with NavigationDrawer menu */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case (R.id.nav_auth): {
+            case (R.id.nav_sign_in): {
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
+                break;
+            }
+            case (R.id.nav_sign_out): {
+                this.logout();
                 break;
             }
             case (R.id.nav_calendar): {
@@ -284,6 +309,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             }
         }
         // close NavigationDrawer after choosing menu item
+        changeAuthItem();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -321,6 +348,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         }
 
         invalidateOptionsMenu();
+        changeAuthItem();
         // mRecycleViewAdapter.notifyDataSetChanged();
     }
 
@@ -329,7 +357,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         Log.i(TAG, "Logged out");
         mName = "";
         invalidateOptionsMenu();
-
+        changeAuthItem();
         // case tab ->
         // mRecycleViewAdapter.notifyDataSetChanged();
     }
@@ -355,12 +383,18 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     @Override
     protected void onResume() {
         super.onResume();
-        if (prefs.getBoolean("firstrun", true)) {
+        if (prefs.getBoolean("FirstRun", true)) {
             Toast.makeText(this, "First run", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, CreateAccountActivity.class);
             startActivity(intent);
-            prefs.edit().putBoolean("firstrun", false).apply();
+            prefs.edit().putBoolean("FirstRun", false).apply();
         }
     }
 
+    private void changeAuthItem() {
+        navigationView.getMenu().findItem(R.id.nav_sign_in).setVisible(getAuth() == null);
+        navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(getAuth() != null);
+        adapter.updateData();
+        //adapter.notifyDataSetChanged();
+    }
 }

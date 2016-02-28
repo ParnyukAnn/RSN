@@ -16,7 +16,7 @@
         android:icon="@drawable/ic_magnify_grey600_24dp"
         app:showAsAction="never" />
 -->
-    <item
+<!--    <item
         android:id="@+id/action_login"
         android:orderInCategory="100"
         android:title="@string/action_login"
@@ -26,7 +26,7 @@
         android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:title="@string/action_logout"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" />-->
 <!--
     <item
         android:id="@+id/action_items_view"

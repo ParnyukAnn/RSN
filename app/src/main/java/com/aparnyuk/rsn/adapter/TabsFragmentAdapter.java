@@ -27,6 +27,11 @@ public class TabsFragmentAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    public int getItemPosition(Object object) {
+        return  POSITION_NONE;
+    }
+
+    @Override
     public CharSequence getPageTitle(int position) {
         return tabs.get(position).getTitle();
     }
@@ -37,7 +42,7 @@ public class TabsFragmentAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public AbstractTabFragment getItem(int position) {
         return tabs.get(position);
     }
 
@@ -47,5 +52,13 @@ public class TabsFragmentAdapter extends FragmentPagerAdapter {
         tabs.put(Constants.TAB_TWO_CALL, CallFragment.getInstance(context));
         tabs.put(Constants.TAB_THREE_REMIND, RemindFragment.getInstance(context));
         tabs.put(Constants.TAB_FOUR_NOTE, NoteFragment.getInstance(context));
+    }
+
+    public void updateData(){
+//        getItem(0).mAdapter.notifyDataSetChanged();
+//        getItem(1).mAdapter.notifyDataSetChanged();
+//        getItem(2).mAdapter.notifyDataSetChanged();
+//        getItem(3).mAdapter.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 }

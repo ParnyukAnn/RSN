@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     /* EditText that is used to enter information about the created or logged in user */
     private EditText mEmail;
     private EditText mPassword;
+    private TextView mSignUp;
 
     /* A dialog that is presented until the Firebase authentication finished. */
     private ProgressDialog mAuthProgressDialog;
@@ -45,16 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mEmail = (EditText) findViewById(R.id.et_enter_email);
-        mPassword = (EditText) findViewById(R.id.et_enter_password);
-
-        Button mCreateAccountButton = (Button) findViewById(R.id.create_account_button);
-        mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createNewUser(mEmail.getText().toString(), mPassword.getText().toString());
-            }
-        });
+        mEmail = (EditText) findViewById(R.id.edit_text_email_login);
+        mPassword = (EditText) findViewById(R.id.edit_text_password_login);
 
         Button mPasswordLoginButton = (Button) findViewById(R.id.login_with_password);
         mPasswordLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +57,15 @@ public class LoginActivity extends AppCompatActivity {
                 loginWithPassword(mEmail.getText().toString(), mPassword.getText().toString());
                 //   Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 //   startActivity(intent);
+            }
+        });
+
+                /* Open LoginActivity when user taps on "Sign in" textView */
+        mSignUp = (TextView) findViewById(R.id.tv_sign_up);
+        mSignUp.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                onSignUpPressed(view);
             }
         });
 
@@ -123,29 +126,9 @@ public class LoginActivity extends AppCompatActivity {
                 .show();
     }
 
-    public void createNewUser(String email, String password) {
-        mAuthProgressDialog.show();
-        //mFirebaseRef.createUser(email, password, new AuthResultHandler("password"));
-        mFirebaseRef.createUser(email, password, new Firebase.ResultHandler() {
-
-            @Override
-            public void onSuccess() {
-                mAuthProgressDialog.dismiss();
-                Log.i(TAG, "Create user successful");
-                loginWithPassword(mEmail.getText().toString(), mPassword.getText().toString());
-            }
-
-            @Override
-            public void onError(FirebaseError firebaseError) {
-                mAuthProgressDialog.dismiss();
-                showErrorDialog(firebaseError.toString());
-            }
-        });
-    }
 
     public void loginWithPassword(String email, String password) {
         mAuthProgressDialog.show();
-        // mFirebaseRef.authWithPassword(email, password, new AuthResultHandler("password"));
         mFirebaseRef.authWithPassword(email, password, new Firebase.AuthResultHandler() {
 
             @Override
@@ -163,6 +146,12 @@ public class LoginActivity extends AppCompatActivity {
                 showErrorDialog(firebaseError.toString());
             }
         });
+    }
+
+    /* Open CreateAccountActivity when user taps on "Sign up" TextView */
+    public void onSignUpPressed(View view) {
+        Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
+        startActivity(intent);
     }
 
     private void logout() {
