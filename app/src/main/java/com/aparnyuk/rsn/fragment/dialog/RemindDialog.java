@@ -19,20 +19,26 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.aparnyuk.rsn.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.model.Remind;
+import com.firebase.client.Firebase;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 public class RemindDialog extends DialogFragment {
     private EditText nameView, dateView, timeView;
     private Spinner repeatRemindSpinner, quantityRemindSpinner;
     private int day, month, year, hour, minute;
+    private int day_x, month_x, year_x, hour_x, minute_x;
     private static TimePickerDialog timePicker;
     private static DatePickerDialog datePicker;
     private static Button okButton, cancelButton;
@@ -51,9 +57,11 @@ public class RemindDialog extends DialogFragment {
         dateView = (EditText) view.findViewById(R.id.remind_date);
         timeView = (EditText) view.findViewById(R.id.remind_time);
 
-        Date date = new Date();
-        TimeZone timeZone = TimeZone.getDefault();
-        int offset = timeZone.getOffset(date.getTime()) / (60 * 60 * 1000);
+        final Date date = new Date();
+//        int timeZone = TimeZone.getDefault().getRawOffset();
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+
+//        int offset = timeZone.getOffset(date.getTime()) / (60 * 60 * 1000);
 
         DateTime dateTime = new DateTime(date);
         LocalDateTime localDateTime = dateTime.toLocalDateTime();
@@ -61,10 +69,11 @@ public class RemindDialog extends DialogFragment {
         day = localDateTime.getDayOfMonth();
         month = localDateTime.getMonthOfYear();
         year = localDateTime.getYear();
-        hour = localDateTime.getHourOfDay() + offset;
+        hour = localDateTime.getHourOfDay();
         minute = localDateTime.getMinuteOfHour();
 
-        datePicker = new DatePickerDialog(getActivity(), myDateListener, year, month, day);
+
+        datePicker = new DatePickerDialog(getActivity(), myDateListener, year, month - 1, day);
         timePicker = new TimePickerDialog(getActivity(), myTimeListener, hour, minute, true);
         showDate(year, month, day);
         showTime(hour, minute);
@@ -75,7 +84,9 @@ public class RemindDialog extends DialogFragment {
             public void setDatePicker(DatePickerDialog mDatePicker) {
                 final Calendar calendar = Calendar.getInstance();
                 mDatePicker = datePicker;
-                mDatePicker.getDatePicker().setMinDate(calendar.getTimeInMillis());
+//                mDatePicker.getDatePicker().setMinDate(calendar.getTimeInMillis());
+                calendar.set(year, month, day);
+//                mDatePicker.getDatePicker().setMinDate(calendar.getTimeInMillis());
                 mDatePicker.getDatePicker().setCalendarViewShown(false);
                 mDatePicker.show();
             }
@@ -128,8 +139,18 @@ public class RemindDialog extends DialogFragment {
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        sendCreateItemEvent();
-                        dialog.dismiss();
+                        GregorianCalendar gregorianCalendar = new GregorianCalendar(year_x, month_x, day_x, hour_x, minute_x);
+                        Date date1 = gregorianCalendar.getTime();
+                        if (date1.after(date)) {
+                            Remind remind = new Remind(nameView.getText().toString(), date1);
+                            new Firebase(Constants.FIREBASE_URL)
+                                    .child("remind")
+                                    .push()
+                                    .setValue(remind);
+                            dialog.dismiss();
+                        } else {
+                            Toast.makeText(getContext(), "Choose correct date", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
@@ -143,6 +164,50 @@ public class RemindDialog extends DialogFragment {
         });
         return dialog;
     }
+
+
+    private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int day, int month, int year) {
+            showDate(day, month + 1, year);
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hour, int minute) {
+            showTime(hour, minute);
+        }
+    };
+
+    private void showDate(int day, int month, int year) {
+        day_x = year;
+        month_x = month - 1;
+        year_x = day;
+        dateView.setText(new StringBuilder().append(year).append("/")
+                .append(month).append("/").append(day));
+    }
+
+    public void showTime(int hour, int minute) {
+        hour_x = hour;
+        minute_x = minute;
+        String mHour = "00";
+        if (hour < 10) {
+            mHour = "0" + hour;
+        } else {
+            mHour = String.valueOf(hour);
+        }
+
+        String mMinute = "00";
+        if (minute < 10) {
+            mMinute = "0" + minute;
+        } else {
+            mMinute = String.valueOf(minute);
+        }
+        timeView.setText(new StringBuilder().append(mHour)
+                .append(":").append(mMinute));
+    }
+
 
     private final TextWatcher titleWatcher = new TextWatcher() {
 
@@ -169,44 +234,10 @@ public class RemindDialog extends DialogFragment {
         }
     };
 
-    private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int day, int month, int year) {
-            showDate(day, month, year);
-        }
-    };
 
-    private TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker view, int hour, int minute) {
-            showTime(hour, minute);
-        }
-    };
-
-    private void showDate(int day, int month, int year) {
-        dateView.setText(new StringBuilder().append(year).append("/")
-                .append(month).append("/").append(day));
-    }
-
-    public void showTime(int hour, int minute) {
-        String mHour = "00";
-        if (hour < 10) {
-            mHour = "0" + hour;
-        } else {
-            mHour = String.valueOf(hour);
-        }
-
-        String mMinute = "00";
-        if (minute < 10) {
-            mMinute = "0" + minute;
-        } else {
-            mMinute = String.valueOf(minute);
-        }
-        timeView.setText(new StringBuilder().append(mHour)
-                .append(":").append(mMinute));
-    }
-
-
+//    private void saveRemindDialog () {
+//        Remind remind = new Remind(nameView.getText().toString(), Date date);
+//    }
 //
 //    private boolean dateHasPassed(EditText dateView) {
 //        String[] strings = dateView.getText().toString().split("/");
