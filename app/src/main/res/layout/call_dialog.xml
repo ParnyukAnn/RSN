@@ -4,11 +4,71 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <!--<LinearLayout-->
+    <!--android:id="@+id/linearLayout4"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/linearLayout2"-->
+    <!--android:layout_margin="20dp"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:weightSum="1">-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/call_number_text"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:hint="Write yor number here"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:layout_toStartOf="@+id/buttonContacts"-->
+    <!--android:layout_toLeftOf="@+id/buttonContacts" />-->
+
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Push"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:layout_alignRight="@+id/linearLayout1"-->
+    <!--android:layout_alignEnd="@+id/linearLayout1"-->
+    <!--android:id="@+id/buttonContacts" />-->
+    <!--</LinearLayout>-->
+
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp">
+
+        <EditText
+            android:id="@+id/call_number_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Write yor number here"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/buttonContacts"
+            android:layout_weight="2"
+            android:layout_toLeftOf="@+id/buttonContacts" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Push"
+            android:layout_weight="1"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/linearLayout1"
+            android:layout_alignEnd="@+id/linearLayout1"
+            android:id="@+id/buttonContacts" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:orientation="horizontal">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/event_title_layout"
@@ -23,16 +83,17 @@
                 android:maxLength="24"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
+
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout1"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/linearLayout2"
         android:layout_margin="20dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/event_date_layout"
@@ -64,13 +125,14 @@
                 android:focusable="false"
                 android:hint="@string/hint_time" />
         </android.support.design.widget.TextInputLayout>
+
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout3"
         android:layout_margin="20dp"
         android:orientation="horizontal"
         android:weightSum="1">
@@ -88,25 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5" />
 
+
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/call_number_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Write yor number here"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/buttonContacts"
-        android:layout_toLeftOf="@+id/buttonContacts" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Push"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/linearLayout1"
-        android:layout_alignEnd="@+id/linearLayout1"
-
-        android:id="@+id/buttonContacts" />
 
 </RelativeLayout>

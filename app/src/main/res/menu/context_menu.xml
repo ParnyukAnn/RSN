@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_ok"
+        android:orderInCategory="2"
+        android:icon="@drawable/button_ab_ok"
+        android:title="@string/ok"
+        app:showAsAction="always"
+        />
+</menu>

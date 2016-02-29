@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:background="@xml/record_bg"
+    >
+    <RelativeLayout
+        android:id="@+id/contact_picture_layout"
+        android:layout_width="104dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        >
+
+        <ImageView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_friendframe_nophoto"
+            android:layout_centerInParent="true"
+
+            />
+        <ImageView
+            android:id="@+id/contact_picture"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="11dp"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/contact_picture_layout"
+        android:orientation="vertical"
+
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ff242525"
+            android:layout_alignParentTop="true"
+            />
+        <TextView
+            android:id="@+id/contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/contact_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#1AFFFFFF"
+            android:lines="1"
+            android:layout_below="@id/contact_name"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ff242525"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+

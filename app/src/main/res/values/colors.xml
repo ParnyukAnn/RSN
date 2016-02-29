@@ -36,4 +36,7 @@
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#bdbdbd</color>
     <color name="colorBackground">#ECEFF1</color>
+
+    <color name="pressed">#1e1f20</color>
+    <color name="selected">#1e1f20</color>
 </resources>
