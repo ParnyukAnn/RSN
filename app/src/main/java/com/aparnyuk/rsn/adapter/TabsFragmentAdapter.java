@@ -1,11 +1,10 @@
 package com.aparnyuk.rsn.adapter;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.aparnyuk.rsn.Constants;
+import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.fragment.AbstractTabFragment;
 import com.aparnyuk.rsn.fragment.CallFragment;
 import com.aparnyuk.rsn.fragment.NoteFragment;

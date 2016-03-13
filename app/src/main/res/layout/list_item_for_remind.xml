@@ -3,24 +3,38 @@
     style="@style/itemLayout">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/remind_cv"
+        android:id="@+id/note_cv"
         style="@style/itemCard">
 
         <LinearLayout
+            android:id="@+id/remind_main_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="?android:selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             android:orientation="vertical"
-            android:padding="6dp">
+            android:padding="@dimen/activity_horizontal_margin">
 
             <TextView
                 android:id="@+id/remind_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="15sp"
+                android:transitionName="@string/transition_text" />
 
             <TextView
-                android:id="@+id/event_date"
+                android:id="@+id/remind_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingTop="6dp"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="15sp"
+                android:transitionName="@string/transition_date" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

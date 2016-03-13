@@ -3,27 +3,26 @@ package com.aparnyuk.rsn.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.aparnyuk.rsn.Constants;
+
+import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.adapter.RemindListAdapter;
 import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
-import com.aparnyuk.rsn.model.Remind;
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
-import com.firebase.ui.FirebaseRecyclerAdapter;
+
 
 public class RemindFragment extends AbstractTabFragment {
-    FirebaseRecyclerAdapter mAdapter;
+
     RemindDialog remindDialog;
+    public RemindListAdapter remindAdapter;
 
     public static RemindFragment getInstance(Context context) {
         Bundle args = new Bundle();
@@ -38,69 +37,80 @@ public class RemindFragment extends AbstractTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_remind, container, false);
-        // view.setBackgroundColor(getResources().getColor(R.color.colorTabFrag3));
 
-     //   initFab();
+        // from parent class, need for changing toolbar colors
+        setActivityElements();
 
+        // init recycler view
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.remindRecyclerView);
         recycler.setHasFixedSize(true);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Use Firebase to populate the list.
         Firebase.setAndroidContext(getContext());
-        Firebase base = new Firebase(Constants.FIREBASE_URL).child("remind");
+        Firebase base = new Firebase(Constants.FIREBASE_URL);
+        AuthData authData = base.getAuth();
+        if (authData != null) {
+            base = base.child(authData.getUid()).child("remind");
+        } else {
+            base = base.child("remind");
+        }
+        remindAdapter = new RemindListAdapter(base);
+        recycler.setAdapter(remindAdapter);
 
-        mAdapter = new FirebaseRecyclerAdapter<Remind, RemindListViewHolder>(Remind.class, R.layout.list_item_for_remind, RemindListViewHolder.class, base) {
+        // normal mode: one click - open remind, long - set delete mode
+        // on delete mode: one click - check/uncheck remind to delete, long click - the same
+        remindAdapter.setOnItemClickListener(new RemindListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                if (!deleteMode) {
+                    if (changeMode) {
+                        setNormalModeInterface();
+                    } else {
+                        remindDialog = new RemindDialog();
+                        remindDialog.show(getFragmentManager(), "CreateDialog2");
+                        //remindAdapter.getRef(position).removeValue();
+
+                        //  toolbar.setDisplayHomeAsUpEnabled(true);
+                    }
+                } else {
+                    getActivity().setTitle("" + remindAdapter.getDeleteItemSet().size());
+                }
+            }
 
             @Override
-            protected void populateViewHolder(RemindListViewHolder remindListViewHolder, Remind remind, int i) {
-                remindListViewHolder.remindText.setText(remind.getText());
-                remindListViewHolder.dateText.setText(remind.getDate().toString());
+            public void onItemLongClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                if (!deleteMode) {
+                    if (changeMode) {
+                        setNormalModeInterface();
+                    }
+                } else {
+                    if (changeMode) {
+                        setDeleteModeInterface();
+                    }
+                    getActivity().setTitle("" + remindAdapter.getDeleteItemSet().size());
+                }
             }
-        };
-
-        recycler.setAdapter(mAdapter);
-
+        });
         return view;
     }
-/*
-    private void initFab() {
-        //Firebase.setAndroidContext(getContext());
-        final EditText text = (EditText) view.findViewById(R.id.remindText);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.remind_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-////!!
-//
-//                // создать диалоговые окна ввода данных о напоминании
-//                // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
-//                Remind remind = new Remind(text.getText().toString(), new Date());
-//                new Firebase(Constants.FIREBASE_URL)
-//                        .child("remind")
-//                        .push()
-//                        .setValue(remind);
-                remindDialog = new RemindDialog();
-                remindDialog.show(getFragmentManager(), "CreateDialog2");
-            }
-//!!
-        });
-    }
-*/
+
     public void setContext(Context context) {
         this.context = context;
     }
 
-    public static class RemindListViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView remindText;
-        TextView dateText;
-
-        public RemindListViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.remind_cv);
-            remindText = (TextView) itemView.findViewById(R.id.remind_text);
-            dateText = (TextView) itemView.findViewById(R.id.event_date);
+    @Override
+    public void onDeleteClick(boolean delete) {
+        if (remindAdapter.isDeleteMode()) {
+            Log.d("remind", "delete in remind fragment");
+            if (delete) {
+                for (int i : remindAdapter.getDeleteItemSet()) {
+                    remindAdapter.getRef(i).removeValue();
+                }
+            }
+            remindAdapter.clearDeleteMode();
+            remindAdapter.notifyDataSetChanged();
+            setNormalModeInterface();
         }
     }
 

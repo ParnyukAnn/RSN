@@ -3,25 +3,19 @@ import com.firebase.client.AuthData;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.aparnyuk.rsn.Constants;
+import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
-import com.aparnyuk.rsn.model.Sim;
 import com.aparnyuk.rsn.model.Sms;
 import com.firebase.client.Firebase;
 import com.firebase.ui.FirebaseRecyclerAdapter;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 public class SmsFragment extends AbstractTabFragment {
     FirebaseRecyclerAdapter mAdapter;
@@ -101,36 +95,42 @@ public class SmsFragment extends AbstractTabFragment {
       //  initFab();
         return view;
     }
-/*
-    private void initFab() {
-        final EditText text = (EditText) view.findViewById(R.id.smsText);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.sms_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-//!!
+    @Override
+    public void onDeleteClick(boolean delete) {
 
-                // создать диалоговые окна ввода данных смс
-                // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
-                ArrayList<String> phoneNumbers = new ArrayList<>();
-                phoneNumbers.add("8947839534");
-                phoneNumbers.add("5487983721");
-                Sim sim = new Sim("sim 1", "phone 2");
-                Sms sms = new Sms(phoneNumbers, sim, text.getText().toString(), new Date());
-
-                Firebase base = new Firebase(Constants.FIREBASE_URL);
-                AuthData authData = base.getAuth();
-                if (authData != null) {
-                    base =base.child(authData.getUid());
-                }
-
-                base.child("sms").push().setValue(sms);
-//!!
-            }
-        });
     }
-*/
+
+    /*
+        private void initFab() {
+            final EditText text = (EditText) view.findViewById(R.id.smsText);
+            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.sms_fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+    //!!
+
+                    // создать диалоговые окна ввода данных смс
+                    // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
+                    ArrayList<String> phoneNumbers = new ArrayList<>();
+                    phoneNumbers.add("8947839534");
+                    phoneNumbers.add("5487983721");
+                    Sim sim = new Sim("sim 1", "phone 2");
+                    Sms sms = new Sms(phoneNumbers, sim, text.getText().toString(), new Date());
+
+                    Firebase base = new Firebase(Constants.FIREBASE_URL);
+                    AuthData authData = base.getAuth();
+                    if (authData != null) {
+                        base =base.child(authData.getUid());
+                    }
+
+                    base.child("sms").push().setValue(sms);
+    //!!
+                }
+            });
+        }
+    */
     public static class SmsListViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView smsPhoneNum;

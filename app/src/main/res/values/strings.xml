@@ -85,10 +85,19 @@
         <item>3</item>
     </string-array>
 
+
     <string name="add_friends">Add Friends</string>
     <string name="add">Add</string>
     <string name="friend">Friend</string>
     <string name="friends">Add numbers</string>
     <string name="ok">OK</string>
+
+
+    <!-- Names for recycler transation -->
+    <string name="transition_name_or_number">transition:NAME_OR_NUMBER</string>
+    <string name="transition_circle">transition:CIRCLE</string>
+    <string name="transition_text">transition:TEXT</string>
+    <string name="transition_date">transition:DATE</string>
+
 
 </resources>

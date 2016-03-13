@@ -1,4 +1,4 @@
-package com.aparnyuk.rsn;
+package com.aparnyuk.rsn.activity;
 
 import android.Manifest;
 import android.app.LoaderManager;
@@ -19,12 +19,16 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.aparnyuk.rsn.Contact;
+import com.aparnyuk.rsn.adapter.ContactsAdapter;
+import com.aparnyuk.rsn.R;
+
 import java.util.ArrayList;
 
 public class MultipleContactPickerActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    public ArrayList<Contact> contacts = new ArrayList<Contact>();
+    public ArrayList<Contact> contacts = new ArrayList<>();
 
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 101;
 

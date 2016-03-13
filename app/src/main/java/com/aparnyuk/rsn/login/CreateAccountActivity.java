@@ -1,7 +1,7 @@
 package com.aparnyuk.rsn.login;
 
-import com.aparnyuk.rsn.Constants;
-import com.aparnyuk.rsn.MainActivity;
+import com.aparnyuk.rsn.Utils.Constants;
+import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.R;
 
 import android.app.AlertDialog;
@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;

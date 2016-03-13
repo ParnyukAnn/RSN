@@ -3,30 +3,27 @@ package com.aparnyuk.rsn.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.aparnyuk.rsn.Constants;
+
+import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.adapter.NoteListAdapter;
 import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
-import com.aparnyuk.rsn.model.Note;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
-import com.firebase.ui.FirebaseRecyclerAdapter;
 
-import java.util.Date;
 
 public class NoteFragment extends AbstractTabFragment {
-
-   // NoteDialog noteDialog;
-    FirebaseRecyclerAdapter mAdapter;
+    Toolbar toolbar;
+    NoteDialog noteDialog;
+    public NoteListAdapter noteAdapter;
 
     public static NoteFragment getInstance(Context context) {
         Bundle args = new Bundle();
@@ -41,8 +38,11 @@ public class NoteFragment extends AbstractTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_note, container, false);
-        //   view.setBackgroundColor(getResources().getColor(R.color.colorTabFrag4));
 
+        // from parent class, need for changing toolbar colors
+        setActivityElements();
+
+        // init recycler view
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.noteRecyclerView);
         recycler.setHasFixedSize(true);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -56,38 +56,68 @@ public class NoteFragment extends AbstractTabFragment {
         } else {
             base = base.child("note");
         }
+        noteAdapter = new NoteListAdapter(base);
+        recycler.setAdapter(noteAdapter);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        // normal mode: one click - open note, long - set delete mode
+        // on delete mode: one click - check/uncheck note to delete, long click - the same
+        noteAdapter.setOnItemClickListener(new NoteListAdapter.OnItemClickListener() {
+                                               @Override
+                                               public void onItemClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                                                   if (!deleteMode) {
+                                                       if (changeMode) {
+                                                           setNormalModeInterface();
+                                                       } else {
+                                                           noteDialog = new NoteDialog();
+                                                           noteDialog.show(getFragmentManager(), "CreateDialog2");
+                                                           //noteAdapter.getRef(position).removeValue();
 
-        mAdapter = new FirebaseRecyclerAdapter<Note, NoteListViewHolder>(Note.class, R.layout.list_item_for_note, NoteListViewHolder.class, base) {
-            @Override
-            protected void populateViewHolder(NoteListViewHolder noteListViewHolder, Note note, int i) {
-                noteListViewHolder.noteText.setText(note.getText());
-                noteListViewHolder.dateText.setText(note.getDate().toString());
-            }
-        };
+                                                           //  toolbar.setDisplayHomeAsUpEnabled(true);
+                                                       }
+                                                   } else {
+                                                       getActivity().setTitle("" + noteAdapter.getDeleteItemSet().size());
+                                                   }
+                                               }
 
-        recycler.setAdapter(mAdapter);
+                                               @Override
+                                               public void onItemLongClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                                                   if (!deleteMode) {
+                                                       if (changeMode) {
+                                                           setNormalModeInterface();
+                                                       }
+                                                   } else {
+                                                       if (changeMode) {
+                                                           setDeleteModeInterface();
+                                                       }
+                                                       getActivity().setTitle("" + noteAdapter.getDeleteItemSet().size());
+                                                   }
+                                               }
+                                           }
 
-
+        );
         return view;
     }
+
 
     public void setContext(Context context) {
         this.context = context;
     }
 
-    public static class NoteListViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView notePhoneNum;
-        TextView noteText;
-        TextView dateText;
-
-        public NoteListViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.note_cv);
-            noteText = (TextView) itemView.findViewById(R.id.note_text);
-            dateText = (TextView) itemView.findViewById(R.id.note_date);
+    @Override
+    public void onDeleteClick(boolean delete) {
+        if (noteAdapter.isDeleteMode()) {
+            if (delete) {
+                Log.d("Note", "delete in note fragment");
+                for (int i : noteAdapter.getDeleteItemSet()) {
+                    noteAdapter.getRef(i).removeValue();
+                }
+            }
+            noteAdapter.clearDeleteMode();
+            noteAdapter.notifyDataSetChanged();
+            setNormalModeInterface();
         }
     }
+
 
 //    public void onDestroy() {
 //        super.onDestroy();

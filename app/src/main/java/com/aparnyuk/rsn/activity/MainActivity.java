@@ -1,9 +1,8 @@
-package com.aparnyuk.rsn;
+package com.aparnyuk.rsn.activity;
 
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +20,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import com.aparnyuk.rsn.Utils.Constants;
+import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.adapter.CallListAdapter;
+import com.aparnyuk.rsn.adapter.NoteListAdapter;
+import com.aparnyuk.rsn.adapter.RemindListAdapter;
+import com.aparnyuk.rsn.adapter.SmsListAdapter;
 import com.aparnyuk.rsn.adapter.TabsFragmentAdapter;
 import com.aparnyuk.rsn.fragment.dialog.CallDialog;
 import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
@@ -36,6 +40,7 @@ import com.firebase.ui.auth.core.FirebaseLoginError;
 
 public class MainActivity extends FirebaseLoginBaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    /*Use to show logs*/
     public static final String TAG = "MainActivity";
 
     Toolbar toolbar;
@@ -62,6 +67,13 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     NoteDialog noteDialog;
     //SmsDialog smsDialog;
 
+    /*Handle click to fragment with recycler view*/
+    onDeleteClickListener deleteClickListener;
+
+    public interface onDeleteClickListener {
+        void onDeleteClick(boolean delete);
+        // public void onClearDeleteMode();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,11 +103,12 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         adapter = new TabsFragmentAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
+        Log.d("Main activity ", "" + viewPager.getCurrentItem());
+
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-
-        // !! add animation to floating button and change tabs color
+        // add animation to floating button and change tabs color
         // state 0 = nothing happen, state 1 = begining scrolling, state 2 = stop at selected tab.
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -115,7 +128,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             @Override
             public void onPageSelected(int pos) {
                 //reset floating
-                //this.position = position;
                 position = pos;
                 if (state == 2) {
                     //have end in selected tab
@@ -136,8 +148,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 }
             }
         });
-        //!!
-
     }
 
     //!!
@@ -154,45 +164,27 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         fab.clearAnimation();
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.pop_up);
         fab.startAnimation(animation);
-        int selectedColor;
-        // int defaultColor = getResources().getColor(R.color.colorPrimaryLight);
-        int tabColor;
         switch (tab) {
             case (Constants.TAB_ONE_SMS): {
-                //  selectedColor = (getResources().getColor(R.color.colorFab1));
-                //  tabColor = (getResources().getColor(R.color.colorTabLine1));
                 fab.setImageResource(android.R.drawable.ic_dialog_email);
-                // fab.setImageResource(R.drawable.ic_email_white_36dp);
-                // fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
-                // tabLayout.setSelectedTabIndicatorColor(tabColor);
-                // tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
             case (Constants.TAB_TWO_CALL): {
-                //  selectedColor = getResources().getColor(R.color.colorFab2);
-                //  tabColor = (getResources().getColor(R.color.colorTabLine2));
                 fab.setImageResource(R.drawable.ic_phone_white_36dp);
-                // fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
-                // tabLayout.setSelectedTabIndicatorColor(tabColor);
-                // tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
             case (Constants.TAB_THREE_REMIND): {
-                //  selectedColor = getResources().getColor(R.color.colorFab3);
-                //  tabColor = (getResources().getColor(R.color.colorTabLine3));
                 fab.setImageResource(R.drawable.ic_alarm_check_white_36dp);
-                //  fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
-                //  tabLayout.setSelectedTabIndicatorColor(tabColor);
-                //   tabLayout.setTabTextColors(defaultColor, tabColor);
                 break;
             }
             case (Constants.TAB_FOUR_NOTE): {
-                //  selectedColor = getResources().getColor(R.color.colorFab4);
-                //  tabColor = (getResources().getColor(R.color.colorTabLine4));
                 fab.setImageResource(R.drawable.ic_pen_white_36dp);
-                //   fab.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
-                //  tabLayout.setSelectedTabIndicatorColor(tabColor);
-                //   tabLayout.setTabTextColors(defaultColor, tabColor);
+                // set fragment which will realize delete items in recycler view
+ /*               try {
+                    deleteClickListener = (onDeleteClickListener) adapter.getItem(Constants.TAB_FOUR_NOTE);
+                } catch (ClassCastException e) {
+                    throw new ClassCastException(adapter.getItem(Constants.TAB_FOUR_NOTE).toString() + " must implement onSomeEventListener");
+                }*/
                 break;
             }
         }
@@ -210,7 +202,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         navigationView.setNavigationItemSelectedListener(this);
 
         changeAuthItem();
-        // navigationView.inflateMenu();
     }
 
     private void initFloatingButton() {
@@ -250,6 +241,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         });
     }
 
+    /*Create and work with main menu in Toolbar (show or hide basket)*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -259,8 +251,11 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-//        menu.findItem(R.id.action_login).setVisible(getAuth() == null);
-//        menu.findItem(R.id.action_logout).setVisible(getAuth() != null);
+//       menu.findItem(R.id.action_login).setVisible(getAuth() == null);
+//       menu.findItem(R.id.action_logout).setVisible(getAuth() != null);
+
+        /* make visible basket if in some fragment set "delete mode" */
+        menu.findItem(R.id.action_delete).setVisible(checkDeleteMode());
         return true;
     }
 
@@ -270,14 +265,23 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-//        switch (item.getItemId()) {
+        try {
+            deleteClickListener = adapter.getItem(position);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(adapter.getItem(position).toString() + " must implement onSomeEventListener");
+        }
+
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                deleteClickListener.onDeleteClick(true);
+                return true;
 //            case R.id.action_login:
 //                this.showFirebaseLoginPrompt();
 //                return true;
 //            case R.id.action_logout:
 //                this.logout();
 //                return true;
-//        }
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -323,8 +327,21 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (checkDeleteMode()) {
+                try {
+                    deleteClickListener = adapter.getItem(position);
+                } catch (ClassCastException e) {
+                    throw new ClassCastException(adapter.getItem(position).toString() + " must implement onSomeEventListener");
+                }
+                deleteClickListener.onDeleteClick(false);
+            } else {
+                super.onBackPressed();
+            }
         }
+    }
+
+    public boolean checkDeleteMode() {
+        return (NoteListAdapter.isDeleteMode()) || (SmsListAdapter.isDeleteMode()) || (CallListAdapter.isDeleteMode()) || (RemindListAdapter.isDeleteMode());
     }
 
     @Override

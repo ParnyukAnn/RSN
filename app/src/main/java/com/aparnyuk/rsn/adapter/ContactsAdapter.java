@@ -1,4 +1,4 @@
-package com.aparnyuk.rsn;
+package com.aparnyuk.rsn.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,6 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.aparnyuk.rsn.Contact;
+import com.aparnyuk.rsn.R;
 
 import java.util.ArrayList;
 
@@ -106,7 +109,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
         private void finishWithResult()
         {
-            ArrayList<Contact> selectedContacts = new ArrayList<Contact>();
+            ArrayList<Contact> selectedContacts = new ArrayList<>();
             for (Contact c: contacts){
                 if (c.isSelected()){
                     selectedContacts.add(c);

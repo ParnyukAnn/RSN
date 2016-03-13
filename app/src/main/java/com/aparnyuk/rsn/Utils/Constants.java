@@ -1,4 +1,6 @@
-package com.aparnyuk.rsn;
+package com.aparnyuk.rsn.Utils;
+
+import com.aparnyuk.rsn.BuildConfig;
 
 public class Constants {
     // Fragment number

@@ -3,26 +3,20 @@ package com.aparnyuk.rsn.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.aparnyuk.rsn.Constants;
+import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.fragment.dialog.CallDialog;
 import com.aparnyuk.rsn.model.Calls;
-import com.aparnyuk.rsn.model.Sim;
 import com.firebase.client.Firebase;
 import com.firebase.ui.FirebaseRecyclerAdapter;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 public class CallFragment extends AbstractTabFragment {
     FirebaseRecyclerAdapter mAdapter;
@@ -97,6 +91,11 @@ public class CallFragment extends AbstractTabFragment {
 */
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    @Override
+    public void onDeleteClick(boolean delete) {
+
     }
 
     public static class CallsListViewHolder extends RecyclerView.ViewHolder {

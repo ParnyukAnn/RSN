@@ -4,10 +4,10 @@ package com.aparnyuk.rsn.fragment.dialog;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,9 +21,10 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.aparnyuk.rsn.Constants;
+import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.model.Remind;
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 
 import org.joda.time.DateTime;
@@ -43,6 +44,7 @@ public class RemindDialog extends DialogFragment {
     private static DatePickerDialog datePicker;
     private static Button okButton, cancelButton;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -143,10 +145,16 @@ public class RemindDialog extends DialogFragment {
                         Date date1 = gregorianCalendar.getTime();
                         if (date1.after(date)) {
                             Remind remind = new Remind(nameView.getText().toString(), date1);
-                            new Firebase(Constants.FIREBASE_URL)
-                                    .child("remind")
-                                    .push()
-                                    .setValue(remind);
+
+                            // !!
+                            Firebase base = new Firebase(Constants.FIREBASE_URL);
+                            AuthData authData = base.getAuth();
+                            if (authData != null) {
+                                base = base.child(authData.getUid());
+                            }
+                            base.child("remind").push().setValue(remind);
+                            // !!
+
                             dialog.dismiss();
                         } else {
                             Toast.makeText(getContext(), "Choose correct date", Toast.LENGTH_SHORT).show();

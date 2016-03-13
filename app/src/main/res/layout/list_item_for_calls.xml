@@ -6,27 +6,62 @@
         android:id="@+id/call_cv"
         style="@style/itemCard">
 
-        <LinearLayout
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id = "@+id/call_main_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             android:orientation="vertical"
-            android:padding="6dp">
+            android:padding="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:id="@+id/call_phone_num"
-                android:layout_width="wrap_content"
+            <View
+                android:id="@+id/call_contact_circle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/circle"
+                android:transitionName="@string/transition_circle" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp" />
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_toRightOf="@+id/call_contact_circle"
+                android:layout_toEndOf="@+id/call_contact_circle"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/call_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/call_phone_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="18sp"
+                    android:transitionName="@string/transition_name_or_number" />
+                <TextView
+                    android:id="@+id/call_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="15sp"
+                    android:transitionName="@string/transition_text" />
 
-            <TextView
-                android:id="@+id/call_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/call_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:paddingTop="6dp"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="15sp"
+                    android:transitionName="@string/transition_date" />
+            </LinearLayout>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
