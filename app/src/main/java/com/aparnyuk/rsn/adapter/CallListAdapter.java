@@ -44,13 +44,14 @@ public class CallListAdapter extends FirebaseRecyclerAdapter<Calls, CallListAdap
     }
 
     static class CallViewHolder extends RecyclerView.ViewHolder {
-
+        TextView phoneNum;
         TextView callText;
         TextView dateText;
         RelativeLayout ll;
 
         public CallViewHolder(View itemView) {
             super(itemView);
+            phoneNum = (TextView) itemView.findViewById(R.id.call_phone_num);
             callText = (TextView) itemView.findViewById(R.id.call_text);
             dateText = (TextView) itemView.findViewById(R.id.call_date);
             ll = (RelativeLayout) itemView.findViewById(R.id.call_main_layout);
@@ -124,6 +125,27 @@ public class CallListAdapter extends FirebaseRecyclerAdapter<Calls, CallListAdap
 
     @Override
     protected void populateViewHolder(CallListAdapter.CallViewHolder CallViewHolder, Calls call, int i) {
+       String str = "";
+        if (call.getNumbers().size() > 1) {
+            if (call.getNumbers().size() == 2) {
+                str = " and other 1";
+            } else {
+                str = " and others " + (call.getNumbers().size() - 1);
+            }
+        }
+/*        String str = new String();
+        int size = call.getNumbers().size();
+        if (size > 4) {
+            str = " and others " + (size - 1);
+        } else {
+            for (int s = 0; s < size; s++) {
+//                str = str +System.getProperty("line.separator")+ call.getNumbers().get(i);
+                str = str +"<br>" + call.getNumbers().get(i);
+
+            }
+        }*/
+
+        CallViewHolder.phoneNum.setText(call.getNumbers().get(0) + str);
         CallViewHolder.callText.setText(call.getText());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
         CallViewHolder.dateText.setText(dateFormat.format(call.getDate()));

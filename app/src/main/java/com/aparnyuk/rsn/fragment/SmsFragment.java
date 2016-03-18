@@ -1,11 +1,12 @@
 package com.aparnyuk.rsn.fragment;
-import com.firebase.client.AuthData;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,16 @@ import android.widget.TextView;
 
 import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
-import com.aparnyuk.rsn.model.Sms;
+import com.aparnyuk.rsn.adapter.SmsListAdapter;
+//import com.aparnyuk.rsn.fragment.dialog.SmsDialog;
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
-import com.firebase.ui.FirebaseRecyclerAdapter;
+
 
 public class SmsFragment extends AbstractTabFragment {
-    FirebaseRecyclerAdapter mAdapter;
+    Toolbar toolbar;
+    // SmsDialog smsDialog;
+    public SmsListAdapter smsAdapter;
 
     public static SmsFragment getInstance(Context context) {
         Bundle args = new Bundle();
@@ -33,8 +38,11 @@ public class SmsFragment extends AbstractTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_sms, container, false);
-        // view.setBackgroundColor(getResources().getColor(R.color.colorTabFrag1));
 
+        // from parent class, need for changing toolbar colors
+        setActivityElements();
+
+        // init recycler view
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.smsRecyclerView);
         recycler.setHasFixedSize(true);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -48,109 +56,69 @@ public class SmsFragment extends AbstractTabFragment {
         } else {
             base = base.child("sms");
         }
+        smsAdapter = new SmsListAdapter(base);
+        recycler.setAdapter(smsAdapter);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        // normal mode: one click - open sms, long - set delete mode
+        // on delete mode: one click - check/uncheck sms to delete, long click - the same
+        smsAdapter.setOnItemClickListener(new SmsListAdapter.OnItemClickListener() {
+                                              @Override
+                                              public void onItemClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                                                  if (!deleteMode) {
+                                                      if (changeMode) {
+                                                          setNormalModeInterface();
+                                                      } else {
+                                                          //             smsDialog = new SmsDialog();
+                                                          //           smsDialog.show(getFragmentManager(), "CreateDialog2");
+                                                          //smsAdapter.getRef(position).removeValue();
 
+                                                          //  toolbar.setDisplayHomeAsUpEnabled(true);
+                                                      }
+                                                  } else {
+                                                      getActivity().setTitle("" + smsAdapter.getDeleteItemSet().size());
+                                                  }
+                                              }
 
+                                              @Override
+                                              public void onItemLongClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                                                  if (!deleteMode) {
+                                                      if (changeMode) {
+                                                          setNormalModeInterface();
+                                                      }
+                                                  } else {
+                                                      if (changeMode) {
+                                                          setDeleteModeInterface();
+                                                      }
+                                                      getActivity().setTitle("" + smsAdapter.getDeleteItemSet().size());
+                                                  }
+                                              }
+                                          }
 
-        mAdapter = new FirebaseRecyclerAdapter<Sms, SmsListViewHolder>(Sms.class, R.layout.list_item_for_sms, SmsListViewHolder.class, base) {
-
-            @Override
-            protected void populateViewHolder(SmsListViewHolder smsListViewHolder, Sms sms, int i) {
-                smsListViewHolder.smsPhoneNum.setText(sms.getNumbers().get(0));
-                smsListViewHolder.smsText.setText(sms.getText());
-                smsListViewHolder.dateText.setText(sms.getDate().toString());
-            }
-        };
-
-        recycler.setAdapter(mAdapter);
-/*
-        // Create a new Adapter
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_list_item_1, android.R.id.text1);
-
-        // Assign adapter to ListView
-        listView.setAdapter(adapter);
-
-
-        base.addChildEventListener(new ChildEventListener() {
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                adapter.add((String) dataSnapshot.child("note").getValue());
-            }
-
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                adapter.remove((String) dataSnapshot.child("note").getValue());
-            }
-
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-        });
-*/
-        //!!
-
-      //  initFab();
+        );
         return view;
     }
 
-    @Override
-    public void onDeleteClick(boolean delete) {
-
-    }
-
-    /*
-        private void initFab() {
-            final EditText text = (EditText) view.findViewById(R.id.smsText);
-            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.sms_fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-    //!!
-
-                    // создать диалоговые окна ввода данных смс
-                    // перенести этот код в диалоговое окно и добавить ввод остальных данных через сеттеры
-                    ArrayList<String> phoneNumbers = new ArrayList<>();
-                    phoneNumbers.add("8947839534");
-                    phoneNumbers.add("5487983721");
-                    Sim sim = new Sim("sim 1", "phone 2");
-                    Sms sms = new Sms(phoneNumbers, sim, text.getText().toString(), new Date());
-
-                    Firebase base = new Firebase(Constants.FIREBASE_URL);
-                    AuthData authData = base.getAuth();
-                    if (authData != null) {
-                        base =base.child(authData.getUid());
-                    }
-
-                    base.child("sms").push().setValue(sms);
-    //!!
-                }
-            });
-        }
-    */
-    public static class SmsListViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView smsPhoneNum;
-        TextView smsText;
-        TextView dateText;
-
-        public SmsListViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.sms_cv);
-            smsPhoneNum = (TextView) itemView.findViewById(R.id.sms_phone_num);
-            smsText = (TextView) itemView.findViewById(R.id.sms_text);
-            dateText = (TextView) itemView.findViewById(R.id.sms_date);
-        }
-    }
 
     public void setContext(Context context) {
         this.context = context;
     }
 
-//    @Override
+    @Override
+    public void onDeleteClick(boolean delete) {
+        if (smsAdapter.isDeleteMode()) {
+            if (delete) {
+                Log.d("sms", "delete in sms fragment");
+                for (int i : smsAdapter.getDeleteItemSet()) {
+                    smsAdapter.getRef(i).removeValue();
+                }
+            }
+            smsAdapter.clearDeleteMode();
+            smsAdapter.notifyDataSetChanged();
+            setNormalModeInterface();
+        }
+    }
+
+
 //    public void onDestroy() {
 //        super.onDestroy();
 //        mAdapter.cleanup();

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.model.Sms;
@@ -44,15 +45,17 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
 
     static class SmsViewHolder extends RecyclerView.ViewHolder {
 
+        TextView phoneNum;
         TextView smsText;
         TextView dateText;
-        LinearLayout ll;
+        RelativeLayout ll;
 
         public SmsViewHolder(View itemView) {
             super(itemView);
+            phoneNum = (TextView) itemView.findViewById(R.id.sms_phone_num);
             smsText = (TextView) itemView.findViewById(R.id.sms_text);
             dateText = (TextView) itemView.findViewById(R.id.sms_date);
-            ll = (LinearLayout) itemView.findViewById(R.id.sms_main_layout);
+            ll = (RelativeLayout) itemView.findViewById(R.id.sms_main_layout);
 
             ll.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -165,6 +168,14 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
 
     @Override
     protected void populateViewHolder(SmsListAdapter.SmsViewHolder smsViewHolder, Sms sms, int i) {
+/*        String str = "";
+        if (sms.getNumbers().size() > 1) {
+            if (sms.getNumbers().size() == 2) {
+            } else {
+                str = " and others " + (sms.getNumbers().size() - 1);
+            }
+        }*/
+        smsViewHolder.phoneNum.setText(sms.getNumbers().get(0) );
         smsViewHolder.smsText.setText(sms.getText());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
         smsViewHolder.dateText.setText(dateFormat.format(sms.getDate()));

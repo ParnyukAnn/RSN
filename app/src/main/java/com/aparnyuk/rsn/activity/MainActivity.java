@@ -32,11 +32,17 @@ import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
 import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
 import com.aparnyuk.rsn.login.CreateAccountActivity;
 import com.aparnyuk.rsn.login.LoginActivity;
+import com.aparnyuk.rsn.model.Calls;
+import com.aparnyuk.rsn.model.Sim;
+import com.aparnyuk.rsn.model.Sms;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends FirebaseLoginBaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -209,20 +215,45 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getAuth()== null) {
+                if (getAuth() == null) {
                     showFirebaseLoginPrompt();
-                } else {
+                }
+
+                if (!checkDeleteMode()) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     switch (position) {
                         case (Constants.TAB_ONE_SMS): {
                             //smsDialog = new SmsDialog();
                             //smsDialog.show(getFragmentManager(), "CreateDialog4");
+                            ArrayList<String> phoneNumbers = new ArrayList<>();
+                            phoneNumbers.add("8947839534");
+                            phoneNumbers.add("5487983721");
+                            Sim sim = new Sim("sim 1", "phone 2");
+                            Sms sms = new Sms(phoneNumbers, sim, "dfasf", new Date());
+
+                            Firebase base = new Firebase(Constants.FIREBASE_URL);
+                            AuthData authData = base.getAuth();
+                            if (authData != null) {
+                                base = base.child(authData.getUid());
+                            }
+                            base.child("sms").push().setValue(sms);
                             break;
                         }
                         case (Constants.TAB_TWO_CALL): {
-                            callDialog = new CallDialog();
-                            callDialog.show(fragmentManager, "CreateDialog3");
-
+//                            callDialog = new CallDialog();
+//                            callDialog.show(fragmentManager, "CreateDialog3");
+                            ArrayList<String> phoneNumbers = new ArrayList<>();
+                            phoneNumbers.add("8947839534");
+                            phoneNumbers.add("5487983721");
+                            Sim sim = new Sim("sim 1", "phone 2");
+                            Calls call = new Calls(phoneNumbers, sim, new Date());
+                            call.setText("asdfasd");
+                            Firebase base = new Firebase(Constants.FIREBASE_URL);
+                            AuthData authData = base.getAuth();
+                            if (authData != null) {
+                                base = base.child(authData.getUid());
+                            }
+                            base.child("call").push().setValue(call);
                             break;
                         }
                         case (Constants.TAB_THREE_REMIND): {
@@ -274,6 +305,10 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         switch (item.getItemId()) {
             case R.id.action_delete:
                 deleteClickListener.onDeleteClick(true);
+                return true;
+            case android.R.id.home:
+                deleteClickListener.onDeleteClick(false);
+                Log.d("Note", "action bar clicked");
                 return true;
 //            case R.id.action_login:
 //                this.showFirebaseLoginPrompt();
