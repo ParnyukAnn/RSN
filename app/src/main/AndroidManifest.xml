@@ -26,6 +26,9 @@
 
         <activity android:name=".login.CreateAccountActivity" />
         <activity android:name=".login.LoginActivity" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="6745faf25c87be6bbf889c5cd2d78ee97c70fef4" />
     </application>
 
 </manifest>

@@ -1,5 +1,9 @@
 package com.aparnyuk.rsn.activity;
 
+import android.content.res.ColorStateList;
+import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +20,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
@@ -49,6 +55,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     /*Use to show logs*/
     public static final String TAG = "MainActivity";
 
+    ActionBarDrawerToggle toggle;
     Toolbar toolbar;
     ViewPager viewPager;
     FloatingActionButton fab;
@@ -73,12 +80,11 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     NoteDialog noteDialog;
     //SmsDialog smsDialog;
 
-    /*Handle click to fragment with recycler view*/
+    /* Handle click to fragment with recycler view */
     onDeleteClickListener deleteClickListener;
 
     public interface onDeleteClickListener {
         void onDeleteClick(boolean delete);
-        // public void onClearDeleteMode();
     }
 
     @Override
@@ -96,14 +102,9 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         initNavigationDrover();
         initFloatingButton();
 
-        position = 0;
     }
 
-    private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-    }
-
+    /*----------------------------------TABS AND ANIMATION----------------------------------------*/
     private void initTabs() {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         adapter = new TabsFragmentAdapter(this, getSupportFragmentManager());
@@ -124,6 +125,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.d("Note", "onPageScrolled " + state);
                 if (!isFloatButtonHidden && state == 1 && positionOffset != 0.0) {
                     isFloatButtonHidden = true;
                     //hide floating button
@@ -135,10 +137,12 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             public void onPageSelected(int pos) {
                 //reset floating
                 position = pos;
+                Log.d("Note", "onPageSelected " + state);
                 if (state == 2) {
                     //have end in selected tab
                     isFloatButtonHidden = false;
                     selectedTabs(position);
+                    Log.d("Note", "page selected");
                 }
             }
 
@@ -146,24 +150,25 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             public void onPageScrollStateChanged(int state) {
                 //state 0 = nothing happen, state 1 = begining scrolling, state 2 = stop at selected tab.
                 this.state = state;
+                Log.d("Note", "onPageScrollStateChanged " + state);
                 if (state == 0) {
                     isFloatButtonHidden = false;
                 } else if (state == 2 && isFloatButtonHidden) {
                     //this only happen if user is swapping but swap back to current tab (cancel to change tab)
                     selectedTabs(position);
+                    Log.d("Note", "Cancel to change tab ");
                 }
             }
         });
     }
 
-    //!!
     private void swappingAway() {
         fab.clearAnimation();
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.pop_down);
         fab.startAnimation(animation);
     }
 
-    /* Add button animation, change button and tabs color and put icons on button */
+    /* Add button animation, put icons on button, set delete interface if it need*/
     private void selectedTabs(int tab) {
         fab.show();
         //a bit animation of popping up.
@@ -173,45 +178,150 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         switch (tab) {
             case (Constants.TAB_ONE_SMS): {
                 fab.setImageResource(android.R.drawable.ic_dialog_email);
+                setInterface(SmsListAdapter.isDeleteMode());
                 break;
             }
             case (Constants.TAB_TWO_CALL): {
                 fab.setImageResource(R.drawable.ic_phone_white_36dp);
+                setInterface(CallListAdapter.isDeleteMode());
                 break;
             }
             case (Constants.TAB_THREE_REMIND): {
                 fab.setImageResource(R.drawable.ic_alarm_check_white_36dp);
+                setInterface(RemindListAdapter.isDeleteMode());
                 break;
             }
             case (Constants.TAB_FOUR_NOTE): {
                 fab.setImageResource(R.drawable.ic_pen_white_36dp);
-                // set fragment which will realize delete items in recycler view
- /*               try {
-                    deleteClickListener = (onDeleteClickListener) adapter.getItem(Constants.TAB_FOUR_NOTE);
-                } catch (ClassCastException e) {
-                    throw new ClassCastException(adapter.getItem(Constants.TAB_FOUR_NOTE).toString() + " must implement onSomeEventListener");
-                }*/
+                setInterface(NoteListAdapter.isDeleteMode());
+                break;
+            }
+        }
+
+    }
+
+    /*-----------------------------------DELETE INTERFACE-----------------------------------------*/
+    /* This metods needs to change toolbar, tabs and button color when
+     * onLongClick is set "delete mode" for current tab */
+    public void setInterface(boolean mode) {
+        if (mode) {
+            setDeleteModeInterface();
+        } else {
+            setNormalModeInterface();
+        }
+    }
+
+    public void setDeleteModeInterface() {
+        //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.deleteMode));
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.deleteMode));
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.light_grey), getResources().getColor(R.color.white));
+        fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.deleteMode)));
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.deleteModeDark));
+        }
+        invalidateOptionsMenu();
+        toggle.setDrawerIndicatorEnabled(false);
+        toggle.setHomeAsUpIndicator(this.getDrawerToggleDelegate().getThemeUpIndicator());
+        setDeleteItemsInTitle(position);
+    }
+
+    public void setDeleteItemsInTitle(int position) {
+        switch (position) {
+            case (Constants.TAB_ONE_SMS): {
+                setTitle("" + SmsListAdapter.getDeleteItemSet().size());
+                break;
+            }
+            case (Constants.TAB_TWO_CALL): {
+                setTitle("" + CallListAdapter.getDeleteItemSet().size());
+                break;
+            }
+            case (Constants.TAB_THREE_REMIND): {
+                setTitle("" + RemindListAdapter.getDeleteItemSet().size());
+                break;
+            }
+            case (Constants.TAB_FOUR_NOTE): {
+                setTitle("" + NoteListAdapter.getDeleteItemSet().size());
                 break;
             }
         }
     }
-//!!
 
-    private void initNavigationDrover() {
-        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
-        drawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.navigation);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        changeAuthItem();
+    public void setNormalModeInterface() {
+        //  getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        // toggle.setDrawerIndicatorEnabled(true);
+        //  toggle.setHomeAsUpIndicator(((AppCompatActivity) getActivity()).getDrawerToggleDelegate().getThemeUpIndicator());
+        setTitle(R.string.app_name);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorFab4));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.colorPrimaryLight), getResources().getColor(R.color.colorTabLine4));
+        fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+        invalidateOptionsMenu();
+        toggle.setDrawerIndicatorEnabled(true);
+        toggle.setHomeAsUpIndicator(this.getDrawerToggleDelegate().getThemeUpIndicator());
     }
+
+    /* Check if the current tab in "delete mode" */
+    public boolean checkDeleteMode(int selectedTab) {
+        boolean mode = false;
+        switch (selectedTab) {
+            case (Constants.TAB_ONE_SMS): {
+                mode = (SmsListAdapter.isDeleteMode());
+                break;
+            }
+            case (Constants.TAB_TWO_CALL): {
+                mode = (CallListAdapter.isDeleteMode());
+                break;
+            }
+            case (Constants.TAB_THREE_REMIND): {
+                mode = (RemindListAdapter.isDeleteMode());
+                break;
+            }
+            case (Constants.TAB_FOUR_NOTE): {
+                mode = (NoteListAdapter.isDeleteMode());
+                break;
+            }
+        }
+        return mode;
+    }
+
+    /* Save and restore selected tab, set "delete interface"
+     * and number of selected items in title */
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("position", position);
+    }
+
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        position = savedInstanceState.getInt("position");
+        if (checkDeleteMode(position)) {
+            setDeleteModeInterface();
+        }
+    }
+
+    /*-------------------------------FLOATING BUTTON----------------------------------------------*/
 
     private void initFloatingButton() {
         fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+        p.setAnchorId(View.NO_ID);
+        fab.setLayoutParams(p);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -219,10 +329,10 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                     showFirebaseLoginPrompt();
                 }
 
-                if (!checkDeleteMode()) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    switch (position) {
-                        case (Constants.TAB_ONE_SMS): {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                switch (position) {
+                    case (Constants.TAB_ONE_SMS): {
+                        if (!SmsListAdapter.isDeleteMode()) {
                             //smsDialog = new SmsDialog();
                             //smsDialog.show(getFragmentManager(), "CreateDialog4");
                             ArrayList<String> phoneNumbers = new ArrayList<>();
@@ -237,11 +347,13 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                                 base = base.child(authData.getUid());
                             }
                             base.child("sms").push().setValue(sms);
-                            break;
                         }
-                        case (Constants.TAB_TWO_CALL): {
-//                            callDialog = new CallDialog();
-//                            callDialog.show(fragmentManager, "CreateDialog3");
+                        break;
+                    }
+                    case (Constants.TAB_TWO_CALL): {
+                        if (!CallListAdapter.isDeleteMode()) {
+                            // callDialog = new CallDialog();
+                            //callDialog.show(fragmentManager, "CreateDialog3");
                             ArrayList<String> phoneNumbers = new ArrayList<>();
                             phoneNumbers.add("8947839534");
                             phoneNumbers.add("5487983721");
@@ -254,22 +366,33 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                                 base = base.child(authData.getUid());
                             }
                             base.child("call").push().setValue(call);
-                            break;
                         }
-                        case (Constants.TAB_THREE_REMIND): {
+                        break;
+                    }
+                    case (Constants.TAB_THREE_REMIND): {
+                        if (!RemindListAdapter.isDeleteMode()) {
                             remindDialog = new RemindDialog();
                             remindDialog.show(fragmentManager, "CreateDialog2");
-                            break;
                         }
-                        case (Constants.TAB_FOUR_NOTE): {
+                        break;
+                    }
+                    case (Constants.TAB_FOUR_NOTE): {
+                        if (!NoteListAdapter.isDeleteMode()) {
                             noteDialog = new NoteDialog();
                             noteDialog.show(fragmentManager, "CreateDialog1");
-                            break;
                         }
+                        break;
                     }
                 }
             }
         });
+    }
+
+    /*------------------------------------TOOLBAR-------------------------------------------------*/
+
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     /*Create and work with main menu in Toolbar (show or hide basket)*/
@@ -285,8 +408,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 //       menu.findItem(R.id.action_login).setVisible(getAuth() == null);
 //       menu.findItem(R.id.action_logout).setVisible(getAuth() != null);
 
-        /* make visible basket if in some fragment set "delete mode" */
-        menu.findItem(R.id.action_delete).setVisible(checkDeleteMode());
+        // make visible basket if in some fragment set "delete mode"
+        menu.findItem(R.id.action_delete).setVisible(checkDeleteMode(position));
         return true;
     }
 
@@ -301,7 +424,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         } catch (ClassCastException e) {
             throw new ClassCastException(adapter.getItem(position).toString() + " must implement onSomeEventListener");
         }
-
         switch (item.getItemId()) {
             case R.id.action_delete:
                 deleteClickListener.onDeleteClick(true);
@@ -318,6 +440,28 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 //                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /*------------------------------NAVIGATION DROVER---------------------------------------------*/
+    private void initNavigationDrover() {
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
+        // in "delete mode" click on the arrow remove delete mode
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!toggle.isDrawerIndicatorEnabled()) {
+                    onBackPressed();
+                }
+            }
+        });
+        drawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.navigation);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        changeAuthItem();
     }
 
     /*  Work with NavigationDrawer menu */
@@ -362,7 +506,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (checkDeleteMode()) {
+            if (checkDeleteMode(position)) {
                 try {
                     deleteClickListener = adapter.getItem(position);
                 } catch (ClassCastException e) {
@@ -375,10 +519,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         }
     }
 
-    public boolean checkDeleteMode() {
-        return (NoteListAdapter.isDeleteMode()) || (SmsListAdapter.isDeleteMode()) || (CallListAdapter.isDeleteMode()) || (RemindListAdapter.isDeleteMode());
-    }
-
+    /*--------------------------------FIREBASE LOGIN/LOGOUT----------------------------------------*/
     @Override
     protected void onStart() {
         super.onStart();

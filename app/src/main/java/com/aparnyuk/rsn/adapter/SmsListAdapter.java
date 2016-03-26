@@ -123,58 +123,8 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
         deleteItemSet.clear();
     }
 
-/*    static class SmsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener  {
-
-        CardView cv;
-        CheckBox deleteSms;
-        TextView SmsText;
-        TextView dateText;
-        LinearLayout ll;
-
-        public SmsViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.Sms_cv);
-            SmsText = (TextView) itemView.findViewById(R.id.Sms_text);
-            dateText = (TextView) itemView.findViewById(R.id.Sms_date);
-            deleteSms = (CheckBox) itemView.findViewById(R.id.checkBox);
-            ll = (LinearLayout) itemView.findViewById(R.id.test);
-
-            deleteSms.setOnClickListener(this);
-            ll.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-                switch (v.getId()) {
-                    case R.id.test:
-                        itemClick(position);
-                        break;
-                    case R.id.checkBox:
-                        checkClick(position);
-                }
-            }
-        }
-
-        private void itemClick(int position) {
-            Log.d("Sms", "Click " + position);
-        }
-
-        private void checkClick(int position) {
-            Log.d("Sms", "Click " + position);
-        }
-    }*/
-
     @Override
     protected void populateViewHolder(SmsListAdapter.SmsViewHolder smsViewHolder, Sms sms, int i) {
-/*        String str = "";
-        if (sms.getNumbers().size() > 1) {
-            if (sms.getNumbers().size() == 2) {
-            } else {
-                str = " and others " + (sms.getNumbers().size() - 1);
-            }
-        }*/
         smsViewHolder.phoneNum.setText(sms.getNumbers().get(0) );
         smsViewHolder.smsText.setText(sms.getText());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");

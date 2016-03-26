@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.RemindListAdapter;
 import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
 import com.firebase.client.AuthData;
@@ -23,7 +24,7 @@ public class RemindFragment extends AbstractTabFragment {
 
     RemindDialog remindDialog;
     public RemindListAdapter remindAdapter;
-
+    MainActivity act;
     public static RemindFragment getInstance(Context context) {
         Bundle args = new Bundle();
         RemindFragment fragment = new RemindFragment();
@@ -37,9 +38,6 @@ public class RemindFragment extends AbstractTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_remind, container, false);
-
-        // from parent class, need for changing toolbar colors
-        setActivityElements();
 
         // init recycler view
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.remindRecyclerView);
@@ -58,6 +56,9 @@ public class RemindFragment extends AbstractTabFragment {
         remindAdapter = new RemindListAdapter(base);
         recycler.setAdapter(remindAdapter);
 
+        if (getActivity() != null) {
+            act = (MainActivity) getActivity();
+        }
         // normal mode: one click - open remind, long - set delete mode
         // on delete mode: one click - check/uncheck remind to delete, long click - the same
         remindAdapter.setOnItemClickListener(new RemindListAdapter.OnItemClickListener() {
@@ -65,16 +66,13 @@ public class RemindFragment extends AbstractTabFragment {
             public void onItemClick(View view, int position, boolean deleteMode, boolean changeMode) {
                 if (!deleteMode) {
                     if (changeMode) {
-                        setNormalModeInterface();
+                        act.setNormalModeInterface();
                     } else {
                         remindDialog = new RemindDialog();
                         remindDialog.show(getFragmentManager(), "CreateDialog2");
-                        //remindAdapter.getRef(position).removeValue();
-
-                        //  toolbar.setDisplayHomeAsUpEnabled(true);
                     }
                 } else {
-                    getActivity().setTitle("" + remindAdapter.getDeleteItemSet().size());
+                    act.setTitle("" + RemindListAdapter.getDeleteItemSet().size());
                 }
             }
 
@@ -82,13 +80,13 @@ public class RemindFragment extends AbstractTabFragment {
             public void onItemLongClick(View view, int position, boolean deleteMode, boolean changeMode) {
                 if (!deleteMode) {
                     if (changeMode) {
-                        setNormalModeInterface();
+                        act.setNormalModeInterface();
                     }
                 } else {
                     if (changeMode) {
-                        setDeleteModeInterface();
+                        act.setDeleteModeInterface();
                     }
-                    getActivity().setTitle("" + remindAdapter.getDeleteItemSet().size());
+                    act.setTitle("" + RemindListAdapter.getDeleteItemSet().size());
                 }
             }
         });
@@ -101,16 +99,16 @@ public class RemindFragment extends AbstractTabFragment {
 
     @Override
     public void onDeleteClick(boolean delete) {
-        if (remindAdapter.isDeleteMode()) {
+        if (RemindListAdapter.isDeleteMode()) {
             Log.d("remind", "delete in remind fragment");
             if (delete) {
-                for (int i : remindAdapter.getDeleteItemSet()) {
+                for (int i : RemindListAdapter.getDeleteItemSet()) {
                     remindAdapter.getRef(i).removeValue();
                 }
             }
             remindAdapter.clearDeleteMode();
             remindAdapter.notifyDataSetChanged();
-            setNormalModeInterface();
+            act.setNormalModeInterface();
         }
     }
 

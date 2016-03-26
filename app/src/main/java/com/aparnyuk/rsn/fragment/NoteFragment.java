@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.NoteListAdapter;
 import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
 import com.firebase.client.AuthData;
@@ -24,6 +25,7 @@ public class NoteFragment extends AbstractTabFragment {
     Toolbar toolbar;
     NoteDialog noteDialog;
     public NoteListAdapter noteAdapter;
+    MainActivity act;
 
     public static NoteFragment getInstance(Context context) {
         Bundle args = new Bundle();
@@ -38,9 +40,6 @@ public class NoteFragment extends AbstractTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_note, container, false);
-
-        // from parent class, need for changing toolbar colors
-        setActivityElements();
 
         // init recycler view
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.noteRecyclerView);
@@ -59,40 +58,43 @@ public class NoteFragment extends AbstractTabFragment {
         noteAdapter = new NoteListAdapter(base);
         recycler.setAdapter(noteAdapter);
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+        if (getActivity() != null) {
+            act = (MainActivity) getActivity();
+        }
+
         // normal mode: one click - open note, long - set delete mode
         // on delete mode: one click - check/uncheck note to delete, long click - the same
-        noteAdapter.setOnItemClickListener(new NoteListAdapter.OnItemClickListener() {
-                                               @Override
-                                               public void onItemClick(View view, int position, boolean deleteMode, boolean changeMode) {
-                                                   if (!deleteMode) {
-                                                       if (changeMode) {
-                                                           setNormalModeInterface();
-                                                       } else {
-                                                           noteDialog = new NoteDialog();
-                                                           noteDialog.show(getFragmentManager(), "CreateDialog2");
-                                                           //noteAdapter.getRef(position).removeValue();
+        noteAdapter.setOnItemClickListener(
+                new NoteListAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                        if (!deleteMode) {
+                            if (changeMode) {
+                                act.setNormalModeInterface();
+                            } else {
+                                noteDialog = new NoteDialog();
+                                noteDialog.show(getFragmentManager(), "CreateDialog2");
+                            }
+                        } else {
+                            act.setTitle("" + NoteListAdapter.getDeleteItemSet().size());
+                        }
+                    }
 
-                                                           //  toolbar.setDisplayHomeAsUpEnabled(true);
-                                                       }
-                                                   } else {
-                                                       getActivity().setTitle("" + noteAdapter.getDeleteItemSet().size());
-                                                   }
-                                               }
-
-                                               @Override
-                                               public void onItemLongClick(View view, int position, boolean deleteMode, boolean changeMode) {
-                                                   if (!deleteMode) {
-                                                       if (changeMode) {
-                                                           setNormalModeInterface();
-                                                       }
-                                                   } else {
-                                                       if (changeMode) {
-                                                           setDeleteModeInterface();
-                                                       }
-                                                       getActivity().setTitle("" + noteAdapter.getDeleteItemSet().size());
-                                                   }
-                                               }
-                                           }
+                    @Override
+                    public void onItemLongClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                        if (!deleteMode) {
+                            if (changeMode) {
+                                act.setNormalModeInterface();
+                            }
+                        } else {
+                            if (changeMode) {
+                                act.setDeleteModeInterface();
+                            }
+                            act.setTitle("" + NoteListAdapter.getDeleteItemSet().size());
+                        }
+                    }
+                }
 
         );
         return view;
@@ -105,19 +107,18 @@ public class NoteFragment extends AbstractTabFragment {
 
     @Override
     public void onDeleteClick(boolean delete) {
-        if (noteAdapter.isDeleteMode()) {
+        if (NoteListAdapter.isDeleteMode()) {
             if (delete) {
                 Log.d("Note", "delete in note fragment");
-                for (int i : noteAdapter.getDeleteItemSet()) {
+                for (int i : NoteListAdapter.getDeleteItemSet()) {
                     noteAdapter.getRef(i).removeValue();
                 }
             }
             noteAdapter.clearDeleteMode();
             noteAdapter.notifyDataSetChanged();
-            setNormalModeInterface();
+            act.setNormalModeInterface();
         }
     }
-
 
 //    public void onDestroy() {
 //        super.onDestroy();

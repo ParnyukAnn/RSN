@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.CallListAdapter;
 import com.aparnyuk.rsn.fragment.dialog.CallDialog;
 import com.firebase.client.AuthData;
@@ -24,6 +25,7 @@ public class CallFragment extends AbstractTabFragment {
     Toolbar toolbar;
     CallDialog callDialog;
     public CallListAdapter callAdapter;
+    MainActivity act;
 
     public static CallFragment getInstance(Context context) {
         Bundle args = new Bundle();
@@ -38,9 +40,6 @@ public class CallFragment extends AbstractTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_call, container, false);
-
-        // from parent class, need for changing toolbar colors
-        setActivityElements();
 
         // init recycler view
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.callRecyclerView);
@@ -59,40 +58,43 @@ public class CallFragment extends AbstractTabFragment {
         callAdapter = new CallListAdapter(base);
         recycler.setAdapter(callAdapter);
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+        if (getActivity() != null) {
+            act = (MainActivity) getActivity();
+        }
+
         // normal mode: one click - open call, long - set delete mode
         // on delete mode: one click - check/uncheck call to delete, long click - the same
-        callAdapter.setOnItemClickListener(new CallListAdapter.OnItemClickListener() {
-                                               @Override
-                                               public void onItemClick(View view, int position, boolean deleteMode, boolean changeMode) {
-                                                   if (!deleteMode) {
-                                                       if (changeMode) {
-                                                           setNormalModeInterface();
-                                                       } else {
-                                                           callDialog = new CallDialog();
-                                                           callDialog.show(getFragmentManager(), "CreateDialog2");
-                                                           //callAdapter.getRef(position).removeValue();
+        callAdapter.setOnItemClickListener(
+                new CallListAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                        if (!deleteMode) {
+                            if (changeMode) {
+                                act.setNormalModeInterface();
+                            } else {
+                                callDialog = new CallDialog();
+                                callDialog.show(getFragmentManager(), "CreateDialog2");
+                            }
+                        } else {
+                            act.setTitle("" + CallListAdapter.getDeleteItemSet().size());
+                        }
+                    }
 
-                                                           //  toolbar.setDisplayHomeAsUpEnabled(true);
-                                                       }
-                                                   } else {
-                                                       getActivity().setTitle("" + callAdapter.getDeleteItemSet().size());
-                                                   }
-                                               }
-
-                                               @Override
-                                               public void onItemLongClick(View view, int position, boolean deleteMode, boolean changeMode) {
-                                                   if (!deleteMode) {
-                                                       if (changeMode) {
-                                                           setNormalModeInterface();
-                                                       }
-                                                   } else {
-                                                       if (changeMode) {
-                                                           setDeleteModeInterface();
-                                                       }
-                                                       getActivity().setTitle("" + callAdapter.getDeleteItemSet().size());
-                                                   }
-                                               }
-                                           }
+                    @Override
+                    public void onItemLongClick(View view, int position, boolean deleteMode, boolean changeMode) {
+                        if (!deleteMode) {
+                            if (changeMode) {
+                                act.setNormalModeInterface();
+                            }
+                        } else {
+                            if (changeMode) {
+                                act.setDeleteModeInterface();
+                            }
+                            act.setTitle("" + CallListAdapter.getDeleteItemSet().size());
+                        }
+                    }
+                }
 
         );
         return view;
@@ -105,16 +107,16 @@ public class CallFragment extends AbstractTabFragment {
 
     @Override
     public void onDeleteClick(boolean delete) {
-        if (callAdapter.isDeleteMode()) {
+        if (CallListAdapter.isDeleteMode()) {
             if (delete) {
                 Log.d("Call", "delete in call fragment");
-                for (int i : callAdapter.getDeleteItemSet()) {
+                for (int i : CallListAdapter.getDeleteItemSet()) {
                     callAdapter.getRef(i).removeValue();
                 }
             }
             callAdapter.clearDeleteMode();
             callAdapter.notifyDataSetChanged();
-            setNormalModeInterface();
+            act.setNormalModeInterface();
         }
     }
 
