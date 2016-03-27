@@ -482,6 +482,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 break;
             }
             case (R.id.nav_settings): {
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
             }
         }

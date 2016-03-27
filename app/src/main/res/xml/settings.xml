@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="auth"
+        android:title="@string/auth_category">
+        <PreferenceScreen
+            android:key="change_password"
+            android:summary="@string/change_password_summary"
+            android:title="@string/change_password_title" />
+        <PreferenceScreen
+            android:key="reset_password"
+            android:summary="@string/reset_password_summary"
+            android:title="@string/reset_password_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="storage_settings"
+        android:title="@string/storage_category">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="delete_old"
+            android:summary="@string/delete_old_summary"
+            android:title="@string/delete_old_title" />
+        <Preference
+            android:dependency="delete_old"
+            android:key="delete_limit"
+            android:summary="@string/delete_limit_summary"
+            android:title="@string/delete_limit_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="sound_settings"
+        android:title="@string/sound_category">
+        <ListPreference
+            android:entries="@array/entries"
+            android:entryValues="@array/entry_values"
+            android:key="sound_type"
+            android:summary="@string/sound_type_summary"
+            android:title="@string/sound_type_title" />
+        <RingtonePreference
+            android:key="ringtone"
+            android:showDefault="true"
+            android:showSilent="true"
+            android:summary="@string/ringtone_summary"
+            android:title="@string/ringtone_title" />
+        <VolumePreference
+            android:name="@string/volume_name"
+            android:key="volume"
+            android:summary="@string/volume_summary"
+            android:title="@string/volume_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="main"
+        android:summary="@string/main_summary"
+        android:title="@string/main_title">
+        <ListPreference
+            android:entries="@array/entries_lang"
+            android:entryValues="@array/entry_values_lang"
+            android:key="lang"
+            android:summary="@string/language_summary"
+            android:title="@string/language_title" />
+        <ListPreference
+            android:entries="@array/entries_tab"
+            android:entryValues="@array/entry_values_tab"
+            android:key="tabs"
+            android:summary="@string/tabs_summary"
+            android:title="@string/tabs_title" />
+        <PreferenceScreen
+            android:key="reset"
+            android:summary="@string/reset_summary"
+            android:title="@string/reset_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

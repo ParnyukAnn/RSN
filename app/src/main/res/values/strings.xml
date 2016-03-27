@@ -92,12 +92,95 @@
     <string name="friends">Add numbers</string>
     <string name="ok">OK</string>
 
-
     <!-- Names for recycler transation -->
     <string name="transition_name_or_number">transition:NAME_OR_NUMBER</string>
     <string name="transition_circle">transition:CIRCLE</string>
     <string name="transition_text">transition:TEXT</string>
     <string name="transition_date">transition:DATE</string>
 
+    <!-- Preferences -->
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="storage_category">STORAGE</string>
+
+    <string name="delete_old_title">Delete old messages (reminds)</string>
+    <string name="delete_old_summary">Delete old messages as limits are reached </string>
+
+    <string name="delete_limit_title">Message limit</string>
+    <string name="delete_limit_summary">Set number of messages to save </string>
+
+    <!-- Sound -->
+    <string name="sound_category">SOUND</string>
+
+    <string name="sound_type_title">Sound</string>
+    <string name="sound_type_summary">Choose type of notification sound</string>
+
+    <string-array name="entries">
+        <item>Silent</item>
+        <item>Ringtone</item>
+        <item>Vibrate</item>
+        <item>Combine</item>
+    </string-array>
+    <string-array name="entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string name="ringtone_title">Ringtone</string>
+    <string name="ringtone_summary">Choose ringtone</string>
+
+    <string name="volume_name">Volume</string>
+    <string name="volume_title">Ringtone volume </string>
+    <string name="volume_summary">Set volume</string>
+
+    <!--Other-->
+    <string name="main_title">OTHER</string>
+    <string name="main_summary">Other settings</string>
+
+    <string name="reset_title">Reset</string>
+    <string name="reset_summary">Clear all settings</string>
+
+    <string name="tabs_title">Main tab </string>
+    <string name="tabs_summary">Select main tab when application is started</string>
+
+    <string-array name="entries_tab">
+        <item>SMS</item>
+        <item>Call</item>
+        <item>Remind</item>
+        <item>Note</item>
+    </string-array>
+    <array name="entry_values_tab">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </array>
+
+    <!-- Language-->
+    <string name="language_title">Language</string>
+    <string name="language_summary">Choose language</string>
+
+    <string-array name="entries_lang">
+        <item>English</item>
+        <item>Russian</item>
+        <item>Ukrainian</item>
+        <item>Default</item>
+    </string-array>
+    <string-array name="entry_values_lang">
+        <item>en</item>
+        <item>ru</item>
+        <item>uk</item>
+        <item>default</item>
+    </string-array>
+
+    <!--Authentication-->
+    <string name="auth_category">AUTHENTICATION</string>
+    <string name="change_password_title">Change password</string>
+    <string name="change_password_summary">Change current password for the account</string>
+
+    <string name="reset_password_title">Reset password</string>
+    <string name="reset_password_summary">Send a password reset email</string>
 
 </resources>

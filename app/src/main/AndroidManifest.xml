@@ -34,6 +34,16 @@
             android:name="io.fabric.ApiKey"
             android:value="6745faf25c87be6bbf889c5cd2d78ee97c70fef4" />
 
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!--   android:theme="@style/AppTheme.SolidStatusBar">-->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.aparnyuk.rsn.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
