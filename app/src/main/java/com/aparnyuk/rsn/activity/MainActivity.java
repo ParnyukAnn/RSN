@@ -110,7 +110,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         adapter = new TabsFragmentAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
-        Log.d("Main activity ", "" + viewPager.getCurrentItem());
+        Log.d(TAG, "" + viewPager.getCurrentItem());
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -125,7 +125,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.d("Note", "onPageScrolled " + state);
                 if (!isFloatButtonHidden && state == 1 && positionOffset != 0.0) {
                     isFloatButtonHidden = true;
                     //hide floating button
@@ -137,12 +136,10 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             public void onPageSelected(int pos) {
                 //reset floating
                 position = pos;
-                Log.d("Note", "onPageSelected " + state);
                 if (state == 2) {
                     //have end in selected tab
                     isFloatButtonHidden = false;
                     selectedTabs(position);
-                    Log.d("Note", "page selected");
                 }
             }
 
@@ -150,13 +147,11 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             public void onPageScrollStateChanged(int state) {
                 //state 0 = nothing happen, state 1 = begining scrolling, state 2 = stop at selected tab.
                 this.state = state;
-                Log.d("Note", "onPageScrollStateChanged " + state);
                 if (state == 0) {
                     isFloatButtonHidden = false;
                 } else if (state == 2 && isFloatButtonHidden) {
                     //this only happen if user is swapping but swap back to current tab (cancel to change tab)
                     selectedTabs(position);
-                    Log.d("Note", "Cancel to change tab ");
                 }
             }
         });
@@ -389,7 +384,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     }
 
     /*------------------------------------TOOLBAR-------------------------------------------------*/
-
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
