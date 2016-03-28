@@ -19,9 +19,7 @@
                 android:id="@+id/remind_dialog_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_title_remind"
-                android:maxLength="24"
-                android:singleLine="true" />
+                android:hint="@string/hint_title_remind" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
@@ -101,9 +99,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
-            android:text="Quantity"
-            android:layout_gravity="center_vertical" />
+            android:text="Quantity" />
 
 
         <Spinner

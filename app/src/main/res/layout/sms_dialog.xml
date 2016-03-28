@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-
     <!--<LinearLayout-->
     <!--android:id="@+id/linearLayout4"-->
     <!--android:layout_width="match_parent"-->
@@ -40,12 +38,10 @@
         android:layout_margin="20dp">
 
         <EditText
-            android:id="@+id/call_number_text"
+            android:id="@+id/sms_number_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/buttonContacts"
-            android:layout_toStartOf="@+id/buttonContacts"
             android:layout_weight="2"
             android:hint="Write yor number here" />
 
@@ -76,10 +72,11 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/call_dialog_text"
+                android:id="@+id/sms_dialog_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_title_call" />
+                android:hint="@string/hint_title_sms"
+                android:maxLength="24" />
         </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
@@ -131,7 +128,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout3"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:text="notice before sending" />
+
+        <Spinner
+            android:id="@+id/noticeSmsSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout4"
         android:layout_margin="20dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="delivery report" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout5"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="horizontal"
         android:weightSum="1">
 
@@ -143,11 +182,10 @@
             android:text="Repeat" />
 
         <Spinner
-            android:id="@+id/repeatCallSpinner"
+            android:id="@+id/repeatSmsSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5" />
-
     </LinearLayout>
 
 </RelativeLayout>
