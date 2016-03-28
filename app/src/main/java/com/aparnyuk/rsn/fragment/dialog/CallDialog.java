@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.telecom.Call;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,8 +21,13 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.aparnyuk.rsn.Contact;
+import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.activity.MultipleContactPickerActivity;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.model.Calls;
+import com.aparnyuk.rsn.model.Sim;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -29,6 +35,7 @@ import org.joda.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 public class CallDialog extends DialogFragment {
@@ -38,6 +45,7 @@ public class CallDialog extends DialogFragment {
     private Spinner repeatSpinner, quantitySpinner;
     private int day, month, year, hour, minute;
     private static TimePickerDialog timePicker;
+    private int day_x, month_x, year_x, hour_x, minute_x;
     private static DatePickerDialog datePicker;
     private static Button okButton, cancelButton;
     private Button buttonContacts;
@@ -153,7 +161,19 @@ public class CallDialog extends DialogFragment {
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        sendCreateItemEvent();
+                        GregorianCalendar gregorianCalendar = new GregorianCalendar(year_x, month_x, day_x, hour_x, minute_x);
+                        Date date1 = gregorianCalendar.getTime();
+                        ArrayList<String> phoneNumbers = new ArrayList<>();
+                        phoneNumbers.add("8947839534");
+                        phoneNumbers.add("5487983721");
+                        Sim sim = new Sim("sim 1", "phone 2");
+                        Calls call = new Calls(phoneNumbers, sim, date1);
+                        Firebase base = new Firebase(Constants.FIREBASE_URL);
+                        AuthData authData = base.getAuth();
+                        if (authData != null) {
+                            base = base.child(authData.getUid());
+                        }
+                        base.child("call").push().setValue(call);
                         dialog.dismiss();
                     }
                 });
@@ -209,6 +229,9 @@ public class CallDialog extends DialogFragment {
     };
 
     private void showDate(int day, int month, int year) {
+        day_x = year;
+        month_x = month - 1;
+        year_x = day;
         dateView.setText(new StringBuilder().append(year).append("/")
                 .append(month).append("/").append(day));
     }

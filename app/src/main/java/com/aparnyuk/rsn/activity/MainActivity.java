@@ -347,20 +347,20 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                     }
                     case (Constants.TAB_TWO_CALL): {
                         if (!CallListAdapter.isDeleteMode()) {
-                            // callDialog = new CallDialog();
-                            //callDialog.show(fragmentManager, "CreateDialog3");
-                            ArrayList<String> phoneNumbers = new ArrayList<>();
-                            phoneNumbers.add("8947839534");
-                            phoneNumbers.add("5487983721");
-                            Sim sim = new Sim("sim 1", "phone 2");
-                            Calls call = new Calls(phoneNumbers, sim, new Date());
-                            call.setText("asdfasd");
-                            Firebase base = new Firebase(Constants.FIREBASE_URL);
-                            AuthData authData = base.getAuth();
-                            if (authData != null) {
-                                base = base.child(authData.getUid());
-                            }
-                            base.child("call").push().setValue(call);
+                             callDialog = new CallDialog();
+                             callDialog.show(fragmentManager, "CreateDialog3");
+//                            ArrayList<String> phoneNumbers = new ArrayList<>();
+//                            phoneNumbers.add("8947839534");
+//                            phoneNumbers.add("5487983721");
+//                            Sim sim = new Sim("sim 1", "phone 2");
+//                            Calls call = new Calls(phoneNumbers, sim, new Date());
+//                            call.setText("asdfasd");
+//                            Firebase base = new Firebase(Constants.FIREBASE_URL);
+//                            AuthData authData = base.getAuth();
+//                            if (authData != null) {
+//                                base = base.child(authData.getUid());
+//                            }
+//                            base.child("call").push().setValue(call);
                         }
                         break;
                     }
