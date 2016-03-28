@@ -322,33 +322,32 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             public void onClick(View view) {
                 if (getAuth() == null) {
                     showFirebaseLoginPrompt();
-                }
+                } else {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    switch (position) {
+                        case (Constants.TAB_ONE_SMS): {
+                            if (!SmsListAdapter.isDeleteMode()) {
+                                //smsDialog = new SmsDialog();
+                                //smsDialog.show(getFragmentManager(), "CreateDialog4");
+                                ArrayList<String> phoneNumbers = new ArrayList<>();
+                                phoneNumbers.add("8947839534");
+                                phoneNumbers.add("5487983721");
+                                Sim sim = new Sim("sim 1", "phone 2");
+                                Sms sms = new Sms(phoneNumbers, sim, "dfasf", new Date());
 
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                switch (position) {
-                    case (Constants.TAB_ONE_SMS): {
-                        if (!SmsListAdapter.isDeleteMode()) {
-                            //smsDialog = new SmsDialog();
-                            //smsDialog.show(getFragmentManager(), "CreateDialog4");
-                            ArrayList<String> phoneNumbers = new ArrayList<>();
-                            phoneNumbers.add("8947839534");
-                            phoneNumbers.add("5487983721");
-                            Sim sim = new Sim("sim 1", "phone 2");
-                            Sms sms = new Sms(phoneNumbers, sim, "dfasf", new Date());
-
-                            Firebase base = new Firebase(Constants.FIREBASE_URL);
-                            AuthData authData = base.getAuth();
-                            if (authData != null) {
-                                base = base.child(authData.getUid());
+                                Firebase base = new Firebase(Constants.FIREBASE_URL);
+                                AuthData authData = base.getAuth();
+                                if (authData != null) {
+                                    base = base.child(authData.getUid());
+                                }
+                                base.child("sms").push().setValue(sms);
                             }
-                            base.child("sms").push().setValue(sms);
+                            break;
                         }
-                        break;
-                    }
-                    case (Constants.TAB_TWO_CALL): {
-                        if (!CallListAdapter.isDeleteMode()) {
-                             callDialog = new CallDialog();
-                             callDialog.show(fragmentManager, "CreateDialog3");
+                        case (Constants.TAB_TWO_CALL): {
+                            if (!CallListAdapter.isDeleteMode()) {
+                                callDialog = new CallDialog();
+                                callDialog.show(fragmentManager, "CreateDialog3");
 //                            ArrayList<String> phoneNumbers = new ArrayList<>();
 //                            phoneNumbers.add("8947839534");
 //                            phoneNumbers.add("5487983721");
@@ -361,22 +360,23 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 //                                base = base.child(authData.getUid());
 //                            }
 //                            base.child("call").push().setValue(call);
+                            }
+                            break;
                         }
-                        break;
-                    }
-                    case (Constants.TAB_THREE_REMIND): {
-                        if (!RemindListAdapter.isDeleteMode()) {
-                            remindDialog = new RemindDialog();
-                            remindDialog.show(fragmentManager, "CreateDialog2");
+                        case (Constants.TAB_THREE_REMIND): {
+                            if (!RemindListAdapter.isDeleteMode()) {
+                                remindDialog = new RemindDialog();
+                                remindDialog.show(fragmentManager, "CreateDialog2");
+                            }
+                            break;
                         }
-                        break;
-                    }
-                    case (Constants.TAB_FOUR_NOTE): {
-                        if (!NoteListAdapter.isDeleteMode()) {
-                            noteDialog = new NoteDialog();
-                            noteDialog.show(fragmentManager, "CreateDialog1");
+                        case (Constants.TAB_FOUR_NOTE): {
+                            if (!NoteListAdapter.isDeleteMode()) {
+                                noteDialog = new NoteDialog();
+                                noteDialog.show(fragmentManager, "CreateDialog1");
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
