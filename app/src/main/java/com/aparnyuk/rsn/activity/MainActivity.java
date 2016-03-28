@@ -36,6 +36,7 @@ import com.aparnyuk.rsn.adapter.TabsFragmentAdapter;
 import com.aparnyuk.rsn.fragment.dialog.CallDialog;
 import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
 import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
+import com.aparnyuk.rsn.fragment.dialog.SmsDialog;
 import com.aparnyuk.rsn.login.CreateAccountActivity;
 import com.aparnyuk.rsn.login.LoginActivity;
 import com.aparnyuk.rsn.model.Calls;
@@ -78,7 +79,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     CallDialog callDialog;
     RemindDialog remindDialog;
     NoteDialog noteDialog;
-    //SmsDialog smsDialog;
+    SmsDialog smsDialog;
 
     /* Handle click to fragment with recycler view */
     onDeleteClickListener deleteClickListener;
@@ -327,20 +328,20 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                     switch (position) {
                         case (Constants.TAB_ONE_SMS): {
                             if (!SmsListAdapter.isDeleteMode()) {
-                                //smsDialog = new SmsDialog();
-                                //smsDialog.show(getFragmentManager(), "CreateDialog4");
-                                ArrayList<String> phoneNumbers = new ArrayList<>();
-                                phoneNumbers.add("8947839534");
-                                phoneNumbers.add("5487983721");
-                                Sim sim = new Sim("sim 1", "phone 2");
-                                Sms sms = new Sms(phoneNumbers, sim, "dfasf", new Date());
-
-                                Firebase base = new Firebase(Constants.FIREBASE_URL);
-                                AuthData authData = base.getAuth();
-                                if (authData != null) {
-                                    base = base.child(authData.getUid());
-                                }
-                                base.child("sms").push().setValue(sms);
+                                smsDialog = new SmsDialog();
+                                smsDialog.show(fragmentManager, "CreateDialog4");
+//                                ArrayList<String> phoneNumbers = new ArrayList<>();
+//                                phoneNumbers.add("8947839534");
+//                                phoneNumbers.add("5487983721");
+//                                Sim sim = new Sim("sim 1", "phone 2");
+//                                Sms sms = new Sms(phoneNumbers, sim, "dfasf", new Date());
+//
+//                                Firebase base = new Firebase(Constants.FIREBASE_URL);
+//                                AuthData authData = base.getAuth();
+//                                if (authData != null) {
+//                                    base = base.child(authData.getUid());
+//                                }
+//                                base.child("sms").push().setValue(sms);
                             }
                             break;
                         }

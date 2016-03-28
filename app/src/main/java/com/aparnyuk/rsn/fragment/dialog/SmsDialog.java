@@ -21,7 +21,12 @@ import android.widget.TimePicker;
 
 import com.aparnyuk.rsn.Contact;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.activity.MultipleContactPickerActivity;
+import com.aparnyuk.rsn.model.Sim;
+import com.aparnyuk.rsn.model.Sms;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -35,7 +40,7 @@ public class SmsDialog extends DialogFragment {
 
 
     private EditText nameView, dateView, timeView, smsNumberText;
-    private Spinner repeatSpinner, quantitySpinner;
+    private Spinner repeatSpinner, noticeSpinner;
     private int day, month, year, hour, minute;
     private static TimePickerDialog timePicker;
     private static DatePickerDialog datePicker;
@@ -136,6 +141,12 @@ public class SmsDialog extends DialogFragment {
         arrayRepeatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         repeatSpinner.setAdapter(arrayRepeatAdapter);
 
+        noticeSpinner = (Spinner) view.findViewById(R.id.noticeSmsSpinner);
+        ArrayAdapter<CharSequence> arrayRepeatAdapter1 = ArrayAdapter.createFromResource(getActivity(),
+                R.array.repeat, android.R.layout.simple_spinner_dropdown_item);
+        arrayRepeatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        noticeSpinner.setAdapter(arrayRepeatAdapter1);
+
 
         builder.setTitle(R.string.dialog_create_sms)
                 .setView(view)
@@ -153,7 +164,17 @@ public class SmsDialog extends DialogFragment {
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        sendCreateItemEvent();
+                        ArrayList<String> phoneNumbers = new ArrayList<>();
+                        phoneNumbers.add("8947839534");
+                        phoneNumbers.add("5487983721");
+                        Sim sim = new Sim("sim 1", "phone 2");
+                        Sms sms = new Sms(phoneNumbers, sim, "dfasf", new Date());
+                        Firebase base = new Firebase(Constants.FIREBASE_URL);
+                        AuthData authData = base.getAuth();
+                        if (authData != null) {
+                            base = base.child(authData.getUid());
+                        }
+                        base.child("sms").push().setValue(sms);
                         dialog.dismiss();
                     }
                 });

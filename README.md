@@ -10,4 +10,5 @@
 <a href="http://qrcoder.ru" target="_blank"><img src="http://qrcoder.ru/code/?http%3A%2F%2F&4&0" width="116" height="116" border="0" title="QR код"></a>
 ##### Прототип: https://ninjamock.com/s/ZNXGS
 ##### Эстимейты: https://docs.google.com/spreadsheets/d/1O3WDKDXBGNBcZUhO-6PyFWh0g7bWVf8Y9oV5AF0D0WY/edit#gid=0
-##### Apk: https://www.dropbox.com/s/qtfdopzpo3k0cjh/RSN.apk?dl=0
+##### Apk: https://drive.google.com/file/d/0B9zJxDv3q7UfaUdDVG5pWk9XTGM/view?usp=sharing
+##### QR: http://qrcoder.ru/code/?https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F0B9zJxDv3q7UfaUdDVG5pWk9XTGM%2Fview%3Fusp%3Dsharing&4&0
