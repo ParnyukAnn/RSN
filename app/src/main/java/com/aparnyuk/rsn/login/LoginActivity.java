@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         mPassword = (EditText) findViewById(R.id.edit_text_password_login);
 
         Button mPasswordLoginButton = (Button) findViewById(R.id.login_with_password);
+        assert (mPasswordLoginButton != null);
         mPasswordLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,9 +142,40 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {
+            public void onAuthenticationError(FirebaseError error) {
                 mAuthProgressDialog.dismiss();
-                showErrorDialog(firebaseError.toString());
+                String errorMessage;
+                // Something went wrong :(
+                switch (error.getCode()) {
+                    case FirebaseError.USER_DOES_NOT_EXIST:
+                        errorMessage = getString(R.string.user_does_not_exist);
+                        break;
+                    case FirebaseError.INVALID_PASSWORD:
+                        errorMessage = getString(R.string.invalid_password);
+                        break;
+                    case FirebaseError.EMAIL_TAKEN:
+                        errorMessage = getString(R.string.email_taken);
+                        break;
+                    case FirebaseError.INVALID_CREDENTIALS:
+                        errorMessage = getString(R.string.invalid_credentials);
+                        break;
+                    case FirebaseError.INVALID_EMAIL:
+                        errorMessage = getString(R.string.invalid_email);
+                        break;
+                    case FirebaseError.NETWORK_ERROR:
+                        errorMessage = getString(R.string.network_error);
+                        break;
+                    case FirebaseError.PREEMPTED:
+                        errorMessage = getString(R.string.preempted);
+                        break;
+                    case FirebaseError.UNKNOWN_ERROR:
+                        errorMessage = getString(R.string.unknown_error);
+                        break;
+                    default:
+                        errorMessage = getString(R.string.unknown_error);
+                        break;
+                }
+                showErrorDialog(errorMessage);
             }
         });
     }

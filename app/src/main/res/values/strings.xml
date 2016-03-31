@@ -72,6 +72,19 @@
     <string name="hint_enter_email">Enter your email</string>
     <string name="hint_enter_password">Enter password</string>
     <!--End-->
+    <!--Login error-->
+    <string name="email_taken">The new user account cannot be created because the specified email address is already in use.</string>
+    <string name="invalid_credentials">The specified authentication credentials are invalid. This may occur when credentials are malformed or expired.</string>
+    <string name="invalid_email">The specified email is not a valid email.</string>
+    <string name="invalid_origin">A security error occurred while processing the authentication request.</string>
+    <string name="invalid_password">The specified user account password is incorrect.</string>
+    <string name="network_error">An error occurred while attempting to contact the authentication server.</string>
+    <string name="preempted">The current request was aborted by a new, incoming authentication request.</string>
+    <string name="unknown_error">An unknown error occurred.</string>
+    <string name="user_denied_auth">The user did not authorize the application.</string>
+    <string name="user_does_not_exist">The specified user account does not exist.</string>
+    <!--End-->
+
 
     <string-array name="repeat">
         <item>Never</item>

@@ -50,6 +50,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         /* Create new account in Firebase when user taps on "Create account" button */
         Button mCreateAccountButton = (Button) findViewById(R.id.btn_create_account);
+        assert (mCreateAccountButton != null);
         mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,11 +137,45 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onError(FirebaseError firebaseError) {
+            public void onError(FirebaseError error) {
                 mAuthProgressDialog.dismiss();
-                showErrorDialog(firebaseError.toString());
+                showErrorDialog(someError(error.getCode()));
             }
         });
+    }
+
+    private String someError(int code) {
+        String errorMessage;
+        switch (code) {
+            case FirebaseError.USER_DOES_NOT_EXIST:
+                errorMessage = getString(R.string.user_does_not_exist);
+                break;
+            case FirebaseError.INVALID_PASSWORD:
+                errorMessage = getString(R.string.invalid_password);
+                break;
+            case FirebaseError.EMAIL_TAKEN:
+                errorMessage = getString(R.string.email_taken);
+                break;
+            case FirebaseError.INVALID_CREDENTIALS:
+                errorMessage = getString(R.string.invalid_credentials);
+                break;
+            case FirebaseError.INVALID_EMAIL:
+                errorMessage = getString(R.string.invalid_email);
+                break;
+            case FirebaseError.NETWORK_ERROR:
+                errorMessage = getString(R.string.network_error);
+                break;
+            case FirebaseError.PREEMPTED:
+                errorMessage = getString(R.string.preempted);
+                break;
+            case FirebaseError.UNKNOWN_ERROR:
+                errorMessage = getString(R.string.unknown_error);
+                break;
+            default:
+                errorMessage = getString(R.string.unknown_error);
+                break;
+        }
+        return errorMessage;
     }
 
     public void loginWithPassword(String email, String password) {
@@ -158,9 +193,9 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {
+            public void onAuthenticationError(FirebaseError error) {
                 mAuthProgressDialog.dismiss();
-                showErrorDialog(firebaseError.toString());
+                showErrorDialog(someError(error.getCode()));
             }
         });
     }

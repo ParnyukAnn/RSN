@@ -114,6 +114,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         Log.d(TAG, "" + viewPager.getCurrentItem());
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        assert tabLayout != null;
         tabLayout.setupWithViewPager(viewPager);
 
         // add animation to floating button and change tabs color
@@ -223,7 +224,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         }
         invalidateOptionsMenu();
         toggle.setDrawerIndicatorEnabled(false);
-        toggle.setHomeAsUpIndicator(this.getDrawerToggleDelegate().getThemeUpIndicator());
+        assert getDrawerToggleDelegate() != null;
+        toggle.setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
         setDeleteItemsInTitle(position);
     }
 
@@ -267,7 +269,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         }
         invalidateOptionsMenu();
         toggle.setDrawerIndicatorEnabled(true);
-        toggle.setHomeAsUpIndicator(this.getDrawerToggleDelegate().getThemeUpIndicator());
+        assert getDrawerToggleDelegate() != null;
+        toggle.setHomeAsUpIndicator(getDrawerToggleDelegate().getThemeUpIndicator());
     }
 
     /* Check if the current tab in "delete mode" */
@@ -313,7 +316,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
     private void initFloatingButton() {
         fab = (FloatingActionButton) findViewById(R.id.fab);
-
+        assert fab != null;
         CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
         p.setAnchorId(View.NO_ID);
         fab.setLayoutParams(p);
@@ -361,6 +364,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 //                                base = base.child(authData.getUid());
 //                            }
 //                            base.child("call").push().setValue(call);
+
                             }
                             break;
                         }
@@ -450,10 +454,12 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 }
             }
         });
+        assert drawerLayout != null;
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.navigation);
+        assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
         changeAuthItem();
@@ -492,6 +498,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         changeAuthItem();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -500,6 +507,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
