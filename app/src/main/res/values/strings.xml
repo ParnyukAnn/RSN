@@ -17,10 +17,16 @@
     <string name="view_navigation_open">Open</string>
     <string name="view_navigation_close">Close</string>
 
-    <string name="action_history">History</string>
-    <string name="action_authorization">Authorization</string>
+    <string name="action_calendar">update</string>
+    <string name="action_search">stop</string>
+    <string name="action_history">start</string>
+<!--
     <string name="action_calendar">Calendar</string>
     <string name="action_search">Search</string>
+    <string name="action_history">History</string>
+-->
+
+    <string name="action_authorization">Authorization</string>
     <string name="action_settings">Settings</string>
     <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
@@ -196,5 +202,12 @@
 
     <string name="reset_password_title">Reset password</string>
     <string name="reset_password_summary">Send a password reset email</string>
+
+    <!--Notification-->
+    <string name="notification_ticker">notification_ticker</string>
+    <string name="notification_text">notification_text</string>
+    <string name="notification_update_button">notification_update_button</string>
+    <string name="notification_long_text">notification_long_text</string>
+
 
 </resources>

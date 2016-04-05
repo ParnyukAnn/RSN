@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="192dp"
     android:src="@drawable/test"
-    android:background="@drawable/green_3"
     android:orientation="vertical">
-
+    <!--android:background="@drawable/green_3"-->
 </LinearLayout>
 
 <!--

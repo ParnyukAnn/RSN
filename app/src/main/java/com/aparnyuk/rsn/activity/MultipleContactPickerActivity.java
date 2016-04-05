@@ -19,7 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.aparnyuk.rsn.Contact;
+import com.aparnyuk.rsn.Utils.Contact;
 import com.aparnyuk.rsn.adapter.ContactsAdapter;
 import com.aparnyuk.rsn.R;
 

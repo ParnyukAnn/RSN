@@ -1,4 +1,4 @@
-package com.aparnyuk.rsn;
+package com.aparnyuk.rsn.Utils;
 
 import android.graphics.Bitmap;
 import android.os.Parcel;

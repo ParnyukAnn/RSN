@@ -44,6 +44,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.aparnyuk.rsn.activity.MainActivity" />
         </activity>
+
+        <service
+            android:name=".services.MainService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

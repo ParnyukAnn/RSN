@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
-import com.aparnyuk.rsn.Contact;
+import com.aparnyuk.rsn.Utils.Contact;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.activity.MultipleContactPickerActivity;

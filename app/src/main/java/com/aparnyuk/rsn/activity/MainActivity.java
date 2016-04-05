@@ -2,7 +2,6 @@ package com.aparnyuk.rsn.activity;
 
 import android.content.res.ColorStateList;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -39,17 +38,12 @@ import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
 import com.aparnyuk.rsn.fragment.dialog.SmsDialog;
 import com.aparnyuk.rsn.login.CreateAccountActivity;
 import com.aparnyuk.rsn.login.LoginActivity;
-import com.aparnyuk.rsn.model.Calls;
-import com.aparnyuk.rsn.model.Sim;
-import com.aparnyuk.rsn.model.Sms;
+import com.aparnyuk.rsn.services.MainService;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 public class MainActivity extends FirebaseLoginBaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -480,12 +474,24 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 break;
             }
             case (R.id.nav_calendar): {
+                if (!MainService.state) {
+                    stopService(new Intent(this, MainService.class));
+                }
+                // update date
+                startService(new Intent(this, MainService.class));
                 break;
             }
             case (R.id.nav_search): {
+                if (!MainService.state) {
+                    stopService(new Intent(this, MainService.class));
+                }
                 break;
             }
             case (R.id.nav_history): {
+                if (MainService.state) {
+                    startService(new Intent(this, MainService.class));
+                }
+
                 break;
             }
             case (R.id.nav_settings): {
