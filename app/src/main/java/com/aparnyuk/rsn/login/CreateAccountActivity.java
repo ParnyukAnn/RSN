@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aparnyuk.rsn.services.MainService;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -188,6 +189,10 @@ public class CreateAccountActivity extends AppCompatActivity {
                 mAuthProgressDialog.dismiss();
                 Log.i(TAG, "Auth successful");
                 setAuthenticatedUser(authData);
+//!!!!
+               /* if (MainService.state) {
+                    startService(new Intent(getApplicationContext(), MainService.class));
+                }*/
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }

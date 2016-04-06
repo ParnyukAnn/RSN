@@ -44,10 +44,13 @@ public class MainService extends Service {
 
     final String TAG = "Annet";
 
-    Firebase sms_ref;
-    Firebase call_ref;
-    Firebase remind_ref;
-    Firebase ref;
+    private Firebase sms_ref;
+    private Firebase call_ref;
+    private Firebase remind_ref;
+    private ChildEventListener smsListener;
+    private ChildEventListener callListener;
+    private ChildEventListener remindListener;
+    private Firebase ref;
 
     public MainService() {
 
@@ -72,9 +75,9 @@ public class MainService extends Service {
             sms_ref = ref.child("sms");
             call_ref = ref.child("call");
             remind_ref = ref.child("remind");
-            listenFirebase(sms_ref, 0);
-            listenFirebase(call_ref, 1);
-            listenFirebase(remind_ref, 2);
+            smsListener = listenFirebase(sms_ref, 0);
+            callListener = listenFirebase(call_ref, 1);
+            remindListener = listenFirebase(remind_ref, 2);
         } else {
             Log.d(TAG, "no auth user");
             //!!!!!!
@@ -102,8 +105,8 @@ public class MainService extends Service {
     }
 
 
-    void listenFirebase(Firebase ref, final int taskType) {
-        ref.addChildEventListener(new ChildEventListener() {
+    ChildEventListener listenFirebase(Firebase ref, final int taskType) {
+        ChildEventListener listener = new ChildEventListener() {
             // Retrieve new tasks as they are added to the database
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
@@ -152,7 +155,9 @@ public class MainService extends Service {
             public void onCancelled(FirebaseError firebaseError) {
                 Log.d(TAG, "some error happened");
             }
-        });
+        };
+        ref.addChildEventListener(listener);
+        return listener;
     }
 
     //create new Timer and rewrite TimerTask here
@@ -246,8 +251,14 @@ public class MainService extends Service {
         nm.cancel(NOTIFICATION_ID);
         if (mTimer != null) {
             mTimer.cancel();
+            mTimer.purge();
             mTimer = null;
         }
+        //ref.removeEventListener();
+        sms_ref.removeEventListener(smsListener);
+        call_ref.removeEventListener(callListener);
+        remind_ref.removeEventListener(remindListener);
+        Log.d(TAG, "Destroy service");
         super.onDestroy();
         state = true;
     }

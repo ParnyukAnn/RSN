@@ -554,6 +554,10 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         invalidateOptionsMenu();
         changeAuthItem();
         // mRecycleViewAdapter.notifyDataSetChanged();
+//!!
+    /*   if (MainService.state) {
+            startService(new Intent(this, MainService.class));
+        }*/
     }
 
     @Override
