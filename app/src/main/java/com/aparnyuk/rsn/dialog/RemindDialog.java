@@ -1,4 +1,4 @@
-package com.aparnyuk.rsn.fragment.dialog;
+package com.aparnyuk.rsn.dialog;
 
 
 import android.app.AlertDialog;

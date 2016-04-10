@@ -16,7 +16,7 @@ import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.CallListAdapter;
-import com.aparnyuk.rsn.fragment.dialog.CallDialog;
+import com.aparnyuk.rsn.dialog.CallDialog;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 

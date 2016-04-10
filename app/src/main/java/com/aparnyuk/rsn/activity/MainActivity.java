@@ -32,18 +32,25 @@ import com.aparnyuk.rsn.adapter.NoteListAdapter;
 import com.aparnyuk.rsn.adapter.RemindListAdapter;
 import com.aparnyuk.rsn.adapter.SmsListAdapter;
 import com.aparnyuk.rsn.adapter.TabsFragmentAdapter;
-import com.aparnyuk.rsn.fragment.dialog.CallDialog;
-import com.aparnyuk.rsn.fragment.dialog.NoteDialog;
-import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
-import com.aparnyuk.rsn.fragment.dialog.SmsDialog;
+import com.aparnyuk.rsn.dialog.CallDialog;
+import com.aparnyuk.rsn.dialog.NoteDialog;
+import com.aparnyuk.rsn.dialog.RemindDialog;
+import com.aparnyuk.rsn.dialog.SmsDialog;
 import com.aparnyuk.rsn.login.CreateAccountActivity;
 import com.aparnyuk.rsn.login.LoginActivity;
+import com.aparnyuk.rsn.model.Calls;
+import com.aparnyuk.rsn.model.Remind;
+import com.aparnyuk.rsn.model.Sim;
+import com.aparnyuk.rsn.model.Sms;
 import com.aparnyuk.rsn.services.MainService;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends FirebaseLoginBaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -77,6 +84,10 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
     /* Handle click to fragment with recycler view */
     onDeleteClickListener deleteClickListener;
+
+    // delete this
+    int testTime;
+    boolean testMode = false;
 
     public interface onDeleteClickListener {
         void onDeleteClick(boolean delete);
@@ -325,47 +336,74 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                     switch (position) {
                         case (Constants.TAB_ONE_SMS): {
                             if (!SmsListAdapter.isDeleteMode()) {
-                                smsDialog = new SmsDialog();
-                                smsDialog.show(fragmentManager, "CreateDialog4");
-//                                ArrayList<String> phoneNumbers = new ArrayList<>();
-//                                phoneNumbers.add("8947839534");
-//                                phoneNumbers.add("5487983721");
-//                                Sim sim = new Sim("sim 1", "phone 2");
-//                                Sms sms = new Sms(phoneNumbers, sim, "dfasf", new Date());
-//
-//                                Firebase base = new Firebase(Constants.FIREBASE_URL);
-//                                AuthData authData = base.getAuth();
-//                                if (authData != null) {
-//                                    base = base.child(authData.getUid());
-//                                }
-//                                base.child("sms").push().setValue(sms);
+                                if (!testMode) {
+                                    smsDialog = new SmsDialog();
+                                    smsDialog.show(fragmentManager, "CreateDialog4");
+                                } else {
+                                    testTime = 10000;
+                                    Date oldDate = new Date(); // oldDate == current time
+                                    Date newDate = new Date(oldDate.getTime() + testTime);
+                                    ArrayList<String> phoneNumbers = new ArrayList<>();
+                                    phoneNumbers.add("8947839534");
+                                    phoneNumbers.add("5487983721");
+                                    Sim sim = new Sim("sim 1", "phone 2");
+                                    Sms sms = new Sms(phoneNumbers, sim, "Test sms. ", newDate);
+
+                                    Firebase base = new Firebase(Constants.FIREBASE_URL);
+                                    AuthData authData = base.getAuth();
+                                    if (authData != null) {
+                                        base = base.child(authData.getUid());
+                                    }
+                                    base.child("sms").push().setValue(sms);
+                                }
                             }
                             break;
                         }
                         case (Constants.TAB_TWO_CALL): {
                             if (!CallListAdapter.isDeleteMode()) {
-                                callDialog = new CallDialog();
-                                callDialog.show(fragmentManager, "CreateDialog3");
-//                            ArrayList<String> phoneNumbers = new ArrayList<>();
-//                            phoneNumbers.add("8947839534");
-//                            phoneNumbers.add("5487983721");
-//                            Sim sim = new Sim("sim 1", "phone 2");
-//                            Calls call = new Calls(phoneNumbers, sim, new Date());
-//                            call.setText("asdfasd");
-//                            Firebase base = new Firebase(Constants.FIREBASE_URL);
-//                            AuthData authData = base.getAuth();
-//                            if (authData != null) {
-//                                base = base.child(authData.getUid());
-//                            }
-//                            base.child("call").push().setValue(call);
-
+                                if (!testMode) {
+                                    callDialog = new CallDialog();
+                                    callDialog.show(fragmentManager, "CreateDialog3");
+                                } else {
+                                    testTime = 10000;
+                                    Date oldDate = new Date(); // oldDate == current time
+                                    Date newDate = new Date(oldDate.getTime() + testTime);
+                                    ArrayList<String> phoneNumbers = new ArrayList<>();
+                                    phoneNumbers.add("380989580367");
+                                    phoneNumbers.add("5487983721");
+                                    Sim sim = new Sim("sim 1", "phone 2");
+                                    Calls call = new Calls(phoneNumbers, sim, newDate);
+                                    call.setText("Test call. ");
+                                    Firebase base = new Firebase(Constants.FIREBASE_URL);
+                                    AuthData authData = base.getAuth();
+                                    if (authData != null) {
+                                        base = base.child(authData.getUid());
+                                    }
+                                    base.child("call").push().setValue(call);
+                                }
                             }
                             break;
                         }
                         case (Constants.TAB_THREE_REMIND): {
                             if (!RemindListAdapter.isDeleteMode()) {
-                                remindDialog = new RemindDialog();
-                                remindDialog.show(fragmentManager, "CreateDialog2");
+                                if (!testMode) {
+                                    remindDialog = new RemindDialog();
+                                    remindDialog.show(fragmentManager, "CreateDialog2");
+                                } else {
+                                    testTime = 5000;
+                                    //testTime = testTime + 10000;
+                                    Date oldDate = new Date(); // oldDate == current time
+                                    Date newDate = new Date(oldDate.getTime() + testTime);
+                                    Remind remind = new Remind("Test repeat task. ", newDate);
+                                    remind.setRepeatCount(3);
+                                    remind.setRepeatPeriod(5000);
+                                    Firebase base = new Firebase(Constants.FIREBASE_URL);
+                                    AuthData authData = base.getAuth();
+                                    if (authData != null) {
+                                        base = base.child(authData.getUid());
+                                    }
+                                    base.child("remind").push().setValue(remind);
+                                }
                             }
                             break;
                         }
@@ -474,24 +512,12 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 break;
             }
             case (R.id.nav_calendar): {
-                if (!MainService.state) {
-                    stopService(new Intent(this, MainService.class));
-                }
-                // update date
-                startService(new Intent(this, MainService.class));
                 break;
             }
-            case (R.id.nav_search): {
-                if (!MainService.state) {
-                    stopService(new Intent(this, MainService.class));
-                }
+/*            case (R.id.nav_search): {
                 break;
-            }
+            }*/
             case (R.id.nav_history): {
-                if (MainService.state) {
-                    startService(new Intent(this, MainService.class));
-                }
-
                 break;
             }
             case (R.id.nav_settings): {
@@ -499,13 +525,42 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 startActivity(intent);
                 break;
             }
+            case (R.id.nav_test): {
+                testMode = !testMode;
+               /* navigationView.getMenu().findItem(R.id.nav_start).setVisible(testMode);
+                navigationView.getMenu().findItem(R.id.nav_stop).setVisible(testMode);
+                invalidateOptionsMenu();*/
+                break;
+            }
+            case (R.id.nav_stop): {
+                if (testMode) {
+                    if (!MainService.state) {
+                        stopService(new Intent(this, MainService.class));
+                    }
+                }
+                break;
+            }
+            case (R.id.nav_start): {
+                if (testMode) {
+                    if (MainService.state) {
+                        startService(new Intent(this, MainService.class));
+                    } else if (MainService.no_data) {
+                        stopService(new Intent(this, MainService.class));
+                        Log.d(TAG, "delete in nav");
+                        startService(new Intent(this, MainService.class));
+                    }
+                }
+                break;
+            }
         }
-        // close NavigationDrawer after choosing menu item
-        changeAuthItem();
 
+        changeAuthItem();
+        // close NavigationDrawer after choosing menu item
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;
-        drawer.closeDrawer(GravityCompat.START);
+        if (!testMode) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 
@@ -555,7 +610,11 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         changeAuthItem();
         // mRecycleViewAdapter.notifyDataSetChanged();
 //!!
-    /*   if (MainService.state) {
+        /*if (MainService.state) {
+            startService(new Intent(this, MainService.class));
+        } else if (MainService.no_data) {
+            stopService(new Intent(this, MainService.class));
+            Log.d(TAG,"delete in nav");
             startService(new Intent(this, MainService.class));
         }*/
     }
@@ -604,5 +663,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         navigationView.getMenu().findItem(R.id.nav_sign_out).setVisible(getAuth() != null);
         adapter.updateData();
         //adapter.notifyDataSetChanged();
+
+        navigationView.getMenu().findItem(R.id.nav_start).setVisible(testMode);
+        navigationView.getMenu().findItem(R.id.nav_stop).setVisible(testMode);
     }
 }

@@ -15,7 +15,7 @@ import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.RemindListAdapter;
-import com.aparnyuk.rsn.fragment.dialog.RemindDialog;
+import com.aparnyuk.rsn.dialog.RemindDialog;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 

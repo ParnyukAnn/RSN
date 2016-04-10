@@ -22,11 +22,11 @@
             android:icon="@drawable/ic_calendar_blank_grey600_24dp"
             android:orderInCategory="100"
             android:title="@string/action_calendar" />
-        <item
+<!--        <item
             android:id="@+id/nav_search"
             android:icon="@drawable/ic_magnify_grey600_24dp"
             android:orderInCategory="100"
-            android:title="@string/action_search" />
+            android:title="@string/action_search" />-->
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_archive_grey600_24dp"
@@ -41,5 +41,25 @@
             android:icon="@drawable/ic_settings_grey600_24dp"
             android:orderInCategory="100"
             android:title="@string/action_settings" />
+    </group>
+    <group
+        android:id="@+id/grp3"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_test"
+            android:icon="@drawable/ic_wrench_grey600_24dp"
+            android:orderInCategory="100"
+            android:title="@string/action_test_mode" />
+        <item
+            android:id="@+id/nav_start"
+            android:icon="@drawable/ic_play_grey600_24dp"
+            android:orderInCategory="100"
+            android:title="@string/action_start" />
+        <item
+            android:id="@+id/nav_stop"
+            android:icon="@drawable/ic_stop_grey600_24dp"
+            android:orderInCategory="100"
+            android:title="@string/action_stop" />
+
     </group>
 </menu>

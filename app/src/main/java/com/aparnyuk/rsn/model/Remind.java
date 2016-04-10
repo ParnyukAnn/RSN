@@ -3,11 +3,11 @@ package com.aparnyuk.rsn.model;
 
 import java.util.Date;
 
-public class Remind {
-    private String text;
-    private Date date;
+public class Remind extends AbstractTask{
+//    private String text;
+//    private Date date;
     private boolean repeat;
-    private Date repeatPeriod; // повторять каждый час, день, через месяц
+    private long repeatPeriod; // повторять каждый час, день, через месяц
     private int repeatCount; // количество повторений
     private boolean open; // напоминание активно. ???
 
@@ -15,27 +15,29 @@ public class Remind {
     }
 
     public Remind(String text, Date date) {
-        this.text = text;
-        this.date = date;
+/*        this.text = text;
+        this.date = date;*/
+        this.setText(text);
+        this.setDate(date);
         this.repeat = false;
-        this.repeatPeriod = null;
+        this.repeatPeriod = 0;
         this.repeatCount = 0;
         this.open = true;
     }
 
-    public void setText(String text) {
+/*    public void setText(String text) {
         this.text = text;
     }
 
     public void setDate(Date date) {
         this.date = date;
-    }
+    }*/
 
     public void setRepeat(boolean repeat) {
         this.repeat = repeat;
     }
 
-    public void setRepeatPeriod(Date repeatPeriod) {
+    public void setRepeatPeriod(long repeatPeriod) {
         this.repeatPeriod = repeatPeriod;
     }
 
@@ -47,6 +49,7 @@ public class Remind {
         this.open = open;
     }
 
+/*
     public String getText() {
         return text;
     }
@@ -54,12 +57,13 @@ public class Remind {
     public Date getDate() {
         return date;
     }
+*/
 
     public boolean isRepeat() {
         return repeat;
     }
 
-    public Date getRepeatPeriod() {
+    public long getRepeatPeriod() {
         return repeatPeriod;
     }
 

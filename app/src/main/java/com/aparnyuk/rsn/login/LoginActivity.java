@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aparnyuk.rsn.services.MainService;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -139,9 +138,13 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(TAG, "Auth successful");
                 setAuthenticatedUser(authData);
 //!!!
-//                if (MainService.state) {
-//                startService(new Intent(getApplicationContext(), MainService.class));
-//                }
+                /*if (MainService.state) {
+                    startService(new Intent(this, MainService.class));
+                } else if (MainService.no_data) {
+                    stopService(new Intent(this, MainService.class));
+                    Log.d(TAG,"delete in nav");
+                    startService(new Intent(this, MainService.class));
+                }*/
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }

@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.List;
 //!! Добавить проверку в сеттерах на пустые значения обязательних полей и не давать их изменять
 
-public class Calls {
+public class Calls extends AbstractTask{
     private ArrayList<String> numbers;
     private Sim sim;
-    private String text;
-    private Date date;
+//    private String text;
+//    private Date date;
     private boolean repeat;
     private Date repeatPeriod; // повторять каждый час, день, через месяц
     private int repeatCount; // количество повторений
@@ -21,8 +21,8 @@ public class Calls {
     public Calls(ArrayList<String> numbers, Sim sim, Date date) {
         this.numbers = numbers;
         this.sim = sim;
-        this.date = date;
-        this.text = "Call";
+        this.setText("Call");
+        this.setDate(date);
         this.repeat = false;
         this.repeatPeriod = null;
         this.repeatCount = 0;
@@ -45,7 +45,7 @@ public class Calls {
         this.sim = sim;
     }
 
-    public String getText() {
+/*    public String getText() {
         return text;
     }
 
@@ -59,7 +59,7 @@ public class Calls {
 
     public void setDate(Date date) {
         this.date = date;
-    }
+    }*/
 
     public boolean isRepeat() {
         return repeat;

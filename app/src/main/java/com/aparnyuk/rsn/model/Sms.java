@@ -4,11 +4,11 @@ package com.aparnyuk.rsn.model;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Sms {
+public class Sms extends AbstractTask {
     private ArrayList<String> numbers;
     private Sim sim;
-    private String text;
-    private Date date;
+//    private String text;
+//    private Date date;
     private boolean notificationBefore;
     private boolean deliveryReport;
     private boolean repeat;
@@ -22,8 +22,10 @@ public class Sms {
     public Sms(ArrayList<String> numbers, Sim sim, String text, Date date) {
         this.numbers = numbers;
         this.sim = sim;
-        this.text = text;
-        this.date = date;
+//        this.text = text;
+//        this.date = date;
+        this.setText(text);
+        this.setDate(date);
         this.notificationBefore = true;
         this.deliveryReport = true;
         this.repeat = false;
@@ -48,7 +50,7 @@ public class Sms {
         this.sim = sim;
     }
 
-    public String getText() {
+/*    public String getText() {
         return text;
     }
 
@@ -62,7 +64,7 @@ public class Sms {
 
     public void setDate(Date date) {
         this.date = date;
-    }
+    }*/
 
     public boolean isRepeat() {
         return repeat;
