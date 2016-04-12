@@ -340,7 +340,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                                     smsDialog = new SmsDialog();
                                     smsDialog.show(fragmentManager, "CreateDialog4");
                                 } else {
-                                    testTime = 10000;
+                                    testTime = 5000;
                                     Date oldDate = new Date(); // oldDate == current time
                                     Date newDate = new Date(oldDate.getTime() + testTime);
                                     ArrayList<String> phoneNumbers = new ArrayList<>();
@@ -365,7 +365,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                                     callDialog = new CallDialog();
                                     callDialog.show(fragmentManager, "CreateDialog3");
                                 } else {
-                                    testTime = 10000;
+                                    testTime = 5000;
                                     Date oldDate = new Date(); // oldDate == current time
                                     Date newDate = new Date(oldDate.getTime() + testTime);
                                     ArrayList<String> phoneNumbers = new ArrayList<>();
