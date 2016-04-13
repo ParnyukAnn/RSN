@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.model.Sms;
 import com.firebase.client.Firebase;
@@ -33,12 +34,15 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
 
         void onItemLongClick(View view, int position, boolean mode, boolean changeMode);
     }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+
     public static HashSet<Integer> getDeleteItemSet() {
         return deleteItemSet;
     }
+
     public SmsListAdapter(Firebase ref) {
         super(Sms.class, R.layout.list_item_for_sms, SmsListAdapter.SmsViewHolder.class, ref);
     }
@@ -125,14 +129,16 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
 
     @Override
     protected void populateViewHolder(SmsListAdapter.SmsViewHolder smsViewHolder, Sms sms, int i) {
-        smsViewHolder.phoneNum.setText(sms.getNumbers().get(0) );
-        smsViewHolder.smsText.setText(sms.getText());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-        smsViewHolder.dateText.setText(dateFormat.format(sms.getDate()));
-        if (deleteItemSet.contains(smsViewHolder.getLayoutPosition())) {
-            smsViewHolder.ll.setBackgroundColor(Color.LTGRAY);
-        } else {
-            smsViewHolder.ll.setBackgroundColor(Color.WHITE);
+        if (sms != null) {
+            smsViewHolder.phoneNum.setText(sms.getNumbers().get(0));
+            smsViewHolder.smsText.setText(sms.getText());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+            smsViewHolder.dateText.setText(dateFormat.format(sms.getDate()));
+            if (deleteItemSet.contains(smsViewHolder.getLayoutPosition())) {
+                smsViewHolder.ll.setBackgroundColor(Color.LTGRAY);
+            } else {
+                smsViewHolder.ll.setBackgroundColor(Color.WHITE);
+            }
         }
     }
 }

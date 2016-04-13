@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.model.Calls;
 import com.firebase.client.Firebase;
@@ -33,12 +34,15 @@ public class CallListAdapter extends FirebaseRecyclerAdapter<Calls, CallListAdap
 
         void onItemLongClick(View view, int position, boolean mode, boolean changeMode);
     }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+
     public static HashSet<Integer> getDeleteItemSet() {
         return deleteItemSet;
     }
+
     public CallListAdapter(Firebase ref) {
         super(Calls.class, R.layout.list_item_for_calls, CallListAdapter.CallViewHolder.class, ref);
     }
@@ -125,14 +129,15 @@ public class CallListAdapter extends FirebaseRecyclerAdapter<Calls, CallListAdap
 
     @Override
     protected void populateViewHolder(CallListAdapter.CallViewHolder CallViewHolder, Calls call, int i) {
-       String str = "";
-        if (call.getNumbers().size() > 1) {
-            if (call.getNumbers().size() == 2) {
-                str = " and other 1";
-            } else {
-                str = " and others " + (call.getNumbers().size() - 1);
+        if (call != null) {
+            String str = "";
+            if (call.getNumbers().size() > 1) {
+                if (call.getNumbers().size() == 2) {
+                    str = " and other 1";
+                } else {
+                    str = " and others " + (call.getNumbers().size() - 1);
+                }
             }
-        }
 /*        String str = new String();
         int size = call.getNumbers().size();
         if (size > 4) {
@@ -145,14 +150,15 @@ public class CallListAdapter extends FirebaseRecyclerAdapter<Calls, CallListAdap
             }
         }*/
 
-        CallViewHolder.phoneNum.setText(call.getNumbers().get(0) + str);
-        CallViewHolder.callText.setText(call.getText());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-        CallViewHolder.dateText.setText(dateFormat.format(call.getDate()));
-        if (deleteItemSet.contains(CallViewHolder.getLayoutPosition())) {
-            CallViewHolder.ll.setBackgroundColor(Color.LTGRAY);
-        } else {
-            CallViewHolder.ll.setBackgroundColor(Color.WHITE);
+            CallViewHolder.phoneNum.setText(call.getNumbers().get(0) + str);
+            CallViewHolder.callText.setText(call.getText());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+            CallViewHolder.dateText.setText(dateFormat.format(call.getDate()));
+            if (deleteItemSet.contains(CallViewHolder.getLayoutPosition())) {
+                CallViewHolder.ll.setBackgroundColor(Color.LTGRAY);
+            } else {
+                CallViewHolder.ll.setBackgroundColor(Color.WHITE);
+            }
         }
     }
 }

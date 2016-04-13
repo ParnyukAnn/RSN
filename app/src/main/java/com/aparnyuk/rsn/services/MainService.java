@@ -53,7 +53,7 @@ public class MainService extends Service {
     public final static String REMIND = "remind";
     public final static String PARAM_STATUS = "status";
     public final static String PARAM_ID = "id";
-    public final static String PARAM_TASK_TYPE = "type";
+    public final static String PARAM_TASK_KEY = "key";
     public final static String BROADCAST_ACTION = "com.aparnyuk.rsn.receiver.BROADCAST";
 
     // check if service is running (need for stop/start service)
@@ -168,7 +168,7 @@ public class MainService extends Service {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.d(TAG, "some error happened");
+                Log.d(TAG, "Some error happened");
                 createTimer();
             }
         };
@@ -177,51 +177,41 @@ public class MainService extends Service {
     }
 
     private void deleteTask(DataSnapshot snapshot) {
+        // delete notification if task not finished, but deleted
         if (syncTasksMap.containsKey(snapshot.getKey())) {
-            // !! delete this section
             switch (snapshot.getRef().getParent().getKey()) {
                 case "sms": {
                     SmsTimerTask sms = (SmsTimerTask) syncTasksMap.get(snapshot.getKey());
-                   // nm.cancel(sms.id);
+                    if (sms.count != sms.stop) {
+                        nm.cancel(sms.id);
+                    }
                     Log.d(TAG, "Delete Sms TimerTask. Task ID = " + sms.id);
                     break;
                 }
                 case "call": {
                     CallTimerTask call = (CallTimerTask) syncTasksMap.get(snapshot.getKey());
                     Log.d(TAG, "Delete Call TimerTask. Task ID = " + call.id);
-                   // nm.cancel(call.id);
+                    if (call.count != call.stop) {
+                        nm.cancel(call.id);
+                    }
                     break;
                 }
                 case "remind": {
                     RemindTimerTask remind = (RemindTimerTask) syncTasksMap.get(snapshot.getKey());
-                  //  nm.cancel(remind.id);
+                    if (remind.count != remind.stop) {
+                        nm.cancel(remind.id);
+                    }
                     Log.d(TAG, "Delete Remind TimerTask. Task ID = " + remind.id);
                     break;
                 }
             }
-            // !! delete this section
 
             String key = snapshot.getKey();
-            // удалить эл. из базы или установить isOpen=false
-            // tasks.remove(this);
 
-            //remind_ref.child(key).removeValue();
+            // delete task from Timer and array of active tasks
             syncTasksMap.get(key).cancel();
             mTimer.purge();
             syncTasksMap.remove(key);
-            // remind_ref.child(key).child("open").setValue(false);
-        }
-    }
-
-    public void deleteTask2(String key, String type, boolean inTimer) {
-        if (syncTasksMap.containsKey(key)) {
-            // удалить эл. из базы или установить isOpen=false
-
-            //remind_ref.child(key).removeValue();
-            syncTasksMap.get(key).cancel();
-            mTimer.purge();
-            syncTasksMap.remove(key);
-            // remind_ref.child(key).child("open").setValue(false);
         }
     }
 
@@ -326,7 +316,7 @@ public class MainService extends Service {
         public void run() {
 
             Log.d(TAG, "Start Sms TimerTask. Task ID =  " + id + " " + sms.getText() + " count - " + count + " stop when - " + (stop));
-            smsNotification(sms.getText() + "Task id " + id + " " + " repeat count - " + count + " stop when - " + (stop), id);
+            smsNotification(sms.getText() + "Task id " + id + " " + " repeat count - " + count + " stop when - " + (stop), key, id);
 
             if (count == stop) {
                 Log.d(TAG, "Stop Sms TimerTask. Task ID =  " + id);
@@ -362,7 +352,7 @@ public class MainService extends Service {
         @Override
         public void run() {
             Log.d(TAG, "Start Call TimerTask. Task ID =  " + id + " " + call.getText() + " count - " + count + " stop when - " + (stop));
-            callNotification(call.getText() + "Task id " + id + " " + " repeat count - " + count + " stop when - " + (stop), id);
+            callNotification(call.getText() + "Task id " + id + " " + " repeat count - " + count + " stop when - " + (stop), key, id);
             if (count == stop) {
                 Log.d(TAG, "Stop CallTimerTask. Task ID =  " + id);
                 // удалить эл. из базы или установить isOpen=false
@@ -398,7 +388,7 @@ public class MainService extends Service {
         @Override
         public void run() {
             Log.d(TAG, "Start Remind TimerTask. Task ID =  " + id + " " + remind.getText() + " count - " + count + " stop when - " + (stop));
-            remindNotification(remind.getText() + "Task id " + id + " " + " repeat count - " + count + " stop when - " + (stop), id);
+            remindNotification(remind.getText() + "Task id " + id + " " + " repeat count - " + count + " stop when - " + (stop), key, id);
 
             if (count == stop) {
                 Log.d(TAG, "Stop Remind TimerTask. Task ID =  " + id);
@@ -414,6 +404,7 @@ public class MainService extends Service {
                 count++;
             }
         }
+
     }
 
 
@@ -425,27 +416,32 @@ public class MainService extends Service {
             public void onReceive(Context context, Intent intent) {
                 int status = intent.getIntExtra(PARAM_STATUS, 0);
                 int id = intent.getIntExtra(PARAM_ID, -1);
-                String key = intent.getStringExtra(PARAM_TASK_TYPE);
+                String key = intent.getStringExtra(PARAM_TASK_KEY);
                 //int result = intent.getIntExtra(PARAM_RESULT, -1);
 
                 if (status == STATUS_SMS_CANCEL) {
                     //sms_ref.child(key).removeValue();
-                    sms_ref.child(key).child("open").setValue(false);
+                    if (syncTasksMap.containsKey(key)) {
+                        sms_ref.child(key).child("open").setValue(false);
+                    }
                     nm.cancel(id);
-
                     Toast.makeText(getApplicationContext(), "SMS CANCEL", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "in receiver - cancel sms");
                 }
                 if (status == STATUS_CALL_CANCEL) {
                     //sms_ref.child(key).removeValue();
-                    call_ref.child(key).child("open").setValue(false);
+                    if (syncTasksMap.containsKey(key)) {
+                        call_ref.child(key).child("open").setValue(false);
+                    }
                     nm.cancel(id);
                     Toast.makeText(getApplicationContext(), "CALL CANCEL", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "in receiver - cancel call");
                 }
                 if (status == STATUS_REMIND_CANCEL) {
                     //sms_ref.child(key).removeValue();
-                    remind_ref.child(key).child("open").setValue(false);
+                    if (syncTasksMap.containsKey(key)) {
+                        remind_ref.child(key).child("open").setValue(false);
+                    }
                     nm.cancel(id);
                     Toast.makeText(getApplicationContext(), "REMIND CANCEL", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "in receiver - cancel remind");
@@ -471,17 +467,18 @@ public class MainService extends Service {
     /******************************
      * CREATE NOTIFICATION
      *******************************************/
-    public void remindNotification(String text, int id) {
+    public void remindNotification(String text, String key, int id) {
 
         Intent cancelIntent = new Intent(MainService.BROADCAST_ACTION)
                 .putExtra(MainService.PARAM_STATUS, MainService.STATUS_REMIND_CANCEL)
                 .putExtra(MainService.PARAM_ID, id)
-                .putExtra(MainService.PARAM_TASK_TYPE,REMIND);
+                .putExtra(MainService.PARAM_TASK_KEY, key);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent actionIntent = new Intent(MainService.BROADCAST_ACTION)
                 .putExtra(MainService.PARAM_STATUS, MainService.STATUS_LATER)
-                .putExtra(MainService.PARAM_ID, id);
+                .putExtra(MainService.PARAM_ID, id)
+                .putExtra(MainService.PARAM_TASK_KEY, key);
         PendingIntent actionPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 2, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent appIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -510,16 +507,17 @@ public class MainService extends Service {
         nm.notify(id, notification);
     }
 
-    public void smsNotification(String text, int id) {
+    public void smsNotification(String text, String key, int id) {
         Intent scancelIntent = new Intent(MainService.BROADCAST_ACTION)
                 .putExtra(MainService.PARAM_STATUS, MainService.STATUS_SMS_CANCEL)
                 .putExtra(MainService.PARAM_ID, id)
-                .putExtra(MainService.PARAM_TASK_TYPE,SMS);
+                .putExtra(MainService.PARAM_TASK_KEY, key);
         PendingIntent scancelPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 3, scancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent sactionIntent = new Intent(MainService.BROADCAST_ACTION)
                 .putExtra(MainService.PARAM_STATUS, MainService.STATUS_SEND)
-                .putExtra(MainService.PARAM_ID, id);
+                .putExtra(MainService.PARAM_ID, id)
+                .putExtra(MainService.PARAM_TASK_KEY, key);
         PendingIntent sactionPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 4, sactionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent appIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -548,16 +546,17 @@ public class MainService extends Service {
         nm.notify(id, notification);
     }
 
-    public void callNotification(String text, int id) {
+    public void callNotification(String text, String key, int id) {
         Intent cancelIntent = new Intent(MainService.BROADCAST_ACTION)
                 .putExtra(MainService.PARAM_STATUS, MainService.STATUS_CALL_CANCEL)
                 .putExtra(MainService.PARAM_ID, id)
-                .putExtra(MainService.PARAM_TASK_TYPE,CALL);
+                .putExtra(MainService.PARAM_TASK_KEY, key);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 5, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent actionIntent = new Intent(MainService.BROADCAST_ACTION)
                 .putExtra(MainService.PARAM_STATUS, MainService.STATUS_CALL)
-                .putExtra(MainService.PARAM_ID, id);
+                .putExtra(MainService.PARAM_ID, id)
+                .putExtra(MainService.PARAM_TASK_KEY, key);
         PendingIntent actionPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 6, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent appIntent = new Intent(getApplicationContext(), MainActivity.class);

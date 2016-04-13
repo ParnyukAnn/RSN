@@ -37,6 +37,7 @@ public class RemindListAdapter extends FirebaseRecyclerAdapter<Remind, RemindLis
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+
     public static HashSet<Integer> getDeleteItemSet() {
         return deleteItemSet;
     }
@@ -125,13 +126,15 @@ public class RemindListAdapter extends FirebaseRecyclerAdapter<Remind, RemindLis
 
     @Override
     protected void populateViewHolder(RemindListAdapter.RemindViewHolder RemindViewHolder, Remind remind, int i) {
-        RemindViewHolder.remindText.setText(remind.getText());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-        RemindViewHolder.dateText.setText(dateFormat.format(remind.getDate()));
-        if (deleteItemSet.contains(RemindViewHolder.getLayoutPosition())) {
-            RemindViewHolder.ll.setBackgroundColor(Color.LTGRAY);
-        } else {
-            RemindViewHolder.ll.setBackgroundColor(Color.WHITE);
+        if (remind != null) {
+            RemindViewHolder.remindText.setText(remind.getText());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+            RemindViewHolder.dateText.setText(dateFormat.format(remind.getDate()));
+            if (deleteItemSet.contains(RemindViewHolder.getLayoutPosition())) {
+                RemindViewHolder.ll.setBackgroundColor(Color.LTGRAY);
+            } else {
+                RemindViewHolder.ll.setBackgroundColor(Color.WHITE);
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.model.Note;
 import com.firebase.client.Firebase;
@@ -32,12 +33,15 @@ public class NoteListAdapter extends FirebaseRecyclerAdapter<Note, NoteListAdapt
 
         void onItemLongClick(View view, int position, boolean mode, boolean changeMode);
     }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+
     public static HashSet<Integer> getDeleteItemSet() {
         return deleteItemSet;
     }
+
     public NoteListAdapter(Firebase ref) {
         super(Note.class, R.layout.list_item_for_note, NoteListAdapter.NoteViewHolder.class, ref);
     }
@@ -165,13 +169,15 @@ public class NoteListAdapter extends FirebaseRecyclerAdapter<Note, NoteListAdapt
 
     @Override
     protected void populateViewHolder(NoteListAdapter.NoteViewHolder noteViewHolder, Note note, int i) {
-        noteViewHolder.noteText.setText(note.getText());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
-        noteViewHolder.dateText.setText(dateFormat.format(note.getDate()));
-        if (deleteItemSet.contains(noteViewHolder.getLayoutPosition())) {
-            noteViewHolder.ll.setBackgroundColor(Color.LTGRAY);
-        } else {
-            noteViewHolder.ll.setBackgroundColor(Color.WHITE);
+        if (note != null) {
+            noteViewHolder.noteText.setText(note.getText());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
+            noteViewHolder.dateText.setText(dateFormat.format(note.getDate()));
+            if (deleteItemSet.contains(noteViewHolder.getLayoutPosition())) {
+                noteViewHolder.ll.setBackgroundColor(Color.LTGRAY);
+            } else {
+                noteViewHolder.ll.setBackgroundColor(Color.WHITE);
+            }
         }
     }
 }
