@@ -87,7 +87,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
     // delete this
     int testTime;
-    boolean testMode = false;
+    static boolean testMode = false;
 
     public interface onDeleteClickListener {
         void onDeleteClick(boolean delete);
@@ -340,21 +340,29 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                                     smsDialog = new SmsDialog();
                                     smsDialog.show(fragmentManager, "CreateDialog4");
                                 } else {
+                                    startActivity(new Intent(getApplicationContext(), TestInputSmsAtivity.class));
+                                    /*
                                     testTime = 5000;
                                     Date oldDate = new Date(); // oldDate == current time
                                     Date newDate = new Date(oldDate.getTime() + testTime);
                                     ArrayList<String> phoneNumbers = new ArrayList<>();
-                                    phoneNumbers.add("8947839534");
-                                    phoneNumbers.add("5487983721");
+                                  //  phoneNumbers.add("0989580367");
+                                    phoneNumbers.add("0964460071");
                                     Sim sim = new Sim("sim 1", "phone 2");
-                                    Sms sms = new Sms(phoneNumbers, sim, "Test sms. ", newDate);
-
+                                    Sms sms = new Sms(phoneNumbers, sim, "Test notif sms. ", newDate);
+                                    //sms.setRepeatCount(1);
+                                    //sms.setRepeatPeriod(5000);
+                                    //Sms sms = new Sms(phoneNumbers, sim, "Проверка отправки длинного сообщения. В этом сообщении 79 символов. Удачи мне!!", newDate);
+                                    sms.setNotificationBefore(true);
+                                    sms.setNotificationTime(20000);
+                                    Date testDate = new Date (sms.getDate().getTime()+20000);
+                                    sms.setDate(testDate);
                                     Firebase base = new Firebase(Constants.FIREBASE_URL);
                                     AuthData authData = base.getAuth();
                                     if (authData != null) {
                                         base = base.child(authData.getUid());
                                     }
-                                    base.child("sms").push().setValue(sms);
+                                    base.child("sms").push().setValue(sms);*/
                                 }
                             }
                             break;

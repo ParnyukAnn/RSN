@@ -110,7 +110,9 @@ public class SmsFragment extends AbstractTabFragment {
             if (delete) {
                 Log.d("sms", "delete in sms fragment");
                 for (int i : SmsListAdapter.getDeleteItemSet()) {
-                    smsAdapter.getRef(i).removeValue();
+                    if (smsAdapter.getRef(i) != null) {
+                        smsAdapter.getRef(i).removeValue();
+                    }
                 }
             }
             smsAdapter.clearDeleteMode();

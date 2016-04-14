@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -50,12 +51,14 @@ public class RemindListAdapter extends FirebaseRecyclerAdapter<Remind, RemindLis
 
         TextView remindText;
         TextView dateText;
+        ImageView remindCheck;
         LinearLayout ll;
 
         public RemindViewHolder(View itemView) {
             super(itemView);
             remindText = (TextView) itemView.findViewById(R.id.remind_text);
             dateText = (TextView) itemView.findViewById(R.id.remind_date);
+            remindCheck = (ImageView) itemView.findViewById(R.id.remind_check);
             ll = (LinearLayout) itemView.findViewById(R.id.remind_main_layout);
 
             ll.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +137,11 @@ public class RemindListAdapter extends FirebaseRecyclerAdapter<Remind, RemindLis
                 RemindViewHolder.ll.setBackgroundColor(Color.LTGRAY);
             } else {
                 RemindViewHolder.ll.setBackgroundColor(Color.WHITE);
+                if (!remind.isOpen()) {
+                    RemindViewHolder.remindCheck.setVisibility(View.VISIBLE);
+                } else {
+                    RemindViewHolder.remindCheck.setVisibility(View.GONE);
+                }
             }
         }
     }

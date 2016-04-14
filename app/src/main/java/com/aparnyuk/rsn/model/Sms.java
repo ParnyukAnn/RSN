@@ -7,12 +7,13 @@ import java.util.Date;
 public class Sms extends AbstractTask {
     private ArrayList<String> numbers;
     private Sim sim;
-//    private String text;
+    //    private String text;
 //    private Date date;
     private boolean notificationBefore;
+    private int notificationTime;
     private boolean deliveryReport;
     private boolean repeat;
-    private Date repeatPeriod; // повторять каждый час, день, через месяц
+    private int repeatPeriod; // повторять каждый час, день, через месяц
     private int repeatCount; // количество повторений
     private boolean open; // задание активно. ???
 
@@ -26,12 +27,36 @@ public class Sms extends AbstractTask {
 //        this.date = date;
         this.setText(text);
         this.setDate(date);
-        this.notificationBefore = true;
-        this.deliveryReport = true;
+        this.notificationBefore = false;
+        this.deliveryReport = false;
         this.repeat = false;
-        this.repeatPeriod = null;
+        this.repeatPeriod = 0;
         this.repeatCount = 0;
         this.open = true;
+    }
+
+    public int getNotificationTime() {
+        return notificationTime;
+    }
+
+    public void setNotificationTime(int notificationTime) {
+        this.notificationTime = notificationTime;
+    }
+
+    public boolean isNotificationBefore() {
+        return notificationBefore;
+    }
+
+    public void setNotificationBefore(boolean notificationBefore) {
+        this.notificationBefore = notificationBefore;
+    }
+
+    public boolean isDeliveryReport() {
+        return deliveryReport;
+    }
+
+    public void setDeliveryReport(boolean deliveryReport) {
+        this.deliveryReport = deliveryReport;
     }
 
     public ArrayList<String> getNumbers() {
@@ -74,11 +99,11 @@ public class Sms extends AbstractTask {
         this.repeat = repeat;
     }
 
-    public Date getRepeatPeriod() {
+    public int getRepeatPeriod() {
         return repeatPeriod;
     }
 
-    public void setRepeatPeriod(Date repeatPeriod) {
+    public void setRepeatPeriod(int repeatPeriod) {
         this.repeatPeriod = repeatPeriod;
     }
 

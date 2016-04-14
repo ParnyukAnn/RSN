@@ -111,7 +111,9 @@ public class CallFragment extends AbstractTabFragment {
             if (delete) {
                 Log.d("Call", "delete in call fragment");
                 for (int i : CallListAdapter.getDeleteItemSet()) {
-                    callAdapter.getRef(i).removeValue();
+                    if (callAdapter.getRef(i) != null) {
+                        callAdapter.getRef(i).removeValue();
+                    }
                 }
             }
             callAdapter.clearDeleteMode();

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,6 +52,7 @@ public class CallListAdapter extends FirebaseRecyclerAdapter<Calls, CallListAdap
         TextView phoneNum;
         TextView callText;
         TextView dateText;
+        ImageView callCheck;
         RelativeLayout ll;
 
         public CallViewHolder(View itemView) {
@@ -58,6 +60,7 @@ public class CallListAdapter extends FirebaseRecyclerAdapter<Calls, CallListAdap
             phoneNum = (TextView) itemView.findViewById(R.id.call_phone_num);
             callText = (TextView) itemView.findViewById(R.id.call_text);
             dateText = (TextView) itemView.findViewById(R.id.call_date);
+            callCheck = (ImageView) itemView.findViewById(R.id.call_check);
             ll = (RelativeLayout) itemView.findViewById(R.id.call_main_layout);
 
             ll.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +161,11 @@ public class CallListAdapter extends FirebaseRecyclerAdapter<Calls, CallListAdap
                 CallViewHolder.ll.setBackgroundColor(Color.LTGRAY);
             } else {
                 CallViewHolder.ll.setBackgroundColor(Color.WHITE);
+                if (!call.isOpen()) {
+                    CallViewHolder.callCheck.setVisibility(View.VISIBLE);
+                } else {
+                    CallViewHolder.callCheck.setVisibility(View.GONE);
+                }
             }
         }
     }

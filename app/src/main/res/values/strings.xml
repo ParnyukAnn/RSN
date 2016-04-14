@@ -202,7 +202,9 @@
     <string name="reset_password_summary">Send a password reset email</string>
 
     <!--Notification-->
-    <string name="sms_notification_ticker">Sms will be send.</string>
+    <string name="sms_notification_ticker_will">Sms will be send.</string>
+    <string name="sms_notification_ticker_send">Sms was sent.</string>
+    <string name="sms_notification_ticker_delivered">Sms were delivered.</string>
     <string name="call_notification_ticker">You have to do some call.</string>
     <string name="remind_notification_ticker">You have some remind.</string>
     <string name="sms_notification_text">. Sms.</string>
@@ -212,6 +214,7 @@
     <string name="sms_notification_button">SEND</string>
     <string name="call_notification_button">CALL</string>
     <string name="remind_notification_button">REMIND</string>
+    <string name="title_activity_test_input_sms_ativity">Test sms input</string>
 
 
 </resources>

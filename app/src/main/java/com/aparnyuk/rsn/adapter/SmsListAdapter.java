@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
         TextView phoneNum;
         TextView smsText;
         TextView dateText;
+        ImageView smsCheck;
         RelativeLayout ll;
 
         public SmsViewHolder(View itemView) {
@@ -59,6 +61,8 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
             phoneNum = (TextView) itemView.findViewById(R.id.sms_phone_num);
             smsText = (TextView) itemView.findViewById(R.id.sms_text);
             dateText = (TextView) itemView.findViewById(R.id.sms_date);
+            smsCheck = (ImageView) itemView.findViewById(R.id.sms_check);
+
             ll = (RelativeLayout) itemView.findViewById(R.id.sms_main_layout);
 
             ll.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +142,13 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
                 smsViewHolder.ll.setBackgroundColor(Color.LTGRAY);
             } else {
                 smsViewHolder.ll.setBackgroundColor(Color.WHITE);
+                if (!sms.isOpen()) {
+                    smsViewHolder.smsCheck.setVisibility(View.VISIBLE);
+                } else {
+                    smsViewHolder.smsCheck.setVisibility(View.GONE);
+                }
+
+                // if (!sms.isOpen()){ smsViewHolder.ll.setBackgroundColor(#9E9E9E);}
             }
         }
     }

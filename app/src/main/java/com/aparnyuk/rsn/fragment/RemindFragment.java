@@ -103,7 +103,9 @@ public class RemindFragment extends AbstractTabFragment {
             Log.d("remind", "delete in remind fragment");
             if (delete) {
                 for (int i : RemindListAdapter.getDeleteItemSet()) {
-                    remindAdapter.getRef(i).removeValue();
+                    if (remindAdapter.getRef(i) != null) {
+                        remindAdapter.getRef(i).removeValue();
+                    }
                 }
             }
             remindAdapter.clearDeleteMode();
