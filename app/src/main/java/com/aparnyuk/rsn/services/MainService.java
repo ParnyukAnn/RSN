@@ -737,7 +737,7 @@ public class MainService extends Service {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
         Notification notification = builder.build();
 
-        notification.vibrate = new long[]{1000, 1000, 1000, 1000, 1000, 1000, 1000};
+        notification.vibrate = new long[]{1000, 1000, 1000, 1000, 1000};
         // notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_SOUND;
         notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         nm.notify(id, notification);
@@ -808,7 +808,7 @@ public class MainService extends Service {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
         Notification notification = builder.build();
 
-        notification.vibrate = new long[]{1000, 1000, 1000, 1000, 1000, 1000, 1000};
+        notification.vibrate = new long[]{1000, 1000, 1000, 1000, 1000};
         // notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_SOUND;
         notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         nm.notify(id, notification);
