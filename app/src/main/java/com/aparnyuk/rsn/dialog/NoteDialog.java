@@ -15,20 +15,48 @@ import android.widget.EditText;
 
 import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
+import com.aparnyuk.rsn.adapter.NoteListAdapter;
 import com.aparnyuk.rsn.model.Note;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.Date;
 
 public class NoteDialog extends DialogFragment {
 
+    public String notePosition = null;
+    int intPositionNote;
+    public String textNote2 = null;
     private EditText nameView;
     private static Button okButton, cancelButton;
+    public NoteListAdapter noteAdapter;
+    Firebase base = new Firebase(Constants.FIREBASE_URL);
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            notePosition = getArguments().getString("notePosition");
+            intPositionNote = getArguments().getInt("intNotePosition");
+            AuthData authData = base.getAuth();
+            Firebase ref = base.child(authData.getUid()).child("note").child(notePosition);
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Note note2 = dataSnapshot.getValue(Note.class);
+                    textNote2 = note2.getText();
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                }
+            });
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -49,21 +77,26 @@ public class NoteDialog extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                if (nameView.getText().toString().isEmpty()) {
-                    okButton.setEnabled(false);
+                if (textNote2 != null) {
+                    nameView.setText(textNote2);
+                } else {
+                    nameView.addTextChangedListener(titleWatcher);
                 }
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Note note = new Note(nameView.getText().toString(), new Date());
-
-                        Firebase base = new Firebase(Constants.FIREBASE_URL);
+                        String textNote = nameView.getText().toString();
+                        Note note = new Note(textNote, new Date());
                         AuthData authData = base.getAuth();
                         if (authData != null) {
-                            base =base.child(authData.getUid());
+                            base = base.child(authData.getUid());
                         }
-                        base.child("note").push().setValue(note);
-
+                        if (notePosition == null) {
+                            base.child("note").push().setValue(note);
+                        } else {
+                            Firebase resf = base.child("note").child(notePosition);
+                            resf.setValue(note);
+                        }
                         dialog.dismiss();
                     }
                 });

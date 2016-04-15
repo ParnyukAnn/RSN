@@ -35,6 +35,21 @@ public class Sms extends AbstractTask {
         this.open = true;
     }
 
+//    public Sms(ArrayList<String> numbers, Sim sim, String text, Date date, int i) {
+//        this.numbers = numbers;
+//        this.sim = sim;
+//        this.text = text;
+//        this.date = date;
+////        this.setText(text);
+////        this.setDate(date);
+//        this.notificationBefore = false;
+//        this.deliveryReport = false;
+//        this.repeat = false;
+//        this.repeatPeriod = 0;
+//        this.repeatCount = 0;
+//        this.open = true;
+//    }
+
     public int getNotificationTime() {
         return notificationTime;
     }

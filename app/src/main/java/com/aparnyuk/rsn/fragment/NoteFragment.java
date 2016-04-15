@@ -76,8 +76,21 @@ public class NoteFragment extends AbstractTabFragment {
                             if (changeMode) {
                                 act.setNormalModeInterface();
                             } else {
-                                noteDialog = new NoteDialog();
-                                noteDialog.show(getFragmentManager(), "CreateDialog2");
+                                final Firebase ref = noteAdapter.getRef(position);
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot snapshot) {
+                                        String notePosition = snapshot.getKey();
+                                        NoteDialog noteDialog = new NoteDialog();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("notePosition", notePosition);
+                                        noteDialog.setArguments(bundle);
+                                        noteDialog.show(getFragmentManager(), "CreateDialog1");
+                                    }
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+                                    }
+                                });
                             }
                         } else {
                             act.setTitle("" + NoteListAdapter.getDeleteItemSet().size());

@@ -46,12 +46,19 @@ public class SmsDialog extends DialogFragment {
     private static DatePickerDialog datePicker;
     private static Button okButton, cancelButton;
     private Button buttonContacts;
-    //    static final int SELECT_CONTACT_SUCCESS_RESULT = 101;
-    private final int CONTACT_PICKER_REQUEST = 1350;
+    private final int CONTACT_PICKER = 1350;
+    public String smsdPosition = null;
+    Firebase base = new Firebase(Constants.FIREBASE_URL);
+    ArrayList<String> phoneNumbers = new ArrayList<>();
 
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            smsdPosition = getArguments().getString("smsPosition");
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -63,28 +70,13 @@ public class SmsDialog extends DialogFragment {
 
         dateView = (EditText) view.findViewById(R.id.event_date);
         timeView = (EditText) view.findViewById(R.id.event_time);
-        buttonContacts = (Button) view.findViewById(R.id.buttonContacts);
+//        buttonContacts = (Button) view.findViewById(R.id.buttonContacts);
         smsNumberText = (EditText) view.findViewById(R.id.sms_number_text);
 
-        buttonContacts.setOnClickListener(new View.OnClickListener() {
+        smsNumberText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                // Perform action on click
-//
-//                // Create a new intent for choosing a contact
-//                // http://stackoverflow.com/questions/9496350/pick-a-number-and-name-from-contacts-list-in-android-app
-//                Intent contactPickerIntent = new Intent (Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-//                contactPickerIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); //(Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
-//                // Start the contact picker expecting a result with the resultCode '101'
-//                //StartActivityForResult (contactPickerIntent, SELECT_CONTACT_SUCCESS_RESULT);
-//                startActivityForResult(contactPickerIntent, SELECT_CONTACT_SUCCESS_RESULT);
-
-                //1 Contact
-//                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-//                Intent intent1 = new Intent();
-//                startActivityForResult(intent, PICK_CONTACT);
-
-                Intent contactPickerIntent = new Intent(getContext(), MultipleContactPickerActivity.class);
-                startActivityForResult(contactPickerIntent, CONTACT_PICKER_REQUEST);
+                Intent contactPickerIntent = new Intent(getActivity(), MultipleContactPickerActivity.class);
+                getActivity().startActivityForResult(contactPickerIntent, CONTACT_PICKER);
             }
         });
 
@@ -164,17 +156,19 @@ public class SmsDialog extends DialogFragment {
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ArrayList<String> phoneNumbers = new ArrayList<>();
-                        phoneNumbers.add("8947839534");
-                        phoneNumbers.add("5487983721");
                         Sim sim = new Sim("sim 1", "phone 2");
-                        Sms sms = new Sms(phoneNumbers, sim, "dfasf", new Date());
+                        Sms sms = new Sms(phoneNumbers, sim, nameView.getText().toString(), new Date());
                         Firebase base = new Firebase(Constants.FIREBASE_URL);
                         AuthData authData = base.getAuth();
                         if (authData != null) {
                             base = base.child(authData.getUid());
                         }
-                        base.child("sms").push().setValue(sms);
+                        if (smsdPosition == null) {
+                            base.child("sms").push().setValue(sms);
+                        } else {
+                            Firebase resf = base.child("sms").child(smsdPosition);
+                            resf.setValue(sms);
+                        }
                         dialog.dismiss();
                     }
                 });
@@ -256,20 +250,14 @@ public class SmsDialog extends DialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CONTACT_PICKER_REQUEST) {
-//            if (resultCode == AppCompatActivity.RESULT_OK) {
-
-            ArrayList<Contact> contacts = new ArrayList<Contact>();
-            contacts = data.getParcelableArrayListExtra("contacts");
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Contact c : contacts) {
-                stringBuilder.append(c.getNumber() + "; ");
-//                    Log.d("Selected contact = ", c.getNumber());
-//                    smsNumberText.setText(c.getName());
-//                    smsNumberText.setText("XYI");
-            }
-            smsNumberText.setText(stringBuilder);
-
+        ArrayList<Contact> contacts = new ArrayList<Contact>();
+        contacts = data.getParcelableArrayListExtra("contacts");
+        StringBuilder stringBuilder = new StringBuilder();
+        phoneNumbers.clear();
+        for (Contact c : contacts) {
+            phoneNumbers.add(c.getNumber());
+            stringBuilder.append(c.getNumber() + "; ");
         }
+        smsNumberText.setText(stringBuilder);
     }
 }

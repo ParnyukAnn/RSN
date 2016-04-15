@@ -3,9 +3,9 @@
     android:id="@+id/nav_head"
     android:layout_width="match_parent"
     android:layout_height="192dp"
-    android:orientation="vertical">
-    <!--android:background="@drawable/green_3"-->
-</LinearLayout>
+    android:orientation="vertical"
+    android:background="@drawable/green_3_min_310_276">
+ </LinearLayout>
     <!--android:src="@drawable/test"-->
 <!--
 android:layout_height="wrap_content"

@@ -42,18 +42,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:clickable="true"
             android:layout_weight="2"
-            android:hint="Write yor number here" />
+            android:hint="Push to get numbers" />
 
-        <Button
-            android:id="@+id/buttonContacts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/linearLayout1"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/linearLayout1"
-            android:layout_weight="1"
-            android:text="Push" />
+        <!--<Button-->
+            <!--android:id="@+id/buttonContacts"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignEnd="@+id/linearLayout1"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_alignRight="@+id/linearLayout1"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Push" />-->
 
     </LinearLayout>
 

@@ -16,6 +16,7 @@ import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.SmsListAdapter;
 //import com.aparnyuk.rsn.dialog.SmsDialog;
+import com.aparnyuk.rsn.dialog.SmsDialog;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -74,9 +75,22 @@ public class SmsFragment extends AbstractTabFragment {
                             if (changeMode) {
                                 act.setNormalModeInterface();
                             } else {
-                                // smsDialog = new SmsDialog();
-                                // smsDialog.show(getFragmentManager(), "CreateDialog2");
-                                // smsAdapter.getRef(position).removeValue();
+                                final Firebase ref = smsAdapter.getRef(position);
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot snapshot) {
+                                        String smsPosition = snapshot.getKey();
+                                        SmsDialog smsDialog = new SmsDialog();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("smsPosition", smsPosition);
+                                        smsDialog.setArguments(bundle);
+                                        smsDialog.show(getFragmentManager(), "CreateDialog4");
+                                    }
+
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+                                    }
+                                });
                             }
                         } else {
                             act.setTitle("" + SmsListAdapter.getDeleteItemSet().size());

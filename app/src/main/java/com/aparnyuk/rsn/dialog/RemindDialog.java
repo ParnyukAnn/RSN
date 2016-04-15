@@ -25,7 +25,10 @@ import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.model.Remind;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -43,10 +46,17 @@ public class RemindDialog extends DialogFragment {
     private static TimePickerDialog timePicker;
     private static DatePickerDialog datePicker;
     private static Button okButton, cancelButton;
+    public String remindPosition = null;
+    Firebase base = new Firebase(Constants.FIREBASE_URL);
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            remindPosition = getArguments().getString("remindPosition");
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -60,11 +70,7 @@ public class RemindDialog extends DialogFragment {
         timeView = (EditText) view.findViewById(R.id.remind_time);
 
         final Date date = new Date();
-//        int timeZone = TimeZone.getDefault().getRawOffset();
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-
-//        int offset = timeZone.getOffset(date.getTime()) / (60 * 60 * 1000);
-
         DateTime dateTime = new DateTime(date);
         LocalDateTime localDateTime = dateTime.toLocalDateTime();
 
@@ -86,9 +92,7 @@ public class RemindDialog extends DialogFragment {
             public void setDatePicker(DatePickerDialog mDatePicker) {
                 final Calendar calendar = Calendar.getInstance();
                 mDatePicker = datePicker;
-//                mDatePicker.getDatePicker().setMinDate(calendar.getTimeInMillis());
                 calendar.set(year, month, day);
-//                mDatePicker.getDatePicker().setMinDate(calendar.getTimeInMillis());
                 mDatePicker.getDatePicker().setCalendarViewShown(false);
                 mDatePicker.show();
             }
@@ -152,7 +156,13 @@ public class RemindDialog extends DialogFragment {
                             if (authData != null) {
                                 base = base.child(authData.getUid());
                             }
-                            base.child("remind").push().setValue(remind);
+                            if (remindPosition == null){
+                                base.child("remind").push().setValue(remind);
+                            } else {
+                                Firebase resf = base.child("remind").child(remindPosition);
+                                resf.setValue(remind);
+                            }
+
                             // !!
 
                             dialog.dismiss();
@@ -241,25 +251,4 @@ public class RemindDialog extends DialogFragment {
         public void afterTextChanged(Editable s) {
         }
     };
-
-
-//    private void saveRemindDialog () {
-//        Remind remind = new Remind(nameView.getText().toString(), Date date);
-//    }
-//
-//    private boolean dateHasPassed(EditText dateView) {
-//        String[] strings = dateView.getText().toString().split("/");
-//        Integer[] ints = new Integer[3];
-//        ints[0] = Integer.parseInt(strings[0]);
-//        ints[1] = Integer.parseInt(strings[1]);
-//        ints[2] = Integer.parseInt(strings[2]);
-//        Date date = new Date();
-//        DateTime curDateTime = new DateTime(date);
-//        DateTime eventDateTime = new DateTime(ints[2], ints[1], ints[0], 0, 0, 0);
-//        LocalDate currentDateLocal = curDateTime.toLocalDate();
-//        LocalDate eventDateLocal = eventDateTime.toLocalDate();
-//        if (eventDateLocal.isBefore(currentDateLocal)) {
-//            return true;
-//        } else return false;
-//    }
 }

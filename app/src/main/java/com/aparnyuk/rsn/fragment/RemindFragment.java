@@ -71,8 +71,22 @@ public class RemindFragment extends AbstractTabFragment {
                     if (changeMode) {
                         act.setNormalModeInterface();
                     } else {
-                        remindDialog = new RemindDialog();
-                        remindDialog.show(getFragmentManager(), "CreateDialog2");
+                        final Firebase ref = remindAdapter.getRef(position);
+                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                String remindPosition = snapshot.getKey();
+                                RemindDialog remindDialog = new RemindDialog();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("remindPosition", remindPosition);
+                                remindDialog.setArguments(bundle);
+                                remindDialog.show(getFragmentManager(), "CreateDialog2");
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                            }
+                        });
                     }
                 } else {
                     act.setTitle("" + RemindListAdapter.getDeleteItemSet().size());

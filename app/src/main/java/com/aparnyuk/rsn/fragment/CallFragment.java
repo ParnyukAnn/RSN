@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,8 +77,22 @@ public class CallFragment extends AbstractTabFragment {
                             if (changeMode) {
                                 act.setNormalModeInterface();
                             } else {
-                                callDialog = new CallDialog();
-                                callDialog.show(getFragmentManager(), "CreateDialog2");
+                                final Firebase ref = callAdapter.getRef(position);
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot snapshot) {
+                                        String callPosition = snapshot.getKey();
+                                        CallDialog callDialog = new CallDialog();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("callPosition", callPosition);
+                                        callDialog.setArguments(bundle);
+                                        callDialog.show(getFragmentManager(), "CreateDialog3");
+                                    }
+
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+                                    }
+                                });
                             }
                         } else {
                             act.setTitle("" + CallListAdapter.getDeleteItemSet().size());

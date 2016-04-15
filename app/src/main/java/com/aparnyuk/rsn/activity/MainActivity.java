@@ -734,4 +734,14 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         navigationView.getMenu().findItem(R.id.nav_start).setVisible(testMode);
         navigationView.getMenu().findItem(R.id.nav_stop).setVisible(testMode);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 135){
+            callDialog.onActivityResult(requestCode, resultCode, data);
+        } else if (requestCode == 1350){
+            smsDialog.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }
