@@ -5,6 +5,9 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 
 import android.app.Notification;
@@ -56,13 +59,11 @@ public class MainService extends Service {
     String SEND_SMS_FLAG = "SEND_SMS";
     String DELIVER_SMS_FLAG = "DELIVER_SMS";
 
-    public final static String SMS = "sms";
-    public final static String CALL = "call";
-    public final static String REMIND = "remind";
     public final static String PARAM_STATUS = "status";
     public final static String PARAM_ID = "id";
     public final static String PARAM_SMS_TEXT = "sms_text";
     public final static String PARAM_TASK_KEY = "key";
+    public final static String PARAM_PHONE_NUM = "num";
     public final static String BROADCAST_ACTION = "com.aparnyuk.rsn.receiver.BROADCAST";
 
     // check if service is running (need for stop/start service)
@@ -267,8 +268,13 @@ public class MainService extends Service {
                     if (call.isOpen()) {
                         //    tasks.put(taskID, new CallTimerTask(call));
                         syncTasksMap.put(snapshot.getKey(), new CallTimerTask(call, snapshot.getKey(), taskID));
-                        mTimer.schedule(syncTasksMap.get(snapshot.getKey()), call.getDate());
-                        // mTimer.schedule(tasks.get(taskID), call.getDate());
+                        if (call.getRepeatPeriod() == 0) {
+                            mTimer.schedule(syncTasksMap.get(snapshot.getKey()), call.getDate());
+                            // mTimer.schedule(tasks.get(taskID), remind.getDate());
+                        } else {
+                            mTimer.schedule(syncTasksMap.get(snapshot.getKey()), call.getDate(), call.getRepeatPeriod());
+                            //mTimer.schedule(tasks.get(taskID), remind.getDate(), remind.getRepeatPeriod());
+                        }
                         Log.d(TAG, "Add Call TimerTask. Task ID = " + taskID);
                         taskID++;
                     }
@@ -407,6 +413,10 @@ public class MainService extends Service {
             this.id = id;
         }
 
+        public Calls getCall() {
+            return call;
+        }
+
         @Override
         public void run() {
             Log.d(TAG, "Start Call TimerTask. Task ID =  " + id + " " + call.getText() + " count - " + count + " stop when - " + (stop));
@@ -441,6 +451,10 @@ public class MainService extends Service {
             this.id = id;
             this.count = 0;
             this.stop = remind.getRepeatCount();
+        }
+
+        public Remind getRemind() {
+            return remind;
         }
 
         @Override
@@ -482,7 +496,7 @@ public class MainService extends Service {
                         sms_ref.child(key).child("open").setValue(false);
                     }
                     nm.cancel(id);
-                    Toast.makeText(getApplicationContext(), "SMS CANCEL", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.cancel_notification_send), Toast.LENGTH_LONG).show();
                     Log.d(TAG, "in receiver - cancel sms");
                 }
                 if (status == STATUS_CALL_CANCEL) {
@@ -491,7 +505,7 @@ public class MainService extends Service {
                         call_ref.child(key).child("open").setValue(false);
                     }
                     nm.cancel(id);
-                    Toast.makeText(getApplicationContext(), "CALL CANCEL", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.cancel_notification_call), Toast.LENGTH_LONG).show();
                     Log.d(TAG, "in receiver - cancel call");
                 }
                 if (status == STATUS_REMIND_CANCEL) {
@@ -500,11 +514,11 @@ public class MainService extends Service {
                         remind_ref.child(key).child("open").setValue(false);
                     }
                     nm.cancel(id);
-                    Toast.makeText(getApplicationContext(), "REMIND CANCEL", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.cancel_notification_remind), Toast.LENGTH_LONG).show();
                     Log.d(TAG, "in receiver - cancel remind");
                 }
                 if (status == STATUS_SEND) {
-                    Toast.makeText(getApplicationContext(), "SEND", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.send_notification_button), Toast.LENGTH_LONG).show();
                     Log.d(TAG, "in receiver - action send for sms");
                     //SmsTimerTask smsTimerTask = (SmsTimerTask) syncTasksMap.get(key);
                     //sendSms(smsTimerTask.getSms());
@@ -528,12 +542,26 @@ public class MainService extends Service {
 
                 }
                 if (status == STATUS_CALL) {
-                    Toast.makeText(getApplicationContext(), "CALL", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.call_notification_button), Toast.LENGTH_LONG).show();
                     Log.d(TAG, "in receiver - action call for call");
+
+                    // CallTimerTask callTimerTask = (CallTimerTask)syncTasksMap.get(key);
+                    String oneNum = intent.getStringExtra(PARAM_PHONE_NUM);
+                    Log.d(TAG, " Numb:" + oneNum);
+                    Intent actionDialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + oneNum));
+                    actionDialIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(actionDialIntent);
+                    Log.d(TAG, "open call");
+                    if (syncTasksMap.containsKey(key)) {
+                        call_ref.child(key).child("open").setValue(false);
+                    }
+                    nm.cancel(id);
+
                 }
                 if (status == STATUS_LATER) {
-                    Toast.makeText(getApplicationContext(), "LATER", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.later_notification_button), Toast.LENGTH_LONG).show();
                     Log.d(TAG, "in receiver - action later for remind");
+                    nm.cancel(id);
                     // !!! просто закрыть уведомление, остальное напомниться автоматически
                 }
             }
@@ -553,41 +581,41 @@ public class MainService extends Service {
                         // Toast toast = Toast.makeText(getApplicationContext(),
                         //         "Сообщение отправлено!", Toast.LENGTH_SHORT).show();
                         if (smsText != null) {
-                            smsNotificationInfo(smsText + "] was sent successful!", id, false);
+                            smsNotificationInfo(smsText + getString(R.string.was_sent_successful), id, false);
                             //   Log.d(TAG, "Сообщение отправлено!");
-                            Log.d(TAG, smsText + "] was sent successful!");
+                            Log.d(TAG, smsText + getString(R.string.was_sent_successful));
                         }
                         break;
                     //Something went wrong and there's no way to tell what, why or how
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                        /* Toast.makeText(getApplicationContext(), "Some error happened!",
                                 Toast.LENGTH_SHORT).show();*/
-                        smsNotificationInfo("Some error happened!" + smsText + " wasn't sent.", id, false);
+                        smsNotificationInfo(getString(R.string.some_error_happened) + smsText + getString(R.string.wasnt_sent), id, false);
                         Log.d(TAG, "GENERIC FAILURE");
                         break;
                     //Failed because service is currently unavailable
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
 //                        Toast.makeText(getApplicationContext(), "Failed because service is currently unavailable. May be airplane mode enabled.",
 //                                Toast.LENGTH_SHORT).show();
-                        smsNotificationInfo("Failed because service is unavailable. " + smsText + " wasn't sent.", id, false);
+                        smsNotificationInfo(getString(R.string.service_is_unavailable) + smsText + getString(R.string.wasnt_sent), id, false);
                         Log.d(TAG, "NO SERVICE");
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
                         /*Toast.makeText(getApplicationContext(), "Null PDU",
                                 Toast.LENGTH_SHORT).show();*/
-                        smsNotificationInfo("Some error happened!" + smsText + " wasn't sent.", id, false);
+                        smsNotificationInfo(getString(R.string.some_error_happened) + smsText + getString(R.string.wasnt_sent), id, false);
                         Log.d(TAG, "Null PDU");
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
 //                        Toast.makeText(getApplicationContext(), "Phone module is off.",
 //                                Toast.LENGTH_SHORT).show();
-                        smsNotificationInfo("Phone module is off." + smsText + " wasn't sent.", id, false);
+                        smsNotificationInfo(getString(R.string.phone_module_is_off) + smsText + getString(R.string.wasnt_sent), id, false);
                         Log.d(TAG, "Radio Off");
                         break;
                     default:
                         // sent SMS message failed
-                        smsNotificationInfo("Some error happened!" + smsText + " wasn't sent.", id, false);
-                        Log.d(TAG, "Something wrong!");
+                        smsNotificationInfo(getString(R.string.some_error_happened) + smsText + getString(R.string.wasnt_sent), id, false);
+                        Log.d(TAG, "Something went wrong during sms was sending!");
                         break;
                 }
             }
@@ -654,14 +682,22 @@ public class MainService extends Service {
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.app_name) + getString(R.string.remind_notification_text))
                 .setContentText(text)
-                        //.setPriority(Notification.PRIORITY_HIGH)
-                        //.setCategory(Notification.CATEGORY_ALARM)
-                        //.setContentText(getString(R.string.notification_text))
-                .addAction(R.drawable.ic_close_grey600_18dp, "CANCEL", cancelPendingIntent)
-                .addAction(R.drawable.ic_alarm_grey600_18dp, "LATER", actionPendingIntent)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setFullScreenIntent(appPendingIntent, true)
+                .setVisibility(Notification.VISIBILITY_PRIVATE)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+
+        RemindTimerTask remindTimerTask = (RemindTimerTask) syncTasksMap.get(key);
+        if (remindTimerTask.getRemind().getRepeatCount() > 0) {
+            builder
+                    .addAction(R.drawable.ic_alarm_grey600_18dp, getString(R.string.later_notification_button), actionPendingIntent)
+                    .addAction(R.drawable.ic_close_grey600_18dp, getString(R.string.cancel_notification_button), cancelPendingIntent);
+        }
+
         Notification notification = builder.build();
-        notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
+
+        notification.vibrate = new long[]{1000, 1000, 1000, 1000, 1000, 1000, 1000};
+
         notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         nm.notify(id, notification);
     }
@@ -694,15 +730,15 @@ public class MainService extends Service {
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.app_name) + getString(R.string.sms_notification_text))
                 .setContentText(text)
-                        //.setPriority(Notification.PRIORITY_HIGH)
-                        //.setCategory(Notification.CATEGORY_ALARM)
-                        //.setContentText(getString(R.string.notification_text))
-                .addAction(R.drawable.ic_close_grey600_18dp, "CANCEL", scancelPendingIntent)
-                        //.addAction(R.drawable.ic_pen_grey600_18dp, "CHANGE", appPendingIntent)
-                .addAction(R.drawable.ic_send_grey600_18dp, "SEND", sactionPendingIntent)
+                .addAction(R.drawable.ic_close_grey600_18dp, getString(R.string.cancel_notification_button), scancelPendingIntent)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setFullScreenIntent(appPendingIntent, true)
+                .addAction(R.drawable.ic_send_grey600_18dp, getString(R.string.send_notification_button), sactionPendingIntent)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
         Notification notification = builder.build();
-        notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
+
+        notification.vibrate = new long[]{1000, 1000, 1000, 1000, 1000, 1000, 1000};
+        // notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_SOUND;
         notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         nm.notify(id, notification);
     }
@@ -730,7 +766,7 @@ public class MainService extends Service {
                     .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.ic_email_outline_grey600_48dp));
         }
         Notification notification = builder.build();
-        //  notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
+        notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
         notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         nm.notify(id, notification);
     }
@@ -742,10 +778,13 @@ public class MainService extends Service {
                 .putExtra(MainService.PARAM_TASK_KEY, key);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 5, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        CallTimerTask callTask = (CallTimerTask) syncTasksMap.get(key);
+        String num = callTask.getCall().getNumbers().get(0);
         Intent actionIntent = new Intent(MainService.BROADCAST_ACTION)
                 .putExtra(MainService.PARAM_STATUS, MainService.STATUS_CALL)
                 .putExtra(MainService.PARAM_ID, id)
-                .putExtra(MainService.PARAM_TASK_KEY, key);
+                .putExtra(MainService.PARAM_TASK_KEY, key)
+                .putExtra(MainService.PARAM_PHONE_NUM, num);
         PendingIntent actionPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 6, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent appIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -761,14 +800,16 @@ public class MainService extends Service {
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.app_name) + getString(R.string.call_notification_text))
                 .setContentText(text)
-                        //.setPriority(Notification.PRIORITY_HIGH)
-                        //.setCategory(Notification.CATEGORY_ALARM)
-                        //.setContentText(getString(R.string.notification_text))
-                .addAction(R.drawable.ic_close_grey600_18dp, "CANCEL", cancelPendingIntent)
-                .addAction(R.drawable.ic_phone_grey600_18dp, "CALL", actionPendingIntent)
+                .setPriority(Notification.PRIORITY_HIGH)
+                //.setCategory(Notification.CATEGORY_ALARM)
+                .setFullScreenIntent(appPendingIntent, true)
+                .addAction(R.drawable.ic_close_grey600_18dp, getString(R.string.cancel_notification_button), cancelPendingIntent)
+                .addAction(R.drawable.ic_phone_grey600_18dp, getString(R.string.call_notification_button), actionPendingIntent)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
         Notification notification = builder.build();
-        notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
+
+        notification.vibrate = new long[]{1000, 1000, 1000, 1000, 1000, 1000, 1000};
+        // notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_SOUND;
         notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         nm.notify(id, notification);
     }
@@ -778,20 +819,20 @@ public class MainService extends Service {
      * SEND SMS
      *******************************************/
     private void sendSms(Sms sms, int id) {
-        String notificationText = "Sms to numbers: ";
+        String notificationText = getString(R.string.sms_to_numbers);
         for (String num : sms.getNumbers()) {
-            notificationText = notificationText + num + ", ";
+            notificationText = notificationText + num + " ";
         }
-        notificationText = notificationText + "with text: [" + sms.getText();
+        notificationText = notificationText + getString(R.string.with_text) + sms.getText() + getString(R.string.end_of_with_text);
         Intent sendIntent = new Intent(SEND_SMS_FLAG)
                 .putExtra(MainService.PARAM_SMS_TEXT, notificationText)
                 .putExtra(MainService.PARAM_ID, id);
         PendingIntent sendPendingIntent = PendingIntent.getBroadcast(this, 77,
                 sendIntent, PendingIntent.FLAG_UPDATE_CURRENT);//0);
 
-      /*  Intent deliverIntent = new Intent(SEND_SMS_FLAG);
+        Intent deliverIntent = new Intent(SEND_SMS_FLAG);
         PendingIntent deliverPendingIntent = PendingIntent.getBroadcast(this, 88,
-                deliverIntent, PendingIntent.FLAG_UPDATE_CURRENT);*/
+                deliverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         SmsManager smsManager = SmsManager.getDefault();
         for (String num : sms.getNumbers()) {           //"0964460071";//
@@ -799,7 +840,7 @@ public class MainService extends Service {
             // разбивка длинного сообщения
             Log.d(TAG, "Send sms on number " + num);
             if (textLength(sms.getText()) < 140) {
-                smsManager.sendTextMessage(num, null, sms.getText(), sendPendingIntent, null);// deliverPendingIntent);
+                smsManager.sendTextMessage(num, null, sms.getText(), sendPendingIntent, deliverPendingIntent);
             } else {
                 Log.d(TAG, "Long message");
                 ArrayList<String> messageArray = smsManager.divideMessage(sms.getText());

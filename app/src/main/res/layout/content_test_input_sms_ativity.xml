@@ -51,111 +51,131 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="number"
             android:id="@+id/test_phone_num"
             android:hint="phone number"
-            android:text="0964460071" />
+            android:text="0964460071"
+            android:layout_weight="1" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add"
             android:id="@+id/add_sms_button"
-            android:layout_alignTop="@+id/test_phone_num" />
+            android:layout_alignTop="@+id/test_phone_num"
+            android:layout_weight="2" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText"
-            android:text="Repeat count" />
-
-        <EditText
-            android:layout_width="241dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/test_repeat_count"
-            android:hint="repeat count"
-
-            android:text="0" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText2"
-            android:text="Notify before (sec.)" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/test_notify_before"
-            android:layout_below="@+id/test_phone_num"
-            android:hint="notify before - time in ms"
-            android:text="0" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editText3"
-            android:text="Delay before start" />
+            android:inputType="none"
+            android:focusable="false"
+            android:text="Delay before start"
+            android:layout_weight="1" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
             android:id="@+id/test_delay_before_start"
             android:hint="delay before start"
             android:layout_centerHorizontal="true"
-            android:text="5" />
+            android:text="10"
+            android:layout_weight="2" />
+
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:inputType="none"
+            android:focusable="false"
+            android:text="Repeat count"
+            android:layout_weight="1" />
+
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/editText5"
-            android:text="Interval between sending" />
+            android:id="@+id/test_repeat_count"
+            android:hint="repeat count"
+
+            android:text="0"
+            android:layout_weight="2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <EditText
-            android:layout_width="143dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText2"
+            android:inputType="none"
+            android:focusable="false"
+            android:text="Notify before start (sec)"
+            android:layout_weight="1" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/test_notify_before"
+            android:layout_below="@+id/test_phone_num"
+            android:hint="notify before start"
+            android:text="0"
+            android:layout_weight="2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:focusable="false"
+            android:ems="10"
+            android:id="@+id/editText5"
+            android:text="Interval between sending"
+            android:layout_weight="1" />
+
+        <EditText
+            android:layout_width="match_parent"
             android:inputType="number"
             android:layout_height="wrap_content"
             android:id="@+id/test_repeat_period"
-            android:text="10" />
+            android:text="10"
+            android:layout_weight="2" />
+
     </LinearLayout>
 
     <LinearLayout

@@ -11,6 +11,8 @@
     <uses-feature android:name="android.hardware.telephony.cdma"/>
     <uses-feature android:name="android.hardware.telephony.gsm"/>
 
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
         android:name=".application.RSN"
         android:allowBackup="true"
@@ -21,6 +23,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

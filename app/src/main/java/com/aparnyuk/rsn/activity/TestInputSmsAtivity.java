@@ -56,7 +56,7 @@ public class TestInputSmsAtivity extends AppCompatActivity {
 
                 String txt = "Numbers:";
                 for (String num : phoneNumbers) {
-                    txt = txt + num + ",";
+                    txt = txt + num + " ";
                 }
                 txt = txt + ".Dealay:" + delayBeforeStart.getText().toString()
                         + ".Repeat:" + repeatCount.getText().toString()

@@ -18,7 +18,10 @@ import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.CallListAdapter;
 import com.aparnyuk.rsn.dialog.CallDialog;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 
 public class CallFragment extends AbstractTabFragment {
@@ -111,9 +114,22 @@ public class CallFragment extends AbstractTabFragment {
             if (delete) {
                 Log.d("Call", "delete in call fragment");
                 for (int i : CallListAdapter.getDeleteItemSet()) {
-                    if (callAdapter.getRef(i) != null) {
+                    /*if (callAdapter.getRef(i) != null) {
                         callAdapter.getRef(i).removeValue();
-                    }
+                    }*/
+                    callAdapter.getRef(i).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                snapshot.getRef().removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                        }
+                    });
                 }
             }
             callAdapter.clearDeleteMode();

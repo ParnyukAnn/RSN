@@ -17,7 +17,10 @@ import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.SmsListAdapter;
 //import com.aparnyuk.rsn.dialog.SmsDialog;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 
 public class SmsFragment extends AbstractTabFragment {
@@ -110,9 +113,23 @@ public class SmsFragment extends AbstractTabFragment {
             if (delete) {
                 Log.d("sms", "delete in sms fragment");
                 for (int i : SmsListAdapter.getDeleteItemSet()) {
-                    if (smsAdapter.getRef(i) != null) {
+                    smsAdapter.getRef(i).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                snapshot.getRef().removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                        }
+                    });
+
+                    /*if (smsAdapter.getRef(i) != null) {
                         smsAdapter.getRef(i).removeValue();
-                    }
+                    }*/
                 }
             }
             smsAdapter.clearDeleteMode();

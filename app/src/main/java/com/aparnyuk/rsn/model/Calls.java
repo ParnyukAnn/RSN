@@ -11,7 +11,7 @@ public class Calls extends AbstractTask{
 //    private String text;
 //    private Date date;
     private boolean repeat;
-    private Date repeatPeriod; // повторять каждый час, день, через месяц
+    private int repeatPeriod; // повторять каждый час, день, через месяц
     private int repeatCount; // количество повторений
     private boolean open; // напоминание активно. ???
 
@@ -24,7 +24,7 @@ public class Calls extends AbstractTask{
         this.setText("Call");
         this.setDate(date);
         this.repeat = false;
-        this.repeatPeriod = null;
+        this.repeatPeriod = 0;
         this.repeatCount = 0;
         this.open = true;
     }
@@ -69,11 +69,11 @@ public class Calls extends AbstractTask{
         this.repeat = repeat;
     }
 
-    public Date getRepeatPeriod() {
+    public int getRepeatPeriod() {
         return repeatPeriod;
     }
 
-    public void setRepeatPeriod(Date repeatPeriod) {
+    public void setRepeatPeriod(int repeatPeriod) {
         this.repeatPeriod = repeatPeriod;
     }
 

@@ -17,7 +17,10 @@ import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.RemindListAdapter;
 import com.aparnyuk.rsn.dialog.RemindDialog;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 
 public class RemindFragment extends AbstractTabFragment {
@@ -103,9 +106,23 @@ public class RemindFragment extends AbstractTabFragment {
             Log.d("remind", "delete in remind fragment");
             if (delete) {
                 for (int i : RemindListAdapter.getDeleteItemSet()) {
+                    remindAdapter.getRef(i).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                snapshot.getRef().removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                        }
+                    });
+                    /*
                     if (remindAdapter.getRef(i) != null) {
-                        remindAdapter.getRef(i).removeValue();
-                    }
+                        remindAdapter.getRef(i).removeValue();  ///!!!
+                    }*/
                 }
             }
             remindAdapter.clearDeleteMode();

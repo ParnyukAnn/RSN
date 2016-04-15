@@ -23,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.aparnyuk.rsn.Utils.Constants;
@@ -377,11 +378,13 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                                     Date oldDate = new Date(); // oldDate == current time
                                     Date newDate = new Date(oldDate.getTime() + testTime);
                                     ArrayList<String> phoneNumbers = new ArrayList<>();
-                                    phoneNumbers.add("380989580367");
-                                    phoneNumbers.add("5487983721");
+                                    phoneNumbers.add("+380964460071");
+                                    //phoneNumbers.add("5487983721");
                                     Sim sim = new Sim("sim 1", "phone 2");
                                     Calls call = new Calls(phoneNumbers, sim, newDate);
-                                    call.setText("Test call. ");
+                                    call.setText("Test call to number 0964460071. Repeat 3 times. Interval 20 sec.");
+                                    call.setRepeatCount(2);
+                                    call.setRepeatPeriod(20000);
                                     Firebase base = new Firebase(Constants.FIREBASE_URL);
                                     AuthData authData = base.getAuth();
                                     if (authData != null) {
@@ -403,8 +406,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                                     Date oldDate = new Date(); // oldDate == current time
                                     Date newDate = new Date(oldDate.getTime() + testTime);
                                     Remind remind = new Remind("Test repeat task. ", newDate);
-                                    remind.setRepeatCount(3);
-                                    remind.setRepeatPeriod(5000);
+                                    remind.setRepeatCount(2);
+                                    remind.setRepeatPeriod(30000);
                                     Firebase base = new Firebase(Constants.FIREBASE_URL);
                                     AuthData authData = base.getAuth();
                                     if (authData != null) {
@@ -503,8 +506,64 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         navigationView.setNavigationItemSelectedListener(this);
 
         changeAuthItem();
-    }
 
+       // navLayout = (LinearLayout) findViewById(R.id.nav_head);
+        /*Picasso.with(this).load(R.drawable.green_3).into(new Target());*/
+
+           /* CustomLayout mCustomLayout = (CustomLayout)findViewById(R.id.navigation_head);
+            Picasso.with(this).load(R.drawable.green_3).into(mCustomLayout);*/
+/*        Picasso.with(getApplicationContext()).load(R.drawable.green_3).fit().into(new Target() {
+
+            @Override
+            public void onPrepareLoad(Drawable arg0) {
+
+            }
+
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
+
+                navLayout.setBackgroundDrawable(new BitmapDrawable(getApplicationContext().getResources(), bitmap));
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable arg0) {
+
+
+            }
+        });*/
+
+
+    }
+ /*   public class CustomLayout extends LinearLayout implements Target {
+
+        public CustomLayout(Context context) {
+            super(context);
+        }
+
+        public CustomLayout(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public CustomLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+        }
+
+
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            setBackground(new BitmapDrawable(getResources(), bitmap));
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            //Set your error drawable
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            //Set your placeholder
+        }
+    }*/
     /*  Work with NavigationDrawer menu */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

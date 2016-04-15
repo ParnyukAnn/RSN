@@ -203,18 +203,35 @@
 
     <!--Notification-->
     <string name="sms_notification_ticker_will">Sms will be send.</string>
-    <string name="sms_notification_ticker_send">Sms was sent.</string>
+    <string name="sms_notification_ticker_send">Sms sending report.</string>
     <string name="sms_notification_ticker_delivered">Sms were delivered.</string>
+
     <string name="call_notification_ticker">You have to do some call.</string>
     <string name="remind_notification_ticker">You have some remind.</string>
+
     <string name="sms_notification_text">. Sms.</string>
     <string name="call_notification_text">. Call.</string>
     <string name="remind_notification_text">. Remind.</string>
-    <string name="notification_cancel_button">CANCEL</string>
-    <string name="sms_notification_button">SEND</string>
+
+    <string name="cancel_notification_button">CANCEL</string>
+    <string name="send_notification_button">SEND</string>
+    <string name="cancel_notification_send">CANCEL SEND</string>
     <string name="call_notification_button">CALL</string>
-    <string name="remind_notification_button">REMIND</string>
-    <string name="title_activity_test_input_sms_ativity">Test sms input</string>
+    <string name="cancel_notification_call">CANCEL CALL</string>
+    <string name="later_notification_button">LATER</string>
+    <string name="cancel_notification_remind">REMIND CANCELED</string>
+
+    <string name="title_activity_test_input_sms_ativity">Sms test input</string>
+
+    <string name="was_sent_successful">was sent successful!</string>
+    <string name="wasnt_sent"> wasn\'t sent.</string>
+    <string name="some_error_happened">Some error happened!</string>
+    <string name="service_is_unavailable">Failed because service is unavailable. </string>
+    <string name="phone_module_is_off">Phone module is off.</string>
+    <string name="sms_to_numbers">Sms to numbers: </string>
+    <string name="with_text">with text: \"</string>
+    <string name="end_of_with_text">\"</string>
+
 
 
 </resources>

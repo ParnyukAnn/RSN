@@ -18,7 +18,10 @@ import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.NoteListAdapter;
 import com.aparnyuk.rsn.dialog.NoteDialog;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 
 public class NoteFragment extends AbstractTabFragment {
@@ -111,7 +114,20 @@ public class NoteFragment extends AbstractTabFragment {
             if (delete) {
                 Log.d("Note", "delete in note fragment");
                 for (int i : NoteListAdapter.getDeleteItemSet()) {
-                    noteAdapter.getRef(i).removeValue();
+                   // noteAdapter.getRef(i).removeValue();
+                    noteAdapter.getRef(i).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                snapshot.getRef().removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                        }
+                    });
                 }
             }
             noteAdapter.clearDeleteMode();
