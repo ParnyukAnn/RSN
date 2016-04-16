@@ -1,3 +1,5 @@
+##### !!! Рабочий код лежит на  test_branch. Окно ввода смс - не работает. Для тестирования приложения в дровере есть меню Test Mode. После его включения по нажатию кнопки там автоматически создаються звонки, напоминания и вызывается активити для тестирования смс. 
+
 # RSN
 Программа будет выполнять функции напоминалки с дополнительной возможностью создания напоминаний о звонках, блокнота для создания простых заметок и смс-планировщика (создание и отправка смс в указанные дату/время, можно будет указать и частоту отправки (от ежечасно - до ежегодно), выбрать несколько абонентов, указать сим-карту с которой будет отправляться смс и т.д.). Например, если вы поздно вечером вспомнили, что утром нужно будет договориться о встрече, но сейчас отправлять сообщение уже слишком поздно, то можно просто написать текст смс, и задать время отправки утром. Так же можно заранее указать дату и установить отправку сообщений с поздравлениями на дни рождения, Новый Год, 8 марта и т.д. 
 
@@ -8,7 +10,8 @@
 * Заметки: обычные заметки, как напоминания из 1-го пункта, но без даты.
 
 <a href="http://qrcoder.ru" target="_blank"><img src="http://qrcoder.ru/code/?http%3A%2F%2F&4&0" width="116" height="116" border="0" title="QR код"></a>
+##### Описание: https://docs.google.com/document/d/1ZDY0JbFG5i6ufstc9u9UHzZNkXFh0_HU_mTWb2dYCJM/edit
 ##### Прототип: https://ninjamock.com/s/ZNXGS
 ##### Эстимейты: https://docs.google.com/spreadsheets/d/1O3WDKDXBGNBcZUhO-6PyFWh0g7bWVf8Y9oV5AF0D0WY/edit#gid=0
-##### Apk: https://drive.google.com/file/d/0B9zJxDv3q7UfaUdDVG5pWk9XTGM/view?usp=sharing
-##### QR: http://qrcoder.ru/code/?https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F0B9zJxDv3q7UfaUdDVG5pWk9XTGM%2Fview%3Fusp%3Dsharing&4&0
+##### Apk: https://www.dropbox.com/s/qtfdopzpo3k0cjh/RSN.apk?dl=0
+##### QR: http://qrcoder.ru/code/?https%3A%2F%2Fwww.dropbox.com%2Fs%2Fqtfdopzpo3k0cjh%2FRSN.apk%3Fdl%3D0&4&0
