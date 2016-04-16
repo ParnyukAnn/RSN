@@ -3,10 +3,6 @@ package com.aparnyuk.rsn.model;
 import java.util.Date;
 
 public class Note extends AbstractTask {
-/*
-    private String text;
-    private Date date;
-*/
 
     public Note() {
 
@@ -17,20 +13,4 @@ public class Note extends AbstractTask {
         this.setDate(date);
     }
 
-
-/*    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }*/
 }

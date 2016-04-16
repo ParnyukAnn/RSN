@@ -10,10 +10,10 @@ public class RSN extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         Fabric.with(this, new Crashlytics());
 
         Firebase.setAndroidContext(this);
-        // enable disk persistence
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
     }
 }

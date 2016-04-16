@@ -8,12 +8,10 @@ import java.util.List;
 public class Calls extends AbstractTask{
     private ArrayList<String> numbers;
     private Sim sim;
-//    private String text;
-//    private Date date;
     private boolean repeat;
-    private int repeatPeriod; // повторять каждый час, день, через месяц
+    private int repeatPeriod; // повторять каждые ...
     private int repeatCount; // количество повторений
-    private boolean open; // напоминание активно. ???
+    private boolean open; // напоминание активно
 
     public Calls() {
     }
@@ -44,22 +42,6 @@ public class Calls extends AbstractTask{
     public void setSim(Sim sim) {
         this.sim = sim;
     }
-
-/*    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }*/
 
     public boolean isRepeat() {
         return repeat;

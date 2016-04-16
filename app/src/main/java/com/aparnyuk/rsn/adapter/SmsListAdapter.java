@@ -134,7 +134,15 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
     @Override
     protected void populateViewHolder(SmsListAdapter.SmsViewHolder smsViewHolder, Sms sms, int i) {
         if (sms != null) {
-            smsViewHolder.phoneNum.setText(sms.getNumbers().get(0));
+            String str = "";
+            if (sms.getNumbers().size() > 1) {
+                if (sms.getNumbers().size() == 2) {
+                    str = " and other 1";
+                } else {
+                    str = " and others " + (sms.getNumbers().size() - 1);
+                }
+            }
+            smsViewHolder.phoneNum.setText(sms.getNumbers().get(0) + str);
             smsViewHolder.smsText.setText(sms.getText());
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
             smsViewHolder.dateText.setText(dateFormat.format(sms.getDate()));
@@ -147,8 +155,6 @@ public class SmsListAdapter extends FirebaseRecyclerAdapter<Sms, SmsListAdapter.
                 } else {
                     smsViewHolder.smsCheck.setVisibility(View.GONE);
                 }
-
-                // if (!sms.isOpen()){ smsViewHolder.ll.setBackgroundColor(#9E9E9E);}
             }
         }
     }

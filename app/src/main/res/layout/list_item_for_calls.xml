@@ -20,23 +20,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/call_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|top"
-                    android:src="@drawable/check" />
+                <!--android:lines="2" android:maxLines="4" android:singleLine="false"
+                 android:paddingLeft="@dimen/padding_left_right"-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top">
 
-                <TextView
-                    android:id="@+id/call_phone_num"
-                    android:lines="2" android:maxLines="4" android:singleLine="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="18sp"
-                    android:transitionName="@string/transition_name_or_number" />
+                    <TextView
+                        android:id="@+id/call_phone_num"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="18sp"
+                        android:transitionName="@string/transition_name_or_number"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:id="@+id/call_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/check" />
+
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/call_text"
                     android:layout_width="wrap_content"
@@ -55,6 +66,7 @@
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="15sp"
                     android:transitionName="@string/transition_date" />
+
             </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

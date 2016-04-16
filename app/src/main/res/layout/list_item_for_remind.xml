@@ -17,21 +17,28 @@
             android:orientation="vertical"
             android:padding="@dimen/activity_horizontal_margin">
 
-            <ImageView
-                android:id="@+id/remind_check"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|top"
-                android:src="@drawable/check" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/remind_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="6dp"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="15sp"
-                android:transitionName="@string/transition_text" />
+                <TextView
+                    android:id="@+id/remind_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="15sp"
+                    android:layout_weight="1"
+                    android:transitionName="@string/transition_text" />
+
+                <ImageView
+                    android:id="@+id/remind_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|top"
+                    android:src="@drawable/check" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/remind_date"
@@ -42,6 +49,8 @@
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="15sp"
                 android:transitionName="@string/transition_date" />
+
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
 </LinearLayout>

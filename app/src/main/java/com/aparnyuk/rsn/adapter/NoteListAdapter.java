@@ -124,49 +124,6 @@ public class NoteListAdapter extends FirebaseRecyclerAdapter<Note, NoteListAdapt
         deleteItemSet.clear();
     }
 
-/*    static class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener  {
-
-        CardView cv;
-        CheckBox deleteNote;
-        TextView noteText;
-        TextView dateText;
-        LinearLayout ll;
-
-        public NoteViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.note_cv);
-            noteText = (TextView) itemView.findViewById(R.id.note_text);
-            dateText = (TextView) itemView.findViewById(R.id.note_date);
-            deleteNote = (CheckBox) itemView.findViewById(R.id.checkBox);
-            ll = (LinearLayout) itemView.findViewById(R.id.test);
-
-            deleteNote.setOnClickListener(this);
-            ll.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-                switch (v.getId()) {
-                    case R.id.test:
-                        itemClick(position);
-                        break;
-                    case R.id.checkBox:
-                        checkClick(position);
-                }
-            }
-        }
-
-        private void itemClick(int position) {
-            Log.d("Note", "Click " + position);
-        }
-
-        private void checkClick(int position) {
-            Log.d("Note", "Click " + position);
-        }
-    }*/
-
     @Override
     protected void populateViewHolder(NoteListAdapter.NoteViewHolder noteViewHolder, Note note, int i) {
         if (note != null) {

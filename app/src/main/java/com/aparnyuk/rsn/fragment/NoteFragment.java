@@ -50,7 +50,7 @@ public class NoteFragment extends AbstractTabFragment {
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Use Firebase to populate the list.
-        Firebase.setAndroidContext(getContext());
+       // Firebase.setAndroidContext(getContext());
         Firebase base = new Firebase(Constants.FIREBASE_URL);
         AuthData authData = base.getAuth();
         if (authData != null) {
@@ -136,8 +136,8 @@ public class NoteFragment extends AbstractTabFragment {
         }
     }
 
-//    public void onDestroy() {
-//        super.onDestroy();
-//        mAdapter.cleanup();
-//    }
+    public void onDestroy() {
+        super.onDestroy();
+        noteAdapter.cleanup();
+    }
 }

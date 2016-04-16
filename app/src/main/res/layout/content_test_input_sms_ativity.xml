@@ -61,7 +61,7 @@
             android:inputType="number"
             android:id="@+id/test_phone_num"
             android:hint="phone number"
-            android:text="0964460071"
+            android:text="+30964460071"
             android:layout_weight="1" />
 
         <Button

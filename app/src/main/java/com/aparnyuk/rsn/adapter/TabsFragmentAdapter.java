@@ -54,10 +54,6 @@ public class TabsFragmentAdapter extends FragmentPagerAdapter {
     }
 
     public void updateData(){
-//        getItem(0).mAdapter.notifyDataSetChanged();
-//        getItem(1).mAdapter.notifyDataSetChanged();
-//        getItem(2).mAdapter.notifyDataSetChanged();
-//        getItem(3).mAdapter.notifyDataSetChanged();
         notifyDataSetChanged();
     }
 }

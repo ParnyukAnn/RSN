@@ -99,8 +99,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Firebase.setAndroidContext(this);
-
         mRef = new Firebase(Constants.FIREBASE_URL);
         prefs = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
 
@@ -200,7 +198,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                 break;
             }
         }
-
     }
 
     /*-----------------------------------DELETE INTERFACE-----------------------------------------*/
@@ -342,28 +339,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                                     smsDialog.show(fragmentManager, "CreateDialog4");
                                 } else {
                                     startActivity(new Intent(getApplicationContext(), TestInputSmsAtivity.class));
-                                    /*
-                                    testTime = 5000;
-                                    Date oldDate = new Date(); // oldDate == current time
-                                    Date newDate = new Date(oldDate.getTime() + testTime);
-                                    ArrayList<String> phoneNumbers = new ArrayList<>();
-                                  //  phoneNumbers.add("0989580367");
-                                    phoneNumbers.add("0964460071");
-                                    Sim sim = new Sim("sim 1", "phone 2");
-                                    Sms sms = new Sms(phoneNumbers, sim, "Test notif sms. ", newDate);
-                                    //sms.setRepeatCount(1);
-                                    //sms.setRepeatPeriod(5000);
-                                    //Sms sms = new Sms(phoneNumbers, sim, "Проверка отправки длинного сообщения. В этом сообщении 79 символов. Удачи мне!!", newDate);
-                                    sms.setNotificationBefore(true);
-                                    sms.setNotificationTime(20000);
-                                    Date testDate = new Date (sms.getDate().getTime()+20000);
-                                    sms.setDate(testDate);
-                                    Firebase base = new Firebase(Constants.FIREBASE_URL);
-                                    AuthData authData = base.getAuth();
-                                    if (authData != null) {
-                                        base = base.child(authData.getUid());
-                                    }
-                                    base.child("sms").push().setValue(sms);*/
                                 }
                             }
                             break;
@@ -408,6 +383,8 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
                                     Remind remind = new Remind("Test repeat task. ", newDate);
                                     remind.setRepeatCount(2);
                                     remind.setRepeatPeriod(30000);
+                                    remind.setText(remind.getText() + "Repeat " + remind.getRepeatCount()
+                                            + " with interval " + (remind.getRepeatPeriod() / 1000) + "sec.");
                                     Firebase base = new Firebase(Constants.FIREBASE_URL);
                                     AuthData authData = base.getAuth();
                                     if (authData != null) {
@@ -507,7 +484,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
         changeAuthItem();
 
-       // navLayout = (LinearLayout) findViewById(R.id.nav_head);
+        // navLayout = (LinearLayout) findViewById(R.id.nav_head);
         /*Picasso.with(this).load(R.drawable.green_3).into(new Target());*/
 
            /* CustomLayout mCustomLayout = (CustomLayout)findViewById(R.id.navigation_head);
@@ -534,36 +511,38 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
 
 
     }
- /*   public class CustomLayout extends LinearLayout implements Target {
 
-        public CustomLayout(Context context) {
-            super(context);
-        }
+    /*   public class CustomLayout extends LinearLayout implements Target {
 
-        public CustomLayout(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
+           public CustomLayout(Context context) {
+               super(context);
+           }
 
-        public CustomLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-        }
+           public CustomLayout(Context context, AttributeSet attrs) {
+               super(context, attrs);
+           }
+
+           public CustomLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+               super(context, attrs, defStyleAttr);
+           }
 
 
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            setBackground(new BitmapDrawable(getResources(), bitmap));
-        }
+           @Override
+           public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+               setBackground(new BitmapDrawable(getResources(), bitmap));
+           }
 
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            //Set your error drawable
-        }
+           @Override
+           public void onBitmapFailed(Drawable errorDrawable) {
+               //Set your error drawable
+           }
 
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            //Set your placeholder
-        }
-    }*/
+           @Override
+           public void onPrepareLoad(Drawable placeHolderDrawable) {
+               //Set your placeholder
+           }
+       }*/
+
     /*  Work with NavigationDrawer menu */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -581,7 +560,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             case (R.id.nav_calendar): {
                 break;
             }
-/*            case (R.id.nav_search): {
+            /*  case (R.id.nav_search): {
                 break;
             }*/
             case (R.id.nav_history): {
@@ -594,9 +573,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
             }
             case (R.id.nav_test): {
                 testMode = !testMode;
-               /* navigationView.getMenu().findItem(R.id.nav_start).setVisible(testMode);
-                navigationView.getMenu().findItem(R.id.nav_stop).setVisible(testMode);
-                invalidateOptionsMenu();*/
                 break;
             }
             case (R.id.nav_stop): {
@@ -677,13 +653,14 @@ public class MainActivity extends FirebaseLoginBaseActivity implements Navigatio
         changeAuthItem();
         // mRecycleViewAdapter.notifyDataSetChanged();
 //!!
-        /*if (MainService.state) {
+        if (MainService.state) {
             startService(new Intent(this, MainService.class));
         } else if (MainService.no_data) {
             stopService(new Intent(this, MainService.class));
-            Log.d(TAG,"delete in nav");
+            Log.d(TAG, "delete in nav");
             startService(new Intent(this, MainService.class));
-        }*/
+        }
+//!!
     }
 
     @Override

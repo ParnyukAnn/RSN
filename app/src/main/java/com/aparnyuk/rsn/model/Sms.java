@@ -7,15 +7,13 @@ import java.util.Date;
 public class Sms extends AbstractTask {
     private ArrayList<String> numbers;
     private Sim sim;
-    //    private String text;
-//    private Date date;
     private boolean notificationBefore;
     private int notificationTime;
     private boolean deliveryReport;
     private boolean repeat;
-    private int repeatPeriod; // повторять каждый час, день, через месяц
+    private int repeatPeriod; // повторять каждые ...
     private int repeatCount; // количество повторений
-    private boolean open; // задание активно. ???
+    private boolean open; // задание активно
 
     public Sms() {
     }
@@ -23,8 +21,6 @@ public class Sms extends AbstractTask {
     public Sms(ArrayList<String> numbers, Sim sim, String text, Date date) {
         this.numbers = numbers;
         this.sim = sim;
-//        this.text = text;
-//        this.date = date;
         this.setText(text);
         this.setDate(date);
         this.notificationBefore = false;
@@ -74,22 +70,6 @@ public class Sms extends AbstractTask {
     public void setSim(Sim sim) {
         this.sim = sim;
     }
-
-/*    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }*/
 
     public boolean isRepeat() {
         return repeat;

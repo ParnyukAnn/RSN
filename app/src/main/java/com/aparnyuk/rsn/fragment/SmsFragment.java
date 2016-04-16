@@ -15,7 +15,7 @@ import com.aparnyuk.rsn.Utils.Constants;
 import com.aparnyuk.rsn.R;
 import com.aparnyuk.rsn.activity.MainActivity;
 import com.aparnyuk.rsn.adapter.SmsListAdapter;
-//import com.aparnyuk.rsn.dialog.SmsDialog;
+import com.aparnyuk.rsn.dialog.SmsDialog;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -25,7 +25,7 @@ import com.firebase.client.ValueEventListener;
 
 public class SmsFragment extends AbstractTabFragment {
     Toolbar toolbar;
-    // SmsDialog smsDialog;
+    SmsDialog smsDialog;
     public SmsListAdapter smsAdapter;
     MainActivity act;
 
@@ -49,7 +49,7 @@ public class SmsFragment extends AbstractTabFragment {
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Use Firebase to populate the list.
-        Firebase.setAndroidContext(getContext());
+       // Firebase.setAndroidContext(getContext());
         Firebase base = new Firebase(Constants.FIREBASE_URL);
         AuthData authData = base.getAuth();
         if (authData != null) {
@@ -74,8 +74,8 @@ public class SmsFragment extends AbstractTabFragment {
                             if (changeMode) {
                                 act.setNormalModeInterface();
                             } else {
-                                // smsDialog = new SmsDialog();
-                                // smsDialog.show(getFragmentManager(), "CreateDialog2");
+                                smsDialog = new SmsDialog();
+                                smsDialog.show(getFragmentManager(), "CreateDialog2");
                                 // smsAdapter.getRef(position).removeValue();
                             }
                         } else {
@@ -126,7 +126,6 @@ public class SmsFragment extends AbstractTabFragment {
                         public void onCancelled(FirebaseError firebaseError) {
                         }
                     });
-
                     /*if (smsAdapter.getRef(i) != null) {
                         smsAdapter.getRef(i).removeValue();
                     }*/
@@ -139,8 +138,8 @@ public class SmsFragment extends AbstractTabFragment {
     }
 
 
-//    public void onDestroy() {
-//        super.onDestroy();
-//        mAdapter.cleanup();
-//    }
+    public void onDestroy() {
+        super.onDestroy();
+        smsAdapter.cleanup();
+    }
 }
